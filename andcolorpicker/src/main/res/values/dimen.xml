@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="acp_seek_background_corner_radius">4dp</dimen>
+  <dimen name="acp_thumb_stroke_width">4dp</dimen>
+  <dimen name="acp_thumb_size">24dp</dimen>
+</resources>

@@ -1,0 +1,3 @@
+rootProject.name='AndColorPicker Sample'
+include ':app'
+include ':andcolorpicker'
