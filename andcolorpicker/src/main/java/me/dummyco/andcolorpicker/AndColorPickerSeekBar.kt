@@ -326,10 +326,10 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
   }
 
   enum class Mode {
-    HUE,
-    SATURATION,
-    VALUE,//BRIGHTNESS
-    LIGHTNESS,
+    HUE,// H from HSV/HSL/HSI/HSB
+    SATURATION,// S from HSV/HSL/HSI/HSB
+    VALUE,// BRIGHTNESS, V/B from HSV/HSB
+    LIGHTNESS, // INTENSITY, L/I from HSL/HSI
     ALPHA
   }
 }
