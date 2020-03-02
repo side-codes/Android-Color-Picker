@@ -3,10 +3,7 @@ package me.dummyco.andcolorpicker.app
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.andColorPickerHView
-import kotlinx.android.synthetic.main.activity_main.andColorPickerSView
-import kotlinx.android.synthetic.main.activity_main.colorTextView
-import kotlinx.android.synthetic.main.activity_main.setColorButton
+import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.AndColorPickerSeekBar
 import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode
 
@@ -18,38 +15,51 @@ class MainActivity : AppCompatActivity() {
 
     andColorPickerHView.colorPickListener = object : AndColorPickerSeekBar.OnColorPickListener {
       override fun onColorPicking(
-          color: Int,
-          fromUser: Boolean
+        color: Int,
+        mode: Mode,
+        value: Int,
+        fromUser: Boolean
       ) {
         colorizeTextView(color)
-        refreshSaturationSeekBar(color)
+        notifySeekBarsOnHueChange(color)
       }
 
       override fun onColorPicked(
-          color: Int,
-          fromUser: Boolean
+        color: Int,
+        mode: Mode,
+        value: Int,
+        fromUser: Boolean
       ) {
         colorizeTextView(color)
-        refreshSaturationSeekBar(color)
+        notifySeekBarsOnHueChange(color)
       }
     }
 
     andColorPickerSView.mode = Mode.MODE_SATURATION
+    andColorPickerLView.mode = Mode.MODE_LIGHTNESS
+    // TODO: Encapsulate
+    andColorPickerSView.progress = 100
+    andColorPickerLView.progress = 50
 
     setColorButton.setOnClickListener {
-      andColorPickerHView.currentColor = Color.rgb(48, 85, 56)
+      andColorPickerHView.currentColor = Color.rgb(
+        48,
+        85,
+        56
+      )
     }
   }
 
-  private fun refreshSaturationSeekBar(color: Int) {
+  private fun notifySeekBarsOnHueChange(color: Int) {
     andColorPickerSView.currentColor = color
+    andColorPickerLView.currentColor = color
   }
 
   private fun colorizeTextView(color: Int) {
     colorTextView.setBackgroundColor(color)
     colorTextView.text = String.format(
-        "#%06X",
-        0xFFFFFF and color
+      "#%06X",
+      0xFFFFFF and color
     )
   }
 }

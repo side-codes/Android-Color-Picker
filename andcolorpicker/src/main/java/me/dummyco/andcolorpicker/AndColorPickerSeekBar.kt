@@ -4,14 +4,8 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.AnimatedStateListDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
-import android.graphics.drawable.RippleDrawable
+import android.graphics.drawable.*
 import android.os.Build
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.util.AttributeSet
 import android.util.StateSet
 import android.widget.SeekBar
@@ -19,17 +13,23 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode.MODE_ALPHA
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode.MODE_HUE
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode.MODE_LIGHTNESS
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode.MODE_SATURATION
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode.MODE_VALUE
+import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode.*
 import kotlin.math.roundToInt
 
 class AndColorPickerSeekBar : AppCompatSeekBar,
-                              OnSeekBarChangeListener {
+  OnSeekBarChangeListener {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
+    private const val COERCE_AT_MOST_LIGHTNING = 90
+    private val HUE_CHECKPOINTS = intArrayOf(
+      Color.RED,
+      Color.YELLOW,
+      Color.GREEN,
+      Color.CYAN,
+      Color.BLUE,
+      Color.MAGENTA,
+      Color.RED
+    )
   }
 
   var colorPickListener: OnColorPickListener? = null
@@ -54,19 +54,20 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
 
   // TODO: Wrap props in enum
   private fun refreshProperties() {
-    if (VERSION.SDK_INT >= VERSION_CODES.O) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       min = mode.min
     }
     max = mode.max
 
     when (mode) {
-      MODE_HUE        -> {
+      MODE_HUE -> {
       }
       MODE_SATURATION -> {
       }
-      MODE_VALUE      -> TODO()
-      MODE_LIGHTNESS  -> TODO()
-      MODE_ALPHA      -> TODO()
+      MODE_VALUE -> TODO()
+      MODE_LIGHTNESS -> {
+      }
+      MODE_ALPHA -> TODO()
     }
   }
 
@@ -75,23 +76,23 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
   }
 
   constructor(
-      context: Context,
-      attrs: AttributeSet?
+    context: Context,
+    attrs: AttributeSet?
   ) : super(
-      context,
-      attrs
+    context,
+    attrs
   ) {
     init()
   }
 
   constructor(
-      context: Context,
-      attrs: AttributeSet?,
-      defStyleAttr: Int
+    context: Context,
+    attrs: AttributeSet?,
+    defStyleAttr: Int
   ) : super(
-      context,
-      attrs,
-      defStyleAttr
+    context,
+    attrs,
+    defStyleAttr
   ) {
     init()
   }
@@ -102,15 +103,15 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
     splitTrack = false
 
     background = background.mutate()
-        .also {
-          if (it is RippleDrawable) {
-            // TODO: Set ripple size for pre-M too
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-              val rippleSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_ripple_radius)
-              it.radius = rippleSizePx
-            }
+      .also {
+        if (it is RippleDrawable) {
+          // TODO: Set ripple size for pre-M too
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val rippleSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_ripple_radius)
+            it.radius = rippleSizePx
           }
         }
+      }
 
     setupProgressDrawable()
 
@@ -122,29 +123,23 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
     val sizeDHalf = sizeD / 2
 
     thumbDrawableDefaultWrapper = LayerDrawable(
-        arrayOf(GradientDrawable().also {
-          it.color = ColorStateList.valueOf(Color.TRANSPARENT)
+      arrayOf(
+        GradientDrawable().also {
+          it.color = ColorStateList.valueOf(Color.WHITE)
           it.shape = GradientDrawable.OVAL
           it.setSize(
-              thumbFullSizePx,
-              thumbFullSizePx
+            thumbDefaultSizePx,
+            thumbDefaultSizePx
           )
-        },
-            GradientDrawable().also {
-              it.color = ColorStateList.valueOf(Color.WHITE)
-              it.shape = GradientDrawable.OVAL
-              it.setSize(
-                  thumbDefaultSizePx,
-                  thumbDefaultSizePx
-              )
-            })
+        }
+      )
     ).also {
       it.setLayerInset(
-          1,
-          sizeDHalf,
-          sizeDHalf,
-          sizeDHalf,
-          sizeDHalf
+        0,
+        sizeDHalf,
+        sizeDHalf,
+        sizeDHalf,
+        sizeDHalf
       )
     }
 
@@ -152,8 +147,8 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
       it.color = ColorStateList.valueOf(Color.WHITE)
       it.shape = GradientDrawable.OVAL
       it.setSize(
-          thumbFullSizePx,
-          thumbFullSizePx
+        thumbFullSizePx,
+        thumbFullSizePx
       )
     }
 
@@ -162,14 +157,14 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
 
     thumb = AnimatedStateListDrawable().also { animatedStateListDrawable ->
       animatedStateListDrawable.addState(
-          intArrayOf(android.R.attr.state_pressed),
-          thumbDrawablePressed,
-          1
+        intArrayOf(android.R.attr.state_pressed),
+        thumbDrawablePressed,
+        1
       )
       animatedStateListDrawable.addState(
-          StateSet.WILD_CARD,
-          thumbDrawableDefaultWrapper,
-          0
+        StateSet.WILD_CARD,
+        thumbDrawableDefaultWrapper,
+        0
       )
       //animatedStateListDrawable.addTransition(
       //    0,
@@ -211,47 +206,63 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
   private fun setupProgressDrawable() {
     val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_background_padding)
 
-    progressDrawable = GradientDrawable().also {
-      it.orientation = GradientDrawable.Orientation.LEFT_RIGHT
-      it.setStroke(
-          backgroundPaddingPx,
-          Color.TRANSPARENT
+    progressDrawable = LayerDrawable(
+      arrayOf(
+        GradientDrawable().also {
+          it.orientation = GradientDrawable.Orientation.LEFT_RIGHT
+          it.cornerRadius =
+            resources.getDimensionPixelOffset(R.dimen.acp_seek_background_corner_radius)
+              .toFloat()
+          it.shape = GradientDrawable.RECTANGLE
+          // TODO: Make stroke configurable
+          //it.setStroke(
+          //  4,
+          //  Color.rgb(
+          //    192,
+          //    192,
+          //    192
+          //  )
+          //)
+        }
       )
-      it.cornerRadius = resources.getDimensionPixelOffset(R.dimen.acp_seek_background_corner_radius)
-          .toFloat()
-      it.shape = GradientDrawable.RECTANGLE
+    ).also {
+      it.setLayerInset(
+        0,
+        backgroundPaddingPx,
+        backgroundPaddingPx,
+        backgroundPaddingPx,
+        backgroundPaddingPx
+      )
     }
 
     refreshProgressDrawable()
   }
 
   private fun refreshProgressDrawable() {
-    (progressDrawable as GradientDrawable).colors = when (mode) {
-      MODE_HUE        -> {
-        intArrayOf(
-            Color.RED,
-            Color.YELLOW,
-            Color.GREEN,
-            Color.CYAN,
-            Color.BLUE,
-            Color.MAGENTA,
-            Color.RED
-        )
+    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
+      MODE_HUE -> {
+        HUE_CHECKPOINTS
       }
       MODE_SATURATION -> {
         intArrayOf(
-            Color.rgb(
-                128,
-                128,
-                128
-            ),
-            // TODO: Use color
-            currentColor
+          Color.rgb(
+            128,
+            128,
+            128
+          ),
+          // TODO: Use color
+          currentColor
         )
       }
-      MODE_VALUE      -> TODO()
-      MODE_LIGHTNESS  -> TODO()
-      MODE_ALPHA      -> TODO()
+      MODE_VALUE -> TODO()
+      MODE_LIGHTNESS -> {
+        intArrayOf(
+          Color.BLACK,
+          currentColor,
+          Color.WHITE
+        )
+      }
+      MODE_ALPHA -> TODO()
     }
   }
 
@@ -261,37 +272,51 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
         is GradientDrawable -> {
           paintDrawableStroke(it)
         }
-        is LayerDrawable    -> {
-          paintDrawableStroke(it.getDrawable(1) as GradientDrawable)
+        is LayerDrawable -> {
+          paintDrawableStroke(it.getDrawable(0) as GradientDrawable)
         }
       }
     }
   }
 
+  private val paintDrawableStrokeSaturationHSLCache = floatArrayOf(
+    0f,
+    0f,
+    0f
+  )
+  private val paintDrawableStrokeLightnessHSLCache = floatArrayOf(
+    0f,
+    0f,
+    0f
+  )
+
   private fun paintDrawableStroke(drawable: GradientDrawable) {
     val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
 
     drawable.setStroke(
-        thumbStrokeWidthPx,
-        when (mode) {
-          MODE_HUE        -> currentColor
-          MODE_SATURATION -> {
-            val hsl = floatArrayOf(
-                0f,
-                0f,
-                0f
-            )
-            ColorUtils.colorToHSL(
-                currentColor,
-                hsl
-            )
-            hsl[1] = progress / 100f
-            ColorUtils.HSLToColor(hsl)
-          }
-          MODE_VALUE      -> TODO()
-          MODE_LIGHTNESS  -> TODO()
-          MODE_ALPHA      -> TODO()
+      thumbStrokeWidthPx,
+      when (mode) {
+        MODE_HUE -> currentColor
+        MODE_SATURATION -> {
+          ColorUtils.colorToHSL(
+            currentColor,
+            paintDrawableStrokeSaturationHSLCache
+          )
+          paintDrawableStrokeSaturationHSLCache[1] = progress / mode.max.toFloat()
+          ColorUtils.HSLToColor(paintDrawableStrokeSaturationHSLCache)
         }
+        MODE_VALUE -> TODO()
+        MODE_LIGHTNESS -> {
+          ColorUtils.colorToHSL(
+            currentColor,
+            paintDrawableStrokeLightnessHSLCache
+          )
+          paintDrawableStrokeLightnessHSLCache[2] =
+            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.max.toFloat()
+          ColorUtils.HSLToColor(paintDrawableStrokeLightnessHSLCache)
+        }
+        MODE_ALPHA -> TODO()
+      }
     )
   }
 
@@ -300,14 +325,16 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
   }
 
   override fun onProgressChanged(
-      seekBar: SeekBar,
-      progress: Int,
-      fromUser: Boolean
+    seekBar: SeekBar,
+    progress: Int,
+    fromUser: Boolean
   ) {
     refreshThumb()
     colorPickListener?.onColorPicking(
-        currentColor,
-        fromUser
+      currentColor,
+      mode,
+      progress,
+      fromUser
     )
   }
 
@@ -316,22 +343,24 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
 
   override fun onStopTrackingTouch(seekBar: SeekBar) {
     colorPickListener?.onColorPicked(
-        currentColor,
-        true
+      currentColor,
+      mode,
+      progress,
+      true
     )
   }
 
   // Internal holder for non-calculated modes
   private var _currentColor: Int = 0
   private val currentColorWriteHSLCache = floatArrayOf(
-      0f,
-      0f,
-      0f
+    0f,
+    0f,
+    0f
   )
   private val currentColorReadHSLCache = floatArrayOf(
-      0f,
-      1f,
-      0.5f
+    0f,
+    1f,
+    0.5f
   )
   // TODO: Create Color wrapper class with components
   // Is it composed color or reference color? Should I split them?
@@ -339,16 +368,18 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
   var currentColor: Int
     get() {
       return when (mode) {
-        MODE_HUE        -> {
+        MODE_HUE -> {
           currentColorReadHSLCache[0] = progress.toFloat()
           ColorUtils.HSLToColor(currentColorReadHSLCache)
         }
         MODE_SATURATION -> {
           _currentColor
         }
-        MODE_VALUE      -> TODO()
-        MODE_LIGHTNESS  -> TODO()
-        MODE_ALPHA      -> TODO()
+        MODE_VALUE -> TODO()
+        MODE_LIGHTNESS -> {
+          _currentColor
+        }
+        MODE_ALPHA -> TODO()
       }
     }
     set(value) {
@@ -356,19 +387,21 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
       _currentColor = value
 
       when (mode) {
-        MODE_HUE        -> {
+        MODE_HUE -> {
           ColorUtils.colorToHSL(
-              value,
-              currentColorWriteHSLCache
+            value,
+            currentColorWriteHSLCache
           )
           progress = currentColorWriteHSLCache[0].roundToInt()
         }
         MODE_SATURATION -> {
 
         }
-        MODE_VALUE      -> TODO()
-        MODE_LIGHTNESS  -> TODO()
-        MODE_ALPHA      -> TODO()
+        MODE_VALUE -> TODO()
+        MODE_LIGHTNESS -> {
+
+        }
+        MODE_ALPHA -> TODO()
       }
 
       refreshProgressDrawable()
@@ -377,39 +410,45 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
 
   interface OnColorPickListener {
     fun onColorPicking(
-        @ColorInt
-        color: Int, fromUser: Boolean
+      @ColorInt
+      color: Int,
+      mode: Mode,
+      value: Int,
+      fromUser: Boolean
     )
 
     fun onColorPicked(
-        @ColorInt
-        color: Int, fromUser: Boolean
+      @ColorInt
+      color: Int,
+      mode: Mode,
+      value: Int,
+      fromUser: Boolean
     )
   }
 
   enum class Mode(
-      val min: Int,
-      val max: Int
+    val min: Int,
+    val max: Int
   ) {
     MODE_HUE(
-        0,
-        360
+      0,
+      360
     ),// H from HSV/HSL/HSI/HSB
     MODE_SATURATION(
-        0,
-        100
+      0,
+      100
     ),// S from HSV/HSL/HSI/HSB
     MODE_VALUE(
-        0,
-        100
+      0,
+      100
     ),// BRIGHTNESS, V/B from HSV/HSB
     MODE_LIGHTNESS(
-        0,
-        100
+      0,
+      100
     ), // INTENSITY, L/I from HSL/HSI
     MODE_ALPHA(
-        0,
-        360
+      0,
+      360
     )
   }
 }
