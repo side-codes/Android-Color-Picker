@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode
+import me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,9 +13,9 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    andColorPickerHView.colorPickListener = object : AndColorPickerSeekBar.OnColorPickListener {
+    andColorPickerHView.colorPickListener = object : HSLColorPickerSeekBar.OnColorPickListener {
       override fun onColorPicking(
-        color: Int,
+        color: HSLColorPickerSeekBar.HSLColor,
         mode: Mode,
         value: Int,
         fromUser: Boolean
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
       }
 
       override fun onColorPicked(
-        color: Int,
+        color: HSLColorPickerSeekBar.HSLColor,
         mode: Mode,
         value: Int,
         fromUser: Boolean
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     andColorPickerLView.progress = 50
 
     setColorButton.setOnClickListener {
-      andColorPickerHView.currentColor = Color.rgb(
+      andColorPickerHView.currentColor = HSLColorPickerSeekBar.HSLColor().setFromRGB(
         48,
         85,
         56
@@ -50,16 +50,16 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun notifySeekBarsOnHueChange(color: Int) {
-    andColorPickerSView.currentColor = color
-    andColorPickerLView.currentColor = color
+  private fun notifySeekBarsOnHueChange(color: HSLColorPickerSeekBar.HSLColor) {
+    andColorPickerSView.currentColor = color.copy()
+    andColorPickerLView.currentColor = color.copy()
   }
 
-  private fun colorizeTextView(color: Int) {
-    colorTextView.setBackgroundColor(color)
+  private fun colorizeTextView(color: HSLColorPickerSeekBar.HSLColor) {
+    colorTextView.setBackgroundColor(color.colorInt)
     colorTextView.text = String.format(
       "#%06X",
-      0xFFFFFF and color
+      0xFFFFFF and color.colorInt
     )
   }
 }

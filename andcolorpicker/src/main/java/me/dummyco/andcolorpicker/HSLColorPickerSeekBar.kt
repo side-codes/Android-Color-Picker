@@ -10,13 +10,12 @@ import android.util.AttributeSet
 import android.util.StateSet
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
-import me.dummyco.andcolorpicker.AndColorPickerSeekBar.Mode.*
+import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode.*
 import kotlin.math.roundToInt
 
-class AndColorPickerSeekBar : AppCompatSeekBar,
+class HSLColorPickerSeekBar : AppCompatSeekBar,
   OnSeekBarChangeListener {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
@@ -251,14 +250,14 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
             128
           ),
           // TODO: Use color
-          currentColor
+          currentColor.clearColorInt
         )
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
         intArrayOf(
           Color.BLACK,
-          currentColor,
+          currentColor.clearColorInt,
           Color.WHITE
         )
       }
@@ -296,21 +295,19 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
     drawable.setStroke(
       thumbStrokeWidthPx,
       when (mode) {
-        MODE_HUE -> currentColor
+        MODE_HUE -> {
+          currentColor.clearColorInt
+        }
         MODE_SATURATION -> {
-          ColorUtils.colorToHSL(
-            currentColor,
-            paintDrawableStrokeSaturationHSLCache
-          )
+          paintDrawableStrokeSaturationHSLCache[0] = currentColor.h
           paintDrawableStrokeSaturationHSLCache[1] = progress / mode.max.toFloat()
+          paintDrawableStrokeSaturationHSLCache[2] = 0.5f
           ColorUtils.HSLToColor(paintDrawableStrokeSaturationHSLCache)
         }
         MODE_VALUE -> TODO()
         MODE_LIGHTNESS -> {
-          ColorUtils.colorToHSL(
-            currentColor,
-            paintDrawableStrokeLightnessHSLCache
-          )
+          paintDrawableStrokeLightnessHSLCache[0] = currentColor.h
+          paintDrawableStrokeLightnessHSLCache[1] = 1f
           paintDrawableStrokeLightnessHSLCache[2] =
             progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.max.toFloat()
           ColorUtils.HSLToColor(paintDrawableStrokeLightnessHSLCache)
@@ -351,26 +348,14 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
   }
 
   // Internal holder for non-calculated modes
-  private var _currentColor: Int = 0
-  private val currentColorWriteHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
-  private val currentColorReadHSLCache = floatArrayOf(
-    0f,
-    1f,
-    0.5f
-  )
-  // TODO: Create Color wrapper class with components
-  // Is it composed color or reference color? Should I split them?
-  @get:ColorInt
-  var currentColor: Int
+  private var _currentColor = HSLColor()
+  // TODO: Copy on read / copy on write?
+  var currentColor: HSLColor
     get() {
       return when (mode) {
         MODE_HUE -> {
-          currentColorReadHSLCache[0] = progress.toFloat()
-          ColorUtils.HSLToColor(currentColorReadHSLCache)
+          _currentColor.h = progress.toFloat()
+          _currentColor
         }
         MODE_SATURATION -> {
           _currentColor
@@ -388,11 +373,7 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
 
       when (mode) {
         MODE_HUE -> {
-          ColorUtils.colorToHSL(
-            value,
-            currentColorWriteHSLCache
-          )
-          progress = currentColorWriteHSLCache[0].roundToInt()
+          progress = _currentColor.h.roundToInt()
         }
         MODE_SATURATION -> {
 
@@ -410,16 +391,14 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
 
   interface OnColorPickListener {
     fun onColorPicking(
-      @ColorInt
-      color: Int,
+      color: HSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
     )
 
     fun onColorPicked(
-      @ColorInt
-      color: Int,
+      color: HSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
@@ -442,6 +421,7 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
       0,
       100
     ),// BRIGHTNESS, V/B from HSV/HSB
+    // TODO: Do we need this mode?
     MODE_LIGHTNESS(
       0,
       100
@@ -450,5 +430,79 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
       0,
       360
     )
+  }
+
+  class HSLColor {
+    var h: Float
+      get() {
+        return values[0]
+      }
+      set(value) {
+        values[0] = value
+      }
+    var s: Float
+      get() {
+        return values[1]
+      }
+      set(value) {
+        values[1] = value
+      }
+    var l: Float
+      get() {
+        return values[2]
+      }
+      set(value) {
+        values[2] = value
+      }
+    var a: Float = 0f
+
+    val colorInt: Int
+      get() {
+        return ColorUtils.HSLToColor(values)
+      }
+    private val _clearColorIntHSLCache = floatArrayOf(
+      0f,
+      0f,
+      0f
+    )
+    val clearColorInt: Int
+      get() {
+        _clearColorIntHSLCache[0] = h
+        _clearColorIntHSLCache[1] = 1f
+        _clearColorIntHSLCache[2] = 0.5f
+        return ColorUtils.HSLToColor(_clearColorIntHSLCache)
+      }
+
+    // TODO: Copy on read? Ensure read-only
+    private val values = floatArrayOf(
+      0f,
+      0f,
+      0f
+    )
+
+    fun setFromRGB(r: Int, g: Int, b: Int): HSLColor {
+      ColorUtils.colorToHSL(
+        Color.rgb(
+          r,
+          g,
+          b
+        ),
+        values
+      )
+      return this
+    }
+
+    private fun setFromHSLColor(hslColor: HSLColor): HSLColor {
+      hslColor.copyValuesTo(values)
+      return this
+    }
+
+    private fun copyValuesTo(outValues: FloatArray) {
+      values.copyInto(outValues)
+    }
+
+    fun copy(): HSLColor {
+      return HSLColor().setFromHSLColor(this)
+    }
   }
 }
