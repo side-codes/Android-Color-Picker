@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     andColorPickerSView.mode = Mode.MODE_SATURATION
 
     setColorButton.setOnClickListener {
-      andColorPickerHView.currentColor = Color.MAGENTA
+      andColorPickerHView.currentColor = Color.rgb(48, 85, 56)
     }
   }
 

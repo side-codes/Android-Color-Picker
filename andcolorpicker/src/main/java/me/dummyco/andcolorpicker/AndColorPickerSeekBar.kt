@@ -276,8 +276,17 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
         when (mode) {
           MODE_HUE        -> currentColor
           MODE_SATURATION -> {
-            // TODO: Calculate
-            Color.GRAY
+            val hsl = floatArrayOf(
+                0f,
+                0f,
+                0f
+            )
+            ColorUtils.colorToHSL(
+                currentColor,
+                hsl
+            )
+            hsl[1] = progress / 100f
+            ColorUtils.HSLToColor(hsl)
           }
           MODE_VALUE      -> TODO()
           MODE_LIGHTNESS  -> TODO()
@@ -319,7 +328,8 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
       0f,
       0f
   )
-  // TODO: Create Color wrapper class
+  // TODO: Create Color wrapper class with components
+  // Is it composed color or reference color? Should I split them?
   @get:ColorInt
   var currentColor: Int
     get() {
