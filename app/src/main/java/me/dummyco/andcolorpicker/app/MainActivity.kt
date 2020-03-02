@@ -15,11 +15,11 @@ class MainActivity : AppCompatActivity() {
 
     andColorPickerHView
         .colorPickListener = object : AndColorPickerSeekBar.OnColorPickListener {
-      override fun onColorPicking(color: Int) {
+      override fun onColorPicking(color: Int, fromUser: Boolean) {
         colorizeTextView(color)
       }
 
-      override fun onColorPicked(color: Int) {
+      override fun onColorPicked(color: Int, fromUser: Boolean) {
         colorizeTextView(color)
       }
     }

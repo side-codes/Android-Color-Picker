@@ -274,7 +274,7 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
   ) {
     refreshThumb()
     colorPickListener
-        ?.onColorPicking(currentColor)
+        ?.onColorPicking(currentColor, fromUser)
   }
 
   override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -283,7 +283,7 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
 
   override fun onStopTrackingTouch(seekBar: SeekBar) {
     colorPickListener
-        ?.onColorPicked(currentColor)
+        ?.onColorPicked(currentColor, true)
   }
 
   // TODO: Create Color wrapper class
@@ -320,9 +320,9 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
     }
 
   interface OnColorPickListener {
-    fun onColorPicking(@ColorInt color: Int)
+    fun onColorPicking(@ColorInt color: Int, fromUser: Boolean)
 
-    fun onColorPicked(@ColorInt color: Int)
+    fun onColorPicked(@ColorInt color: Int, fromUser: Boolean)
   }
 
   enum class Mode {
