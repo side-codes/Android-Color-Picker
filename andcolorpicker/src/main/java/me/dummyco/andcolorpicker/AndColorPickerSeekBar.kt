@@ -328,19 +328,21 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
       0f,
       0f
   )
+  private val currentColorReadHSLCache = floatArrayOf(
+      0f,
+      1f,
+      0.5f
+  )
   // TODO: Create Color wrapper class with components
   // Is it composed color or reference color? Should I split them?
   @get:ColorInt
   var currentColor: Int
     get() {
       return when (mode) {
-        MODE_HUE        -> ColorUtils.HSLToColor(
-            floatArrayOf(
-                progress.toFloat(),
-                1f,
-                0.5f
-            )
-        )
+        MODE_HUE        -> {
+          currentColorReadHSLCache[0] = progress.toFloat()
+          ColorUtils.HSLToColor(currentColorReadHSLCache)
+        }
         MODE_SATURATION -> {
           _currentColor
         }
