@@ -10,11 +10,16 @@ import android.util.AttributeSet
 import android.util.StateSet
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
+import kotlin.math.roundToInt
 
 class AndColorPickerSeekBar : AppCompatSeekBar,
     OnSeekBarChangeListener {
+  var mode: Mode = Mode
+      .HUE
+  var colorPickListener: OnColorPickListener? = null
 
   companion object {
 
@@ -69,34 +74,10 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
           }
         }
 
-    progressDrawable = GradientDrawable(
-        GradientDrawable.Orientation.LEFT_RIGHT,
-        intArrayOf(
-            Color.RED,
-            Color.YELLOW,
-            Color.GREEN,
-            Color.CYAN,
-            Color.BLUE,
-            Color.MAGENTA,
-            Color.RED
-        )
-    )
-        .also {
-          it
-              .setStroke(
-                  resources
-                      .getDimensionPixelOffset(R.dimen.acp_seek_background_padding),
-                  Color.TRANSPARENT
-              )
-          it
-              .cornerRadius = resources
-              .getDimensionPixelOffset(R.dimen.acp_seek_background_corner_radius)
-              .toFloat()
-          it
-              .shape = GradientDrawable
-              .RECTANGLE
-        }
+    setupProgressDrawable()
 
+    val backgroundPaddingPx = resources
+        .getDimensionPixelOffset(R.dimen.acp_seek_background_padding)
     val thumbFullSizePx = resources
         .getDimensionPixelOffset(R.dimen.acp_thumb_size_full)
     val thumbDefaultSizePx = resources
@@ -203,13 +184,60 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
           //)
         }
 
-    //thumbOffset -= 20
+    thumbOffset -= backgroundPaddingPx / 2
 
     refreshThumb()
   }
 
-  private fun refreshThumb() {
+  private fun setupProgressDrawable() {
+    val backgroundPaddingPx = resources
+        .getDimensionPixelOffset(R.dimen.acp_seek_background_padding)
 
+    progressDrawable = GradientDrawable()
+        .also {
+          it
+              .orientation = GradientDrawable
+              .Orientation
+              .LEFT_RIGHT
+          it
+              .setStroke(
+                  backgroundPaddingPx,
+                  Color.TRANSPARENT
+              )
+          it
+              .cornerRadius = resources
+              .getDimensionPixelOffset(R.dimen.acp_seek_background_corner_radius)
+              .toFloat()
+          it
+              .shape = GradientDrawable
+              .RECTANGLE
+        }
+
+    refreshProgressDrawable()
+  }
+
+  private fun refreshProgressDrawable() {
+    (progressDrawable as GradientDrawable)
+        .colors = when (mode) {
+      Mode.HUE -> {
+        intArrayOf(
+            Color.RED,
+            Color.YELLOW,
+            Color.GREEN,
+            Color.CYAN,
+            Color.BLUE,
+            Color.MAGENTA,
+            Color.RED
+        )
+      }
+      Mode.SATURATION -> TODO()
+      Mode.VALUE -> TODO()
+      Mode.LIGHTNESS -> TODO()
+      Mode.ALPHA -> TODO()
+    }
+  }
+
+  private fun refreshThumb() {
     coloringDrawables
         .forEach {
           when (it) {
@@ -230,13 +258,7 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
     drawable
         .setStroke(
             thumbStrokeWidthPx,
-            ColorUtils.HSLToColor(
-                floatArrayOf(
-                    progress.toFloat(),
-                    1f,
-                    0.5f
-                )
-            )
+            currentColor
         )
   }
 
@@ -251,11 +273,63 @@ class AndColorPickerSeekBar : AppCompatSeekBar,
       fromUser: Boolean
   ) {
     refreshThumb()
+    colorPickListener
+        ?.onColorPicking(currentColor)
   }
 
   override fun onStartTrackingTouch(seekBar: SeekBar) {
+
   }
 
   override fun onStopTrackingTouch(seekBar: SeekBar) {
+    colorPickListener
+        ?.onColorPicked(currentColor)
+  }
+
+  // TODO: Create Color wrapper class
+  @get:ColorInt
+  var currentColor: Int
+    get() {
+      return ColorUtils
+          .HSLToColor(
+              floatArrayOf(
+                  progress.toFloat(),
+                  1f,
+                  0.5f
+              )
+          )
+    }
+    set(value) {
+      when (mode) {
+        Mode.HUE -> {
+          // TODO: Cache
+          val output = floatArrayOf(0f, 0f, 0f)
+          ColorUtils
+              .colorToHSL(
+                  value,
+                  output
+              )
+          progress = output[0]
+              .roundToInt()
+        }
+        Mode.SATURATION -> TODO()
+        Mode.VALUE -> TODO()
+        Mode.LIGHTNESS -> TODO()
+        Mode.ALPHA -> TODO()
+      }
+    }
+
+  interface OnColorPickListener {
+    fun onColorPicking(@ColorInt color: Int)
+
+    fun onColorPicked(@ColorInt color: Int)
+  }
+
+  enum class Mode {
+    HUE,
+    SATURATION,
+    VALUE,//BRIGHTNESS
+    LIGHTNESS,
+    ALPHA
   }
 }
