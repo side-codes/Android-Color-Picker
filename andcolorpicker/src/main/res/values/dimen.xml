@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <dimen name="acp_seek_background_corner_radius">4dp</dimen>
-  <dimen name="acp_seek_background_padding">12dp</dimen>
+  <dimen name="acp_seek_background_padding">16dp</dimen>
   <dimen name="acp_thumb_stroke_width">4dp</dimen>
   <dimen name="acp_thumb_size_full">30dp</dimen>
   <dimen name="acp_thumb_size_default">24dp</dimen>
