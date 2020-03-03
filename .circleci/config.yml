@@ -30,3 +30,5 @@ jobs:
       - run:
           name: Build Release APK
           command: ./gradlew assembleRelease
+      - store_artifacts:
+          path: app/build/outputs/
