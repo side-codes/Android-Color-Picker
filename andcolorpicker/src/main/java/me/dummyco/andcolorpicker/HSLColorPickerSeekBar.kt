@@ -15,12 +15,11 @@ import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode.*
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 // TODO: Add logger solution
 // TODO: Add call flow diagram
 // TODO: Add checks and reduce calls count
-// TODO: Make progress single-directional and create fake progress?
-// TODO: Progress should not reset color
 class HSLColorPickerSeekBar : AppCompatSeekBar,
   OnSeekBarChangeListener {
   companion object {
@@ -87,7 +86,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     colorPickListeners.clear()
   }
 
-  private var propertiesUpdateInProceess = false
+  private var propertiesUpdateInProcess = false
   // TODO: Wrap props in enum
   private fun refreshProperties() {
     if (DEBUG) {
@@ -97,9 +96,9 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       )
     }
 
-    propertiesUpdateInProceess = true
+    propertiesUpdateInProcess = true
     max = mode.maxProgress
-    propertiesUpdateInProceess = false
+    propertiesUpdateInProcess = false
   }
 
   constructor(context: Context) : super(context) {
@@ -383,7 +382,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     progress: Int,
     fromUser: Boolean
   ) {
-    if (propertiesUpdateInProceess) {
+    if (propertiesUpdateInProcess) {
       return
     }
 
@@ -615,26 +614,47 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
   // TODO: Make integer-based and provide precision options
   class HSLColor {
+    companion object {
+      fun createRandomColor(): HSLColor {
+        return HSLColor().setFromHSL(
+          floatArrayOf(
+            Random.Default.nextFloat() * 360f,
+            Random.Default.nextFloat(),
+            Random.Default.nextFloat()
+          )
+        )
+      }
+    }
+
     var h: Int
       get() {
         return values[H_INDEX]
       }
       set(value) {
-        values[H_INDEX] = value
+        values[H_INDEX] = value.coerceIn(
+          0,
+          360
+        )
       }
     var s: Int
       get() {
         return values[S_INDEX]
       }
       set(value) {
-        values[S_INDEX] = value
+        values[S_INDEX] = value.coerceIn(
+          0,
+          100
+        )
       }
     var l: Int
       get() {
         return values[L_INDEX]
       }
       set(value) {
-        values[L_INDEX] = value
+        values[L_INDEX] = value.coerceIn(
+          0,
+          100
+        )
       }
     private var _a: Int = 0
     var a: Int
@@ -642,7 +662,10 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         return _a
       }
       set(value) {
-        _a = value
+        _a = value.coerceIn(
+          0,
+          100
+        )
       }
 
     val colorInt: Int
@@ -675,9 +698,9 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     )
 
     fun setFromHSL(h: Float, s: Float, l: Float): HSLColor {
-      values[H_INDEX] = h.roundToInt()
-      values[S_INDEX] = (s * 100f).roundToInt()
-      values[L_INDEX] = (l * 100f).roundToInt()
+      this.h = h.roundToInt()
+      this.s = (s * 100f).roundToInt()
+      this.l = (l * 100f).roundToInt()
       return this
     }
 
@@ -714,6 +737,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       return this
     }
 
+    // FIXME: Unsafe, provide checks
     fun copyValuesFrom(inValues: IntArray): HSLColor {
       inValues.copyInto(values)
       return this
