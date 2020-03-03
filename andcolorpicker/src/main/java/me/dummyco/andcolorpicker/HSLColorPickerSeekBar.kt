@@ -342,6 +342,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     refreshThumb()
     colorPickListeners.forEach {
       it.onColorPicking(
+        this,
         _currentColor,
         mode,
         progress,
@@ -388,6 +389,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   override fun onStopTrackingTouch(seekBar: SeekBar) {
     colorPickListeners.forEach {
       it.onColorPicked(
+        this,
         currentColor,
         mode,
         progress,
@@ -418,6 +420,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
   interface OnColorPickListener {
     fun onColorPicking(
+      picker: HSLColorPickerSeekBar,
       color: HSLColor,
       mode: Mode,
       value: Int,
@@ -425,6 +428,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     )
 
     fun onColorPicked(
+      picker: HSLColorPickerSeekBar,
       color: HSLColor,
       mode: Mode,
       value: Int,
@@ -531,5 +535,64 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     fun copy(): HSLColor {
       return HSLColor().setFromHSLColor(this)
     }
+  }
+}
+
+class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
+  private val pickers = hashSetOf<HSLColorPickerSeekBar>()
+
+  fun registerPicker(picker: HSLColorPickerSeekBar) {
+    picker.addListener(this)
+    pickers.add(picker)
+  }
+
+  fun unregisterPicker(picker: HSLColorPickerSeekBar) {
+    picker.removeListener(this)
+    pickers.remove(picker)
+  }
+
+  override fun onColorPicking(
+    picker: HSLColorPickerSeekBar,
+    color: HSLColorPickerSeekBar.HSLColor,
+    mode: HSLColorPickerSeekBar.Mode,
+    value: Int,
+    fromUser: Boolean
+  ) {
+    notifyGroupFrom(
+      picker,
+      color
+    )
+  }
+
+  override fun onColorPicked(
+    picker: HSLColorPickerSeekBar,
+    color: HSLColorPickerSeekBar.HSLColor,
+    mode: HSLColorPickerSeekBar.Mode,
+    value: Int,
+    fromUser: Boolean
+  ) {
+    notifyGroupFrom(
+      picker,
+      color
+    )
+  }
+
+  private fun notifyGroupFrom(
+    picker: HSLColorPickerSeekBar,
+    color: HSLColorPickerSeekBar.HSLColor
+  ) {
+    pickers.filter { it != picker }.forEach {
+      it.currentColor = color
+    }
+  }
+}
+
+fun PickerGroup.registerPickers(vararg pickers: HSLColorPickerSeekBar) {
+  registerPickers(listOf(*pickers))
+}
+
+fun PickerGroup.registerPickers(pickers: Iterable<HSLColorPickerSeekBar>) {
+  pickers.forEach {
+    registerPicker(it)
   }
 }

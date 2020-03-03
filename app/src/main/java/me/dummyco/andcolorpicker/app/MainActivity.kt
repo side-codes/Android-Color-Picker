@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode
+import me.dummyco.andcolorpicker.PickerGroup
+import me.dummyco.andcolorpicker.registerPickers
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,25 +15,26 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
 
     andColorPickerHView.addListener(
+      // TODO: Add default listener
       object : HSLColorPickerSeekBar.OnColorPickListener {
         override fun onColorPicking(
+          picker: HSLColorPickerSeekBar,
           color: HSLColorPickerSeekBar.HSLColor,
           mode: Mode,
           value: Int,
           fromUser: Boolean
         ) {
           colorizeTextView(color)
-          notifySeekBarsOnHueChange(color)
         }
 
         override fun onColorPicked(
+          picker: HSLColorPickerSeekBar,
           color: HSLColorPickerSeekBar.HSLColor,
           mode: Mode,
           value: Int,
           fromUser: Boolean
         ) {
           colorizeTextView(color)
-          notifySeekBarsOnHueChange(color)
         }
       }
     )
@@ -49,11 +52,13 @@ class MainActivity : AppCompatActivity() {
         56
       )
     }
-  }
 
-  private fun notifySeekBarsOnHueChange(color: HSLColorPickerSeekBar.HSLColor) {
-    andColorPickerSView.currentColor = color
-    andColorPickerLView.currentColor = color
+    val group = PickerGroup()
+    group.registerPickers(
+      andColorPickerHView,
+      andColorPickerSView,
+      andColorPickerLView
+    )
   }
 
   private fun colorizeTextView(color: HSLColorPickerSeekBar.HSLColor) {
