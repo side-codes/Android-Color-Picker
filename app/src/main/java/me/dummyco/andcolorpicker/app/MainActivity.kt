@@ -1,11 +1,13 @@
 package me.dummyco.andcolorpicker.app
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.HSLColor.Companion.createRandomColor
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode
 import me.dummyco.andcolorpicker.PickerGroup
 import me.dummyco.andcolorpicker.registerPickers
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
           mode: Mode,
           value: Int
         ) {
-          colorizeTextView(picker)
+          colorize(color)
         }
       }
     )
@@ -65,18 +67,10 @@ class MainActivity : AppCompatActivity() {
       }
     )
 
-    // TODO: Encapsulate
-    andColorPickerSView.progress = 100
-    andColorPickerLView.progress = 50
+    andColorPickerHView.currentColor = createRandomColor()
 
     setColorButton.setOnClickListener {
-      andColorPickerHView.currentColor = HSLColorPickerSeekBar.HSLColor().setFromHSL(
-        floatArrayOf(
-          132.97296f,
-          0.2781955f,
-          0.26078433f
-        )
-      )
+      andColorPickerHView.currentColor = createRandomColor()
     }
 
     dynamicSwitchButton.setOnClickListener {
@@ -91,12 +85,16 @@ class MainActivity : AppCompatActivity() {
   }
 
   @SuppressLint("SetTextI18n")
-  private fun colorizeTextView(picker: HSLColorPickerSeekBar) {
-    val color = picker.currentColor
-    Log.d(
-      TAG,
-      "mode = ${picker.mode}, color = $color"
-    )
+  private fun colorize(color: HSLColorPickerSeekBar.HSLColor) {
+    supportActionBar?.setBackgroundDrawable(GradientDrawable().also {
+      it.color = ColorStateList.valueOf(color.colorInt)
+    })
+
+    val statusBarColor = color.copy().also {
+      it.l -= 10
+    }
+    window.statusBarColor = statusBarColor.colorInt
+
     colorTextView.setBackgroundColor(color.colorInt)
     colorTextView.text = String.format(
       "#%06X",
