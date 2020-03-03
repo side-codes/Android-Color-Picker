@@ -250,14 +250,14 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
             128
           ),
           // TODO: Use color
-          currentColor.clearColorInt
+          _currentColor.clearColorInt
         )
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
         intArrayOf(
           Color.BLACK,
-          currentColor.clearColorInt,
+          _currentColor.clearColorInt,
           Color.WHITE
         )
       }
@@ -296,17 +296,17 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       thumbStrokeWidthPx,
       when (mode) {
         MODE_HUE -> {
-          currentColor.clearColorInt
+          _currentColor.clearColorInt
         }
         MODE_SATURATION -> {
-          paintDrawableStrokeSaturationHSLCache[0] = currentColor.h
+          paintDrawableStrokeSaturationHSLCache[0] = _currentColor.h
           paintDrawableStrokeSaturationHSLCache[1] = progress / mode.max.toFloat()
           paintDrawableStrokeSaturationHSLCache[2] = 0.5f
           ColorUtils.HSLToColor(paintDrawableStrokeSaturationHSLCache)
         }
         MODE_VALUE -> TODO()
         MODE_LIGHTNESS -> {
-          paintDrawableStrokeLightnessHSLCache[0] = currentColor.h
+          paintDrawableStrokeLightnessHSLCache[0] = _currentColor.h
           paintDrawableStrokeLightnessHSLCache[1] = 1f
           paintDrawableStrokeLightnessHSLCache[2] =
             progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.max.toFloat()
@@ -326,13 +326,30 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     progress: Int,
     fromUser: Boolean
   ) {
+    refreshCurrentColor()
     refreshThumb()
     colorPickListener?.onColorPicking(
-      currentColor,
+      _currentColor,
       mode,
       progress,
       fromUser
     )
+  }
+
+  private fun refreshCurrentColor() {
+    when (mode) {
+      MODE_HUE -> {
+        _currentColor.h = progress.toFloat()
+      }
+      MODE_SATURATION -> {
+
+      }
+      MODE_VALUE -> TODO()
+      MODE_LIGHTNESS -> {
+
+      }
+      MODE_ALPHA -> TODO()
+    }
   }
 
   override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -350,26 +367,18 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   // Internal holder for non-calculated modes
   private var _currentColor = HSLColor()
   // TODO: Copy on read / copy on write?
+  // TODO: To method?
   var currentColor: HSLColor
     get() {
       return when (mode) {
-        MODE_HUE -> {
-          _currentColor.h = progress.toFloat()
-          _currentColor
-        }
-        MODE_SATURATION -> {
-          _currentColor
-        }
         MODE_VALUE -> TODO()
-        MODE_LIGHTNESS -> {
-          _currentColor
-        }
         MODE_ALPHA -> TODO()
+        else -> _currentColor.copy()
       }
     }
     set(value) {
       // TODO: Revisit whether to place it here or under branches
-      _currentColor = value
+      _currentColor = value.copy()
 
       when (mode) {
         MODE_HUE -> {

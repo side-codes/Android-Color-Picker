@@ -51,15 +51,15 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun notifySeekBarsOnHueChange(color: HSLColorPickerSeekBar.HSLColor) {
-    andColorPickerSView.currentColor = color.copy()
-    andColorPickerLView.currentColor = color.copy()
+    andColorPickerSView.currentColor = color
+    andColorPickerLView.currentColor = color
   }
 
   private fun colorizeTextView(color: HSLColorPickerSeekBar.HSLColor) {
-    colorTextView.setBackgroundColor(color.colorInt)
+    colorTextView.setBackgroundColor(color.clearColorInt)
     colorTextView.text = String.format(
       "#%06X",
-      0xFFFFFF and color.colorInt
+      0xFFFFFF and color.clearColorInt
     )
   }
 }
