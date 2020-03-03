@@ -15,8 +15,9 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle" }}
+      - run: echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/repo/keystore/keystore.jks
+      - run: echo 'export KEYSTORE_FILE=${HOME}/repo/keystore/keystore.jks' >> $BASH_ENV
       - run: ./gradlew dependencies
-
       - save_cache:
           paths:
             - ~/.gradle
