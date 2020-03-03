@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.*
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.util.StateSet
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -15,10 +16,12 @@ import androidx.core.graphics.ColorUtils
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode.*
 import kotlin.math.roundToInt
 
+// TODO: Add logger solution
 class HSLColorPickerSeekBar : AppCompatSeekBar,
   OnSeekBarChangeListener {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
+    private const val DEBUG = true
     private const val COERCE_AT_MOST_LIGHTNING = 90
     private val HUE_CHECKPOINTS = intArrayOf(
       Color.RED,
@@ -65,10 +68,17 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
   // TODO: Wrap props in enum
   private fun refreshProperties() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      min = mode.min
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshProperties() called"
+      )
     }
-    max = mode.max
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      min = mode.minProgress
+    }
+    max = mode.maxProgress
 
     when (mode) {
       MODE_HUE -> {
@@ -215,6 +225,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   }
 
   private fun setupProgressDrawable() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "setupProgressDrawable() called"
+      )
+    }
+
     val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_background_padding)
 
     progressDrawable = LayerDrawable(
@@ -250,6 +267,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   }
 
   private fun refreshProgressDrawable() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshProgressDrawable() called"
+      )
+    }
+
     ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
       MODE_HUE -> {
         HUE_CHECKPOINTS
@@ -278,6 +302,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   }
 
   private fun refreshThumb() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshThumb() called"
+      )
+    }
+
     coloringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
@@ -312,7 +343,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         }
         MODE_SATURATION -> {
           paintDrawableStrokeSaturationHSLCache[0] = _currentColor.h
-          paintDrawableStrokeSaturationHSLCache[1] = progress / mode.max.toFloat()
+          paintDrawableStrokeSaturationHSLCache[1] = progress / mode.maxProgress.toFloat()
           paintDrawableStrokeSaturationHSLCache[2] = 0.5f
           ColorUtils.HSLToColor(paintDrawableStrokeSaturationHSLCache)
         }
@@ -321,7 +352,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           paintDrawableStrokeLightnessHSLCache[0] = _currentColor.h
           paintDrawableStrokeLightnessHSLCache[1] = 1f
           paintDrawableStrokeLightnessHSLCache[2] =
-            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.max.toFloat()
+            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
           ColorUtils.HSLToColor(paintDrawableStrokeLightnessHSLCache)
         }
         MODE_ALPHA -> TODO()
@@ -352,22 +383,36 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   }
 
   private fun refreshCurrentColor() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshCurrentColor() called"
+      )
+    }
+
     when (mode) {
       MODE_HUE -> {
         _currentColor.h = progress.toFloat()
       }
       MODE_SATURATION -> {
-
+        _currentColor.s = progress.toFloat() / mode.maxProgress
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
-
+        _currentColor.l = progress.toFloat() / mode.maxProgress
       }
       MODE_ALPHA -> TODO()
     }
   }
 
   private fun refreshProgress() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshProgress() called"
+      )
+    }
+
     when (mode) {
       MODE_HUE -> {
         progress = _currentColor.h.roundToInt()
@@ -437,8 +482,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   }
 
   enum class Mode(
-    val min: Int,
-    val max: Int
+    val minProgress: Int,
+    val maxProgress: Int
   ) {
     MODE_HUE(
       0,
@@ -534,6 +579,10 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     fun copy(): HSLColor {
       return HSLColor().setFromHSLColor(this)
+    }
+
+    override fun toString(): String {
+      return "HSLColor(a=$a, values=${values.contentToString()})"
     }
   }
 }
