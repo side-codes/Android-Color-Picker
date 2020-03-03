@@ -1,6 +1,5 @@
 package me.dummyco.andcolorpicker.app
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,27 +12,29 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    andColorPickerHView.colorPickListener = object : HSLColorPickerSeekBar.OnColorPickListener {
-      override fun onColorPicking(
-        color: HSLColorPickerSeekBar.HSLColor,
-        mode: Mode,
-        value: Int,
-        fromUser: Boolean
-      ) {
-        colorizeTextView(color)
-        notifySeekBarsOnHueChange(color)
-      }
+    andColorPickerHView.addListener(
+      object : HSLColorPickerSeekBar.OnColorPickListener {
+        override fun onColorPicking(
+          color: HSLColorPickerSeekBar.HSLColor,
+          mode: Mode,
+          value: Int,
+          fromUser: Boolean
+        ) {
+          colorizeTextView(color)
+          notifySeekBarsOnHueChange(color)
+        }
 
-      override fun onColorPicked(
-        color: HSLColorPickerSeekBar.HSLColor,
-        mode: Mode,
-        value: Int,
-        fromUser: Boolean
-      ) {
-        colorizeTextView(color)
-        notifySeekBarsOnHueChange(color)
+        override fun onColorPicked(
+          color: HSLColorPickerSeekBar.HSLColor,
+          mode: Mode,
+          value: Int,
+          fromUser: Boolean
+        ) {
+          colorizeTextView(color)
+          notifySeekBarsOnHueChange(color)
+        }
       }
-    }
+    )
 
     andColorPickerSView.mode = Mode.MODE_SATURATION
     andColorPickerLView.mode = Mode.MODE_LIGHTNESS

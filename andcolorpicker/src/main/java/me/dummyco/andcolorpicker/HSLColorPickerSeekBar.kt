@@ -31,7 +31,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     )
   }
 
-  var colorPickListener: OnColorPickListener? = null
+  private val colorPickListeners = hashSetOf<OnColorPickListener>()
 
   private var _mode = MODE_HUE
   var mode: Mode
@@ -50,6 +50,18 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   private lateinit var thumbDrawableDefaultWrapper: LayerDrawable
   private lateinit var thumbDrawablePressed: GradientDrawable
   private val coloringDrawables = hashSetOf<Drawable>()
+
+  fun addListener(listener: OnColorPickListener) {
+    colorPickListeners.add(listener)
+  }
+
+  fun removeListener(listener: OnColorPickListener) {
+    colorPickListeners.remove(listener)
+  }
+
+  fun clearListeners() {
+    colorPickListeners.clear()
+  }
 
   // TODO: Wrap props in enum
   private fun refreshProperties() {
@@ -328,12 +340,14 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   ) {
     refreshCurrentColor()
     refreshThumb()
-    colorPickListener?.onColorPicking(
-      _currentColor,
-      mode,
-      progress,
-      fromUser
-    )
+    colorPickListeners.forEach {
+      it.onColorPicking(
+        _currentColor,
+        mode,
+        progress,
+        fromUser
+      )
+    }
   }
 
   private fun refreshCurrentColor() {
@@ -352,16 +366,34 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     }
   }
 
+  private fun refreshProgress() {
+    when (mode) {
+      MODE_HUE -> {
+        progress = _currentColor.h.roundToInt()
+      }
+      MODE_SATURATION -> {
+
+      }
+      MODE_VALUE -> TODO()
+      MODE_LIGHTNESS -> {
+
+      }
+      MODE_ALPHA -> TODO()
+    }
+  }
+
   override fun onStartTrackingTouch(seekBar: SeekBar) {
   }
 
   override fun onStopTrackingTouch(seekBar: SeekBar) {
-    colorPickListener?.onColorPicked(
-      currentColor,
-      mode,
-      progress,
-      true
-    )
+    colorPickListeners.forEach {
+      it.onColorPicked(
+        currentColor,
+        mode,
+        progress,
+        true
+      )
+    }
   }
 
   // Internal holder for non-calculated modes
@@ -379,21 +411,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     set(value) {
       // TODO: Revisit whether to place it here or under branches
       _currentColor = value.copy()
-
-      when (mode) {
-        MODE_HUE -> {
-          progress = _currentColor.h.roundToInt()
-        }
-        MODE_SATURATION -> {
-
-        }
-        MODE_VALUE -> TODO()
-        MODE_LIGHTNESS -> {
-
-        }
-        MODE_ALPHA -> TODO()
-      }
-
+      refreshProgress()
       refreshProgressDrawable()
       refreshThumb()
     }
