@@ -17,6 +17,12 @@ class MainActivity : AppCompatActivity() {
 
   companion object {
     private const val TAG = "MainActivity"
+    private const val PRIMARY_DARK_LIGHTNESS_SHIFT = -10
+    private val AVAILABLE_SWITCH_MODES = listOf(
+      Mode.MODE_HUE,
+      Mode.MODE_SATURATION,
+      Mode.MODE_LIGHTNESS
+    )
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,9 +69,7 @@ class MainActivity : AppCompatActivity() {
       andColorPickerHView,
       andColorPickerSView,
       andColorPickerLView,
-      andColorPickerDynamicView.also {
-        it.tag = "Dynamic"
-      }
+      andColorPickerDynamicView
     )
 
     andColorPickerHView.currentColor = createRandomColor()
@@ -75,13 +79,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     dynamicSwitchButton.setOnClickListener {
-      val availableModes = listOf(
-        Mode.MODE_HUE,
-        Mode.MODE_SATURATION,
-        Mode.MODE_LIGHTNESS
-      )
       andColorPickerDynamicView.mode =
-        availableModes[(availableModes.indexOf(andColorPickerDynamicView.mode) + 1) % availableModes.size]
+        AVAILABLE_SWITCH_MODES[(AVAILABLE_SWITCH_MODES.indexOf(andColorPickerDynamicView.mode) + 1) % AVAILABLE_SWITCH_MODES.size]
     }
   }
 
@@ -92,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     })
 
     val statusBarColor = color.copy().also {
-      it.l -= 10
+      it.l += PRIMARY_DARK_LIGHTNESS_SHIFT
     }
     window.statusBarColor = statusBarColor.colorInt
 
@@ -102,7 +101,6 @@ class MainActivity : AppCompatActivity() {
       0xFFFFFF and color.colorInt
     )
 
-    hlsTextView.text =
-      "[${color.h}, ${color.s}, ${color.l}]"
+    hlsTextView.text = color.toString()
   }
 }
