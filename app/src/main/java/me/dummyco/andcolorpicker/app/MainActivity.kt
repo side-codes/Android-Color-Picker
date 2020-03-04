@@ -72,15 +72,21 @@ class MainActivity : AppCompatActivity() {
       andColorPickerDynamicView
     )
 
-    andColorPickerHView.currentColor = createRandomColor()
+    randomizePickedColor()
 
     setColorButton.setOnClickListener {
-      andColorPickerHView.currentColor = createRandomColor()
+      randomizePickedColor()
     }
 
     dynamicSwitchButton.setOnClickListener {
       andColorPickerDynamicView.mode =
         AVAILABLE_SWITCH_MODES[(AVAILABLE_SWITCH_MODES.indexOf(andColorPickerDynamicView.mode) + 1) % AVAILABLE_SWITCH_MODES.size]
+    }
+  }
+
+  private fun randomizePickedColor() {
+    andColorPickerHView.currentColor = createRandomColor().also {
+      it.l = it.l / 2
     }
   }
 
