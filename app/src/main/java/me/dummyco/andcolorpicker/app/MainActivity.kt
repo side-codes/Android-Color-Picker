@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     randomizePickedColor()
 
-    setColorButton.setOnClickListener {
+    setRandomColorButton.setOnClickListener {
       randomizePickedColor()
     }
 
@@ -100,6 +100,9 @@ class MainActivity : AppCompatActivity() {
       it.l += PRIMARY_DARK_LIGHTNESS_SHIFT
     }
     window.statusBarColor = statusBarColor.colorInt
+
+    dynamicSwitchButton.backgroundTintList = ColorStateList.valueOf(color.colorInt)
+    setRandomColorButton.backgroundTintList = ColorStateList.valueOf(color.colorInt)
 
     colorTextView.setBackgroundColor(color.colorInt)
     colorTextView.text = String.format(

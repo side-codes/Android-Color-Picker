@@ -12,7 +12,7 @@
     android:id="@+id/hueTitleTextView"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:text="Hue"
+    android:text="@string/title_hue"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:text="Saturation"
+    android:text="@string/title_saturation"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/andColorPickerHView" />
@@ -48,7 +48,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:text="Lightness"
+    android:text="@string/title_lightness"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/andColorPickerSView" />
@@ -66,7 +66,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:text="Dynamic"
+    android:text="@string/title_dynamic"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/andColorPickerLView" />
@@ -79,11 +79,11 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView" />
 
-  <Button
+  <com.google.android.material.button.MaterialButton
     android:id="@+id/dynamicSwitchButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Switch"
+    android:text="@string/action_switch_mode"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/andColorPickerDynamicView" />
@@ -109,12 +109,12 @@
     app:layout_constraintTop_toBottomOf="@+id/colorTextView"
     tools:text="[128, 10, 20]" />
 
-  <Button
-    android:id="@+id/setColorButton"
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/setRandomColorButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:text="Set color"
+    android:text="@string/action_set_random_color"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/hlsTextView" />
