@@ -57,7 +57,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       }
     }
 
-  var coloringMode = ColoringMode.PURE_COLOR
+  var coloringMode = ColoringMode.OUTPUT_COLOR
 
   private var _currentColor = DiscreteHSLColor()
 
@@ -94,8 +94,19 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   // Dirty hack to stop onProgressChanged while playing with min/max
   private var propertiesUpdateInProcess = false
 
+  // TODO: Make caches lazy?
   private val paintDrawableStrokeSaturationHSLCache = DiscreteHSLColor()
   private val paintDrawableStrokeLightnessHSLCache = DiscreteHSLColor()
+
+  private val progressDrawableSaturationColorsCache = intArrayOf(
+      0,
+      0
+  )
+  private val progressDrawableLightnessColorsCache = intArrayOf(
+      0,
+      0,
+      0
+  )
 
   constructor(context: Context) : super(context) {
     init()
@@ -323,19 +334,18 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         HUE_COLOR_CHECKPOINTS
       }
       MODE_SATURATION -> {
-        intArrayOf(
-          ZERO_SATURATION_COLOR,
-          // TODO: Use color
-          _currentColor.pureColorInt
-        )
+        progressDrawableSaturationColorsCache.also {
+          it[0] = ZERO_SATURATION_COLOR
+          it[1] = _currentColor.pureColorInt
+        }
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
-        intArrayOf(
-          Color.BLACK,
-          _currentColor.pureColorInt,
-          Color.WHITE
-        )
+        progressDrawableLightnessColorsCache.also {
+          it[0] = Color.BLACK
+          it[1] = _currentColor.pureColorInt
+          it[2] = Color.WHITE
+        }
       }
       MODE_ALPHA -> TODO()
     }
