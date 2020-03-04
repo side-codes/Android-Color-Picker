@@ -24,7 +24,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     private const val TAG = "AndColorPickerSeekBar"
     private const val DEBUG = true
     private const val COERCE_AT_MOST_LIGHTNING = 90
-    private val HUE_CHECKPOINTS = intArrayOf(
+    private val HUE_COLOR_CHECKPOINTS = intArrayOf(
       Color.RED,
       Color.YELLOW,
       Color.GREEN,
@@ -32,6 +32,11 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       Color.BLUE,
       Color.MAGENTA,
       Color.RED
+    )
+    private val ZERO_SATURATION_COLOR = Color.rgb(
+        128,
+        128,
+        128
     )
   }
 
@@ -52,6 +57,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         refreshThumb()
       }
     }
+
+  var coloringMode = ColoringMode.PURE_COLOR
 
   private var _currentColor = HSLColor()
 
@@ -322,15 +329,11 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
       MODE_HUE -> {
-        HUE_CHECKPOINTS
+        HUE_COLOR_CHECKPOINTS
       }
       MODE_SATURATION -> {
         intArrayOf(
-          Color.rgb(
-            128,
-            128,
-            128
-          ),
+          ZERO_SATURATION_COLOR,
           // TODO: Use color
           _currentColor.clearColorInt
         )
@@ -534,6 +537,11 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       mode: Mode,
       value: Int
     )
+  }
+
+  enum class ColoringMode {
+    PURE_COLOR,
+    OUTPUT_COLOR
   }
 
   enum class Mode(
