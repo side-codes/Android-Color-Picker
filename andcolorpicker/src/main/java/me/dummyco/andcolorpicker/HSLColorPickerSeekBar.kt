@@ -11,7 +11,6 @@ import android.util.StateSet
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.widget.AppCompatSeekBar
-import androidx.core.graphics.ColorUtils
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode.*
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
@@ -96,11 +95,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   private var propertiesUpdateInProcess = false
 
   private val paintDrawableStrokeSaturationHSLCache = DiscreteHSLColor()
-  private val paintDrawableStrokeLightnessHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
+  private val paintDrawableStrokeLightnessHSLCache = DiscreteHSLColor()
 
   constructor(context: Context) : super(context) {
     init()
@@ -451,17 +446,15 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
               _currentColor.h.toFloat(),
               progress / mode.maxProgress.toFloat(),
               DiscreteHSLColor.DEFAULT_L
-          )
-
-          paintDrawableStrokeSaturationHSLCache.colorInt
+          ).colorInt
         }
         MODE_VALUE -> TODO()
         MODE_LIGHTNESS -> {
-          paintDrawableStrokeLightnessHSLCache[DiscreteHSLColor.H_INDEX] = _currentColor.h.toFloat()
-          paintDrawableStrokeLightnessHSLCache[DiscreteHSLColor.S_INDEX] = DiscreteHSLColor.DEFAULT_S
-          paintDrawableStrokeLightnessHSLCache[DiscreteHSLColor.L_INDEX] =
-            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
-          ColorUtils.HSLToColor(paintDrawableStrokeLightnessHSLCache)
+          paintDrawableStrokeLightnessHSLCache.setFromHSL(
+              _currentColor.h.toFloat(),
+              DiscreteHSLColor.DEFAULT_S,
+              progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
+          ).colorInt
         }
         MODE_ALPHA -> TODO()
       }

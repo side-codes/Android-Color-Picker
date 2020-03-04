@@ -4,6 +4,7 @@ import androidx.core.graphics.ColorUtils
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+// TODO: Invent hierarchy
 // TODO: Provide precision options
 class DiscreteHSLColor {
   companion object {
