@@ -13,7 +13,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode.*
-import me.dummyco.andcolorpicker.model.HSLColor
+import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
 // TODO: Add logger solution
 // TODO: Add call flow diagram
@@ -60,10 +60,10 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
   var coloringMode = ColoringMode.PURE_COLOR
 
-  private var _currentColor = HSLColor()
+  private var _currentColor = DiscreteHSLColor()
 
   // TODO: To method?
-  var currentColor: HSLColor
+  var currentColor: DiscreteHSLColor
     get() {
       return when (mode) {
         MODE_VALUE -> TODO()
@@ -95,11 +95,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   // Dirty hack to stop onProgressChanged while playing with min/max
   private var propertiesUpdateInProcess = false
 
-  private val paintDrawableStrokeSaturationHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
+  private val paintDrawableStrokeSaturationHSLCache = DiscreteHSLColor()
   private val paintDrawableStrokeLightnessHSLCache = floatArrayOf(
     0f,
     0f,
@@ -335,14 +331,14 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         intArrayOf(
           ZERO_SATURATION_COLOR,
           // TODO: Use color
-          _currentColor.clearColorInt
+          _currentColor.pureColorInt
         )
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
         intArrayOf(
           Color.BLACK,
-          _currentColor.clearColorInt,
+          _currentColor.pureColorInt,
           Color.WHITE
         )
       }
@@ -448,20 +444,22 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       thumbStrokeWidthPx,
       when (mode) {
         MODE_HUE -> {
-          _currentColor.clearColorInt
+          _currentColor.pureColorInt
         }
         MODE_SATURATION -> {
-          paintDrawableStrokeSaturationHSLCache[HSLColor.H_INDEX] = _currentColor.h.toFloat()
-          paintDrawableStrokeSaturationHSLCache[HSLColor.S_INDEX] =
-            progress / mode.maxProgress.toFloat()
-          paintDrawableStrokeSaturationHSLCache[HSLColor.L_INDEX] = HSLColor.DEFAULT_L
-          ColorUtils.HSLToColor(paintDrawableStrokeSaturationHSLCache)
+          paintDrawableStrokeSaturationHSLCache.setFromHSL(
+              _currentColor.h.toFloat(),
+              progress / mode.maxProgress.toFloat(),
+              DiscreteHSLColor.DEFAULT_L
+          )
+
+          paintDrawableStrokeSaturationHSLCache.colorInt
         }
         MODE_VALUE -> TODO()
         MODE_LIGHTNESS -> {
-          paintDrawableStrokeLightnessHSLCache[HSLColor.H_INDEX] = _currentColor.h.toFloat()
-          paintDrawableStrokeLightnessHSLCache[HSLColor.S_INDEX] = HSLColor.DEFAULT_S
-          paintDrawableStrokeLightnessHSLCache[HSLColor.L_INDEX] =
+          paintDrawableStrokeLightnessHSLCache[DiscreteHSLColor.H_INDEX] = _currentColor.h.toFloat()
+          paintDrawableStrokeLightnessHSLCache[DiscreteHSLColor.S_INDEX] = DiscreteHSLColor.DEFAULT_S
+          paintDrawableStrokeLightnessHSLCache[DiscreteHSLColor.L_INDEX] =
             progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
           ColorUtils.HSLToColor(paintDrawableStrokeLightnessHSLCache)
         }
@@ -517,7 +515,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   interface OnColorPickListener {
     fun onColorPicking(
       picker: HSLColorPickerSeekBar,
-      color: HSLColor,
+      color: DiscreteHSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
@@ -525,7 +523,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     fun onColorPicked(
       picker: HSLColorPickerSeekBar,
-      color: HSLColor,
+      color: DiscreteHSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
@@ -533,7 +531,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     fun onColorChanged(
       picker: HSLColorPickerSeekBar,
-      color: HSLColor,
+      color: DiscreteHSLColor,
       mode: Mode,
       value: Int
     )

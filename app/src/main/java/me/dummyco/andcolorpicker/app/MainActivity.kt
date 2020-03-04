@@ -9,8 +9,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode
 import me.dummyco.andcolorpicker.PickerGroup
-import me.dummyco.andcolorpicker.model.HSLColor
-import me.dummyco.andcolorpicker.model.HSLColor.Companion.createRandomColor
+import me.dummyco.andcolorpicker.model.DiscreteHSLColor
+import me.dummyco.andcolorpicker.model.DiscreteHSLColor.Companion.createRandomColor
 import me.dummyco.andcolorpicker.registerPickers
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
       object : HSLColorPickerSeekBar.OnColorPickListener {
         override fun onColorPicking(
           picker: HSLColorPickerSeekBar,
-          color: HSLColor,
+          color: DiscreteHSLColor,
           mode: Mode,
           value: Int,
           fromUser: Boolean
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onColorPicked(
           picker: HSLColorPickerSeekBar,
-          color: HSLColor,
+          color: DiscreteHSLColor,
           mode: Mode,
           value: Int,
           fromUser: Boolean
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onColorChanged(
           picker: HSLColorPickerSeekBar,
-          color: HSLColor,
+          color: DiscreteHSLColor,
           mode: Mode,
           value: Int
         ) {
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   @SuppressLint("SetTextI18n")
-  private fun colorize(color: HSLColor) {
+  private fun colorize(color: DiscreteHSLColor) {
     supportActionBar?.setBackgroundDrawable(GradientDrawable().also {
       it.color = ColorStateList.valueOf(color.colorInt)
     })

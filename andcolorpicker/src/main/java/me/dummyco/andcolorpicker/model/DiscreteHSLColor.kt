@@ -1,12 +1,11 @@
 package me.dummyco.andcolorpicker.model
 
-import android.graphics.Color
 import androidx.core.graphics.ColorUtils
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-// TODO: Make integer-based and provide precision options
-class HSLColor {
+// TODO: Provide precision options
+class DiscreteHSLColor {
   companion object {
     const val H_INDEX = 0
     const val S_INDEX = 1
@@ -25,8 +24,8 @@ class HSLColor {
       return DEFAULT_HSL_VALUES[index]
     }
 
-    fun createRandomColor(): HSLColor {
-      return HSLColor().setFromHSL(
+    fun createRandomColor(): DiscreteHSLColor {
+      return DiscreteHSLColor().setFromHSL(
         floatArrayOf(
           Random.Default.nextFloat() * 360f,
           Random.Default.nextFloat(),
@@ -78,27 +77,29 @@ class HSLColor {
       )
     }
 
+  private val colorIntHSLCache = floatArrayOf(
+      0f,
+      0f,
+      0f
+  )
   val colorInt: Int
     get() {
-      return ColorUtils.HSLToColor(
-        floatArrayOf(
-          values[H_INDEX].toFloat(),
-          values[S_INDEX] / 100f,
-          values[L_INDEX] / 100f
-        )
-      )
+      colorIntHSLCache[H_INDEX] = values[H_INDEX].toFloat()
+      colorIntHSLCache[S_INDEX] = values[S_INDEX] / 100f
+      colorIntHSLCache[L_INDEX] = values[L_INDEX] / 100f
+      return ColorUtils.HSLToColor(colorIntHSLCache)
     }
-  private val _clearColorIntHSLCache = floatArrayOf(
+  private val pureColorIntHSLCache = floatArrayOf(
     0f,
     0f,
     0f
   )
-  val clearColorInt: Int
+  val pureColorInt: Int
     get() {
-      _clearColorIntHSLCache[H_INDEX] = h.toFloat()
-      _clearColorIntHSLCache[S_INDEX] = DEFAULT_S
-      _clearColorIntHSLCache[L_INDEX] = DEFAULT_L
-      return ColorUtils.HSLToColor(_clearColorIntHSLCache)
+      pureColorIntHSLCache[H_INDEX] = h.toFloat()
+      pureColorIntHSLCache[S_INDEX] = DEFAULT_S
+      pureColorIntHSLCache[L_INDEX] = DEFAULT_L
+      return ColorUtils.HSLToColor(pureColorIntHSLCache)
     }
 
   private val values = intArrayOf(
@@ -107,14 +108,14 @@ class HSLColor {
     0
   )
 
-  fun setFromHSL(h: Float, s: Float, l: Float): HSLColor {
+  fun setFromHSL(h: Float, s: Float, l: Float): DiscreteHSLColor {
     this.h = h.roundToInt()
     this.s = (s * 100f).roundToInt()
     this.l = (l * 100f).roundToInt()
     return this
   }
 
-  fun setFromHSL(hsl: FloatArray): HSLColor {
+  fun setFromHSL(hsl: FloatArray): DiscreteHSLColor {
     return setFromHSL(
       hsl[H_INDEX],
       hsl[S_INDEX],
@@ -122,18 +123,17 @@ class HSLColor {
     )
   }
 
-  fun setFromRGB(r: Int, g: Int, b: Int): HSLColor {
+  // TODO: Cache output?
+  fun setFromRGB(r: Int, g: Int, b: Int): DiscreteHSLColor {
     val output = floatArrayOf(
       0f,
       0f,
       0f
     )
-    ColorUtils.colorToHSL(
-      Color.rgb(
-        r,
-        g,
-        b
-      ),
+    ColorUtils.RGBToHSL(
+      r,
+      g,
+      b,
       output
     )
     setFromHSL(
@@ -142,13 +142,13 @@ class HSLColor {
     return this
   }
 
-  fun setFromHSLColor(hslColor: HSLColor): HSLColor {
+  fun setFromHSLColor(hslColor: DiscreteHSLColor): DiscreteHSLColor {
     hslColor.copyValuesTo(values)
     return this
   }
 
   // FIXME: Unsafe, provide checks
-  fun copyValuesFrom(inValues: IntArray): HSLColor {
+  fun copyValuesFrom(inValues: IntArray): DiscreteHSLColor {
     inValues.copyInto(values)
     return this
   }
@@ -157,8 +157,8 @@ class HSLColor {
     values.copyInto(outValues)
   }
 
-  fun copy(): HSLColor {
-    return HSLColor().setFromHSLColor(this)
+  fun copy(): DiscreteHSLColor {
+    return DiscreteHSLColor().setFromHSLColor(this)
   }
 
   override fun toString(): String {
@@ -169,7 +169,7 @@ class HSLColor {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as HSLColor
+    other as DiscreteHSLColor
 
     if (_a != other._a) return false
     if (!values.contentEquals(other.values)) return false

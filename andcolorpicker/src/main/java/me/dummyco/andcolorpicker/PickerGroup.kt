@@ -1,6 +1,6 @@
 package me.dummyco.andcolorpicker
 
-import me.dummyco.andcolorpicker.model.HSLColor
+import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
 class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
   // Kinda prioritized collection
@@ -23,7 +23,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   override fun onColorPicking(
     picker: HSLColorPickerSeekBar,
-    color: HSLColor,
+    color: DiscreteHSLColor,
     mode: HSLColorPickerSeekBar.Mode,
     value: Int,
     fromUser: Boolean
@@ -36,7 +36,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   override fun onColorPicked(
     picker: HSLColorPickerSeekBar,
-    color: HSLColor,
+    color: DiscreteHSLColor,
     mode: HSLColorPickerSeekBar.Mode,
     value: Int,
     fromUser: Boolean
@@ -49,7 +49,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   override fun onColorChanged(
     picker: HSLColorPickerSeekBar,
-    color: HSLColor,
+    color: DiscreteHSLColor,
     mode: HSLColorPickerSeekBar.Mode,
     value: Int
   ) {
@@ -61,7 +61,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   private fun notifyGroupOnBroadcastFrom(
     picker: HSLColorPickerSeekBar,
-    color: HSLColor
+    color: DiscreteHSLColor
   ) {
     pickers.filter { it != picker }.forEach {
       it.currentColor = color
