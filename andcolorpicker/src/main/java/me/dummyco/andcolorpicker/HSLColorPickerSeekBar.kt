@@ -2,7 +2,6 @@ package me.dummyco.andcolorpicker
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.*
 import android.os.Build
@@ -54,37 +53,51 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       }
     }
 
+  private var _currentColor = HSLColor()
+
+  // TODO: To method?
+  var currentColor: HSLColor
+    get() {
+      return when (mode) {
+        MODE_VALUE -> TODO()
+        MODE_ALPHA -> TODO()
+        else -> _currentColor.copy()
+      }
+    }
+    set(value) {
+      if (DEBUG) {
+        Log.d(
+          TAG,
+          "currentColor set() called on $this with $value"
+        )
+      }
+      if (_currentColor == value) {
+        return
+      }
+      _currentColor = value.copy()
+      refreshProgressFromCurrentColor()
+      refreshProgressDrawable()
+      refreshThumb()
+      notifyListenersOnColorChanged()
+    }
+
   private lateinit var thumbDrawableDefaultWrapper: LayerDrawable
   private lateinit var thumbDrawablePressed: GradientDrawable
   private val coloringDrawables = hashSetOf<Drawable>()
 
-  fun addListener(listener: OnColorPickListener) {
-    colorPickListeners.add(listener)
-  }
-
-  fun removeListener(listener: OnColorPickListener) {
-    colorPickListeners.remove(listener)
-  }
-
-  fun clearListeners() {
-    colorPickListeners.clear()
-  }
-
+  // Dirty hack to stop onProgressChanged while playing with min/max
   private var propertiesUpdateInProcess = false
 
-  // TODO: Wrap props in enum
-  private fun refreshProperties() {
-    if (DEBUG) {
-      Log.d(
-        TAG,
-        "refreshProperties() called on $this"
-      )
-    }
-
-    propertiesUpdateInProcess = true
-    max = mode.maxProgress
-    propertiesUpdateInProcess = false
-  }
+  private val paintDrawableStrokeSaturationHSLCache = floatArrayOf(
+    0f,
+    0f,
+    0f
+  )
+  private val paintDrawableStrokeLightnessHSLCache = floatArrayOf(
+    0f,
+    0f,
+    0f
+  )
 
   constructor(context: Context) : super(context) {
     init()
@@ -263,6 +276,42 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     refreshProgressDrawable()
   }
 
+  fun addListener(listener: OnColorPickListener) {
+    colorPickListeners.add(listener)
+  }
+
+  fun removeListener(listener: OnColorPickListener) {
+    colorPickListeners.remove(listener)
+  }
+
+  fun clearListeners() {
+    colorPickListeners.clear()
+  }
+
+  private fun notifyListenersOnColorChanged() {
+    colorPickListeners.forEach {
+      it.onColorChanged(
+        this,
+        _currentColor,
+        mode,
+        progress
+      )
+    }
+  }
+
+  private fun refreshProperties() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshProperties() called on $this"
+      )
+    }
+
+    propertiesUpdateInProcess = true
+    max = mode.maxProgress
+    propertiesUpdateInProcess = false
+  }
+
   private fun refreshProgressDrawable() {
     if (DEBUG) {
       Log.d(
@@ -315,85 +364,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           paintDrawableStroke(it.getDrawable(0) as GradientDrawable)
         }
       }
-    }
-  }
-
-  private val paintDrawableStrokeSaturationHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
-  private val paintDrawableStrokeLightnessHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
-
-  private fun paintDrawableStroke(drawable: GradientDrawable) {
-    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
-
-    drawable.setStroke(
-      thumbStrokeWidthPx,
-      when (mode) {
-        MODE_HUE -> {
-          _currentColor.clearColorInt
-        }
-        MODE_SATURATION -> {
-          paintDrawableStrokeSaturationHSLCache[HSLColor.H_INDEX] = _currentColor.h.toFloat()
-          paintDrawableStrokeSaturationHSLCache[HSLColor.S_INDEX] =
-            progress / mode.maxProgress.toFloat()
-          paintDrawableStrokeSaturationHSLCache[HSLColor.L_INDEX] = HSLColor.DEFAULT_L
-          ColorUtils.HSLToColor(paintDrawableStrokeSaturationHSLCache)
-        }
-        MODE_VALUE -> TODO()
-        MODE_LIGHTNESS -> {
-          paintDrawableStrokeLightnessHSLCache[HSLColor.H_INDEX] = _currentColor.h.toFloat()
-          paintDrawableStrokeLightnessHSLCache[HSLColor.S_INDEX] = HSLColor.DEFAULT_S
-          paintDrawableStrokeLightnessHSLCache[HSLColor.L_INDEX] =
-            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
-          ColorUtils.HSLToColor(paintDrawableStrokeLightnessHSLCache)
-        }
-        MODE_ALPHA -> TODO()
-      }
-    )
-  }
-
-  override fun onDraw(canvas: Canvas) {
-    super.onDraw(canvas)
-  }
-
-  // TODO: Revisit
-  override fun onProgressChanged(
-    seekBar: SeekBar,
-    progress: Int,
-    fromUser: Boolean
-  ) {
-    if (propertiesUpdateInProcess) {
-      return
-    }
-
-    refreshInternalCurrentColorFromProgress()
-    refreshProgressDrawable()
-    refreshThumb()
-    colorPickListeners.forEach {
-      it.onColorPicking(
-        this,
-        _currentColor,
-        mode,
-        progress,
-        fromUser
-      )
-    }
-  }
-
-  private fun notifyListenersOnColorChanged() {
-    colorPickListeners.forEach {
-      it.onColorChanged(
-        this,
-        _currentColor,
-        mode,
-        progress
-      )
     }
   }
 
@@ -468,6 +438,59 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     }
   }
 
+  private fun paintDrawableStroke(drawable: GradientDrawable) {
+    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
+
+    drawable.setStroke(
+      thumbStrokeWidthPx,
+      when (mode) {
+        MODE_HUE -> {
+          _currentColor.clearColorInt
+        }
+        MODE_SATURATION -> {
+          paintDrawableStrokeSaturationHSLCache[HSLColor.H_INDEX] = _currentColor.h.toFloat()
+          paintDrawableStrokeSaturationHSLCache[HSLColor.S_INDEX] =
+            progress / mode.maxProgress.toFloat()
+          paintDrawableStrokeSaturationHSLCache[HSLColor.L_INDEX] = HSLColor.DEFAULT_L
+          ColorUtils.HSLToColor(paintDrawableStrokeSaturationHSLCache)
+        }
+        MODE_VALUE -> TODO()
+        MODE_LIGHTNESS -> {
+          paintDrawableStrokeLightnessHSLCache[HSLColor.H_INDEX] = _currentColor.h.toFloat()
+          paintDrawableStrokeLightnessHSLCache[HSLColor.S_INDEX] = HSLColor.DEFAULT_S
+          paintDrawableStrokeLightnessHSLCache[HSLColor.L_INDEX] =
+            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
+          ColorUtils.HSLToColor(paintDrawableStrokeLightnessHSLCache)
+        }
+        MODE_ALPHA -> TODO()
+      }
+    )
+  }
+
+  // TODO: Revisit
+  override fun onProgressChanged(
+    seekBar: SeekBar,
+    progress: Int,
+    fromUser: Boolean
+  ) {
+    if (propertiesUpdateInProcess) {
+      return
+    }
+
+    refreshInternalCurrentColorFromProgress()
+    refreshProgressDrawable()
+    refreshThumb()
+    colorPickListeners.forEach {
+      it.onColorPicking(
+        this,
+        _currentColor,
+        mode,
+        progress,
+        fromUser
+      )
+    }
+  }
+
   override fun onStartTrackingTouch(seekBar: SeekBar) {
   }
 
@@ -486,38 +509,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   override fun toString(): String {
     return "HSLColorPickerSeekBar(tag = $tag, _mode=$_mode, _currentColor=$_currentColor)"
   }
-
-  // Internal holder for non-calculated modes
-  private var _currentColor = HSLColor()
-
-  // TODO: Copy on read / copy on write?
-  // TODO: To method?
-  // TODO: Add support of missing components?
-  var currentColor: HSLColor
-    get() {
-      return when (mode) {
-        MODE_VALUE -> TODO()
-        MODE_ALPHA -> TODO()
-        else -> _currentColor.copy()
-      }
-    }
-    set(value) {
-      if (DEBUG) {
-        Log.d(
-          TAG,
-          "currentColor set() called on $this with $value"
-        )
-      }
-      // TODO: Revisit whether to place it here or under branches
-      if (_currentColor == value) {
-        return
-      }
-      _currentColor = value.copy()
-      refreshProgressFromCurrentColor()
-      refreshProgressDrawable()
-      refreshThumb()
-      notifyListenersOnColorChanged()
-    }
 
   // TODO: Rename
   interface OnColorPickListener {
