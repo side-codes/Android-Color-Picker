@@ -11,6 +11,7 @@ import android.util.StateSet
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.widget.AppCompatSeekBar
+import androidx.core.graphics.ColorUtils
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode.*
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
@@ -33,9 +34,9 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       Color.RED
     )
     private val ZERO_SATURATION_COLOR = Color.rgb(
-        128,
-        128,
-        128
+      128,
+      128,
+      128
     )
   }
 
@@ -99,13 +100,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   private val paintDrawableStrokeLightnessHSLCache = DiscreteHSLColor()
 
   private val progressDrawableSaturationColorsCache = intArrayOf(
-      0,
-      0
+    0,
+    0
   )
   private val progressDrawableLightnessColorsCache = intArrayOf(
-      0,
-      0,
-      0
+    0,
+    0,
+    0
   )
 
   constructor(context: Context) : super(context) {
@@ -321,6 +322,26 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     propertiesUpdateInProcess = false
   }
 
+  // TODO: Make lazy?
+  private val createHueOutputColorCheckpointsHSLCache = floatArrayOf(
+    0f,
+    0f,
+    0f
+  )
+
+  // TODO: Get rid of toIntArray allocations
+  private fun createHueOutputColorCheckpoints(): IntArray {
+    return HUE_COLOR_CHECKPOINTS.map {
+      ColorUtils.colorToHSL(
+        it,
+        createHueOutputColorCheckpointsHSLCache
+      )
+      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.S_INDEX] = currentColor.floatS
+      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.L_INDEX] = currentColor.floatL
+      ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
+    }.toIntArray()
+  }
+
   private fun refreshProgressDrawable() {
     if (DEBUG) {
       Log.d(
@@ -331,7 +352,10 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
       MODE_HUE -> {
-        HUE_COLOR_CHECKPOINTS
+        when (coloringMode) {
+          ColoringMode.PURE_COLOR -> HUE_COLOR_CHECKPOINTS
+          ColoringMode.OUTPUT_COLOR -> createHueOutputColorCheckpoints()
+        }
       }
       MODE_SATURATION -> {
         progressDrawableSaturationColorsCache.also {
@@ -384,18 +408,18 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     // TODO: Use Atomic and compare/set?
     val changed: Boolean = when (mode) {
       MODE_HUE -> {
-        val currentH = _currentColor.h
+        val currentH = _currentColor.intH
         if (currentH != currentProgress) {
-          _currentColor.h = currentProgress
+          _currentColor.intH = currentProgress
           true
         } else {
           false
         }
       }
       MODE_SATURATION -> {
-        val currentS = _currentColor.s
+        val currentS = _currentColor.intS
         if (currentS != currentProgress) {
-          _currentColor.s = currentProgress
+          _currentColor.intS = currentProgress
           true
         } else {
           false
@@ -403,9 +427,9 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
-        val currentL = _currentColor.l
+        val currentL = _currentColor.intL
         if (currentL != currentProgress) {
-          _currentColor.l = currentProgress
+          _currentColor.intL = currentProgress
           true
         } else {
           false
@@ -429,14 +453,14 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     progress = when (mode) {
       MODE_HUE -> {
-        _currentColor.h
+        _currentColor.intH
       }
       MODE_SATURATION -> {
-        _currentColor.s
+        _currentColor.intS
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
-        _currentColor.l
+        _currentColor.intL
       }
       MODE_ALPHA -> TODO()
     }
@@ -453,17 +477,17 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         }
         MODE_SATURATION -> {
           paintDrawableStrokeSaturationHSLCache.setFromHSL(
-              _currentColor.h.toFloat(),
-              progress / mode.maxProgress.toFloat(),
-              DiscreteHSLColor.DEFAULT_L
+            _currentColor.intH.toFloat(),
+            progress / mode.maxProgress.toFloat(),
+            DiscreteHSLColor.DEFAULT_L
           ).colorInt
         }
         MODE_VALUE -> TODO()
         MODE_LIGHTNESS -> {
           paintDrawableStrokeLightnessHSLCache.setFromHSL(
-              _currentColor.h.toFloat(),
-              DiscreteHSLColor.DEFAULT_S,
-              progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
+            _currentColor.intH.toFloat(),
+            DiscreteHSLColor.DEFAULT_S,
+            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
           ).colorInt
         }
         MODE_ALPHA -> TODO()

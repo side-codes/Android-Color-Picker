@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
   private fun randomizePickedColor() {
     andColorPickerHView.currentColor = createRandomColor().also {
-      it.l = it.l / 2
+      it.intL = it.intL / 2
     }
   }
 
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
     appBarLayout.backgroundTintList = ColorStateList.valueOf(color.colorInt)
 
     val statusBarColor = color.copy().also {
-      it.l += PRIMARY_DARK_LIGHTNESS_SHIFT
+      it.intL += PRIMARY_DARK_LIGHTNESS_SHIFT
     }
     window.statusBarColor = statusBarColor.colorInt
 

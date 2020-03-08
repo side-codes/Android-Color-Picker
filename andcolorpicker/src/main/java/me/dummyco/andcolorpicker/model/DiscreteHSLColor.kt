@@ -36,7 +36,14 @@ class DiscreteHSLColor {
     }
   }
 
-  var h: Int
+  var floatH: Float
+    get() {
+      return intH.toFloat()
+    }
+    set(value) {
+      intS = value.toInt()
+    }
+  var intH: Int
     get() {
       return values[H_INDEX]
     }
@@ -46,7 +53,14 @@ class DiscreteHSLColor {
         360
       )
     }
-  var s: Int
+  var floatS: Float
+    get() {
+      return intS / 100f
+    }
+    set(value) {
+      intS = (value * 100f).toInt()
+    }
+  var intS: Int
     get() {
       return values[S_INDEX]
     }
@@ -56,7 +70,14 @@ class DiscreteHSLColor {
         100
       )
     }
-  var l: Int
+  var floatL: Float
+    get() {
+      return intL / 100f
+    }
+    set(value) {
+      intL = (value * 100f).toInt()
+    }
+  var intL: Int
     get() {
       return values[L_INDEX]
     }
@@ -67,7 +88,7 @@ class DiscreteHSLColor {
       )
     }
   private var _a: Int = 0
-  var a: Int
+  var intA: Int
     get() {
       return _a
     }
@@ -79,9 +100,9 @@ class DiscreteHSLColor {
     }
 
   private val colorIntHSLCache = floatArrayOf(
-      0f,
-      0f,
-      0f
+    0f,
+    0f,
+    0f
   )
   val colorInt: Int
     get() {
@@ -97,7 +118,7 @@ class DiscreteHSLColor {
   )
   val pureColorInt: Int
     get() {
-      pureColorIntHSLCache[H_INDEX] = h.toFloat()
+      pureColorIntHSLCache[H_INDEX] = intH.toFloat()
       pureColorIntHSLCache[S_INDEX] = DEFAULT_S
       pureColorIntHSLCache[L_INDEX] = DEFAULT_L
       return ColorUtils.HSLToColor(pureColorIntHSLCache)
@@ -110,9 +131,9 @@ class DiscreteHSLColor {
   )
 
   fun setFromHSL(h: Float, s: Float, l: Float): DiscreteHSLColor {
-    this.h = h.roundToInt()
-    this.s = (s * 100f).roundToInt()
-    this.l = (l * 100f).roundToInt()
+    this.intH = h.roundToInt()
+    this.intS = (s * 100f).roundToInt()
+    this.intL = (l * 100f).roundToInt()
     return this
   }
 
@@ -163,7 +184,7 @@ class DiscreteHSLColor {
   }
 
   override fun toString(): String {
-    return "HSLColor(a=$a, values=${values.contentToString()})"
+    return "HSLColor(a=$intA, values=${values.contentToString()})"
   }
 
   override fun equals(other: Any?): Boolean {
