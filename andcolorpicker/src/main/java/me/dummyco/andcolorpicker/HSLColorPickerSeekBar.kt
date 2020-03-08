@@ -99,15 +99,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   private val paintDrawableStrokeSaturationHSLCache = DiscreteHSLColor()
   private val paintDrawableStrokeLightnessHSLCache = DiscreteHSLColor()
 
-  private val progressDrawableSaturationColorsCache = intArrayOf(
-    0,
-    0
-  )
-  private val progressDrawableLightnessColorsCache = intArrayOf(
-    0,
-    0,
-    0
-  )
+  private val progressDrawableSaturationColorsCache = IntArray(2)
+  private val progressDrawableLightnessColorsCache = IntArray(3)
 
   constructor(context: Context) : super(context) {
     init()
@@ -322,12 +315,9 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     propertiesUpdateInProcess = false
   }
 
-  // TODO: Make lazy?
-  private val createHueOutputColorCheckpointsHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
+  private val createHueOutputColorCheckpointsHSLCache by lazy {
+    FloatArray(3)
+  }
 
   // TODO: Get rid of toIntArray allocations
   private fun createHueOutputColorCheckpoints(): IntArray {

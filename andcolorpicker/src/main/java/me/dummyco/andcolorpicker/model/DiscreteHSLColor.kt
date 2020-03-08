@@ -124,11 +124,7 @@ class DiscreteHSLColor {
       return ColorUtils.HSLToColor(pureColorIntHSLCache)
     }
 
-  private val values = intArrayOf(
-    0,
-    0,
-    0
-  )
+  private val values = IntArray(3)
 
   fun setFromHSL(h: Float, s: Float, l: Float): DiscreteHSLColor {
     this.intH = h.roundToInt()
@@ -147,11 +143,7 @@ class DiscreteHSLColor {
 
   // TODO: Cache output?
   fun setFromRGB(r: Int, g: Int, b: Int): DiscreteHSLColor {
-    val output = floatArrayOf(
-      0f,
-      0f,
-      0f
-    )
+    val output = FloatArray(3)
     ColorUtils.RGBToHSL(
       r,
       g,
