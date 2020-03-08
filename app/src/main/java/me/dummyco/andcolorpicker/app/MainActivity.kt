@@ -2,9 +2,15 @@ package me.dummyco.andcolorpicker.app
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
+import com.mikepenz.iconics.utils.icon
 import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode
@@ -25,9 +31,18 @@ class MainActivity : AppCompatActivity() {
     )
   }
 
+  private val colorfulViews = hashSetOf<View>()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    dynamicSwitchButton.icon = IconicsDrawable(this).icon(MaterialDesignDx.Icon.gmf_loop)
+    setRandomColorButton.icon = IconicsDrawable(this).icon(MaterialDesignDx.Icon.gmf_invert_colors)
+
+    colorfulViews.add(dynamicSwitchButton)
+    colorfulViews.add(setRandomColorButton)
+    colorfulViews.add(colorTextView)
 
     andColorPickerHView.addListener(
       // TODO: Add default listener
@@ -92,24 +107,39 @@ class MainActivity : AppCompatActivity() {
 
   @SuppressLint("SetTextI18n")
   private fun colorize(color: DiscreteHSLColor) {
-    supportActionBar?.setBackgroundDrawable(GradientDrawable().also {
-      it.color = ColorStateList.valueOf(color.colorInt)
-    })
+    appBarLayout.backgroundTintList = ColorStateList.valueOf(color.colorInt)
 
     val statusBarColor = color.copy().also {
       it.l += PRIMARY_DARK_LIGHTNESS_SHIFT
     }
     window.statusBarColor = statusBarColor.colorInt
 
-    dynamicSwitchButton.backgroundTintList = ColorStateList.valueOf(color.colorInt)
-    setRandomColorButton.backgroundTintList = ColorStateList.valueOf(color.colorInt)
+    val red: Int = Color.red(color.colorInt)
+    val green: Int = Color.green(color.colorInt)
+    val blue: Int = Color.blue(color.colorInt)
 
-    colorTextView.setBackgroundColor(color.colorInt)
-    colorTextView.text = String.format(
-      "#%06X",
-      0xFFFFFF and color.colorInt
-    )
+    val textColor =
+      if (red * 0.299f + green * 0.587f + blue * 0.114f > 186) Color.BLACK else Color.WHITE
 
-    hlsTextView.text = color.toString()
+    colorfulViews.forEach {
+      it.setBackgroundColor(color.colorInt)
+      if (it is TextView) {
+        it.setTextColor(textColor)
+      }
+      if (it is MaterialButton) {
+        it.iconTint = ColorStateList.valueOf(textColor)
+      }
+    }
+
+    toolbar.setTitleTextColor(textColor)
+    toolbar.setSubtitleTextColor(textColor)
+
+    colorTextView.text =
+      "RGB: [$red $green $blue]\n" +
+          "HEX: ${String.format(
+            "#%06X",
+            0xFFFFFF and color.colorInt
+          )}\n" +
+          "HSL: $color"
   }
 }
