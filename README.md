@@ -7,6 +7,7 @@
 
 - Add more picker types
 - Enhance API
+- Add thumb animation
 - Add more HSLColorPickerSeekBar checks and reduce calls count
 - Add more encapsulation to limit picker modification capabilities
 - Add Rx support
