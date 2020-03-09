@@ -3,7 +3,7 @@
 *:avocado: Handy, :snake: flexible and :zap: lightning-fast material color picking UI component for Android*
 
 :speech_balloon: Work-In-Progress
-### Roadmap
+## Roadmap
 
 - Add more picker types
     - RGB seekbars
@@ -27,16 +27,42 @@
 - Add tests
 - Add docs
 
-### Picker types
+## Picker types
 
-#### HSL (hue, saturation, lightness)
+### HSL (hue, saturation, lightness)
 
 - *Add color model description*
 - *Add usage sample*
 
 ![](github/type_hsl.png)
 
-### License
+#### Layout XML Snippet
+```
+<me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+  android:id="@+id/andColorPicker"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:coloring="pure"
+  app:mode="hue" />
+```
+
+#### Kotlin snippet
+```
+andColorPicker.addListener(
+  object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+    override fun onColorChanged(
+      picker: HSLColorPickerSeekBar,
+      color: DiscreteHSLColor,
+      mode: HSLColorPickerSeekBar.Mode,
+      value: Int
+    ) {
+      // Client code
+    }
+  }
+)
+```
+
+## License
 
 ```
 Copyright 2020 Illia Achour
