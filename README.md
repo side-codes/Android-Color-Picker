@@ -12,6 +12,7 @@
     - Alpha seekbar
     - HSL (S+L) plane
     - Swatches
+- Sample buttons -> radios
 - Enhance API
 - Add XML attributes
 - Add thumb animation
