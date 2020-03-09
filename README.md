@@ -22,6 +22,7 @@
 - Add Rx support
 - Add/Revisit *RecyclerView* support
 - Add logger solution
+- Add sample app analytics
 - Add call flow diagram
 
 ### Picker types
