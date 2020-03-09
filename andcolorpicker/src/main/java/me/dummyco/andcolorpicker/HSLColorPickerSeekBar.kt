@@ -18,6 +18,7 @@ import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 // TODO: Add logger solution
 // TODO: Add call flow diagram
 // TODO: Add checks and reduce calls count
+// TODO: Limit used SDK properties usage
 class HSLColorPickerSeekBar : AppCompatSeekBar,
   OnSeekBarChangeListener {
   companion object {
@@ -622,6 +623,37 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       mode: Mode,
       value: Int
     )
+  }
+
+  open class DefaultOnColorPickListener : OnColorPickListener {
+    override fun onColorPicking(
+      picker: HSLColorPickerSeekBar,
+      color: DiscreteHSLColor,
+      mode: Mode,
+      value: Int,
+      fromUser: Boolean
+    ) {
+
+    }
+
+    override fun onColorPicked(
+      picker: HSLColorPickerSeekBar,
+      color: DiscreteHSLColor,
+      mode: Mode,
+      value: Int,
+      fromUser: Boolean
+    ) {
+
+    }
+
+    override fun onColorChanged(
+      picker: HSLColorPickerSeekBar,
+      color: DiscreteHSLColor,
+      mode: Mode,
+      value: Int
+    ) {
+
+    }
   }
 
   enum class ColoringMode {
