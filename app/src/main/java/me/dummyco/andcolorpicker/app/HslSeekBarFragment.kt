@@ -66,9 +66,6 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       }
     )
 
-    andColorPickerSView.mode = HSLColorPickerSeekBar.Mode.MODE_SATURATION
-    andColorPickerLView.mode = HSLColorPickerSeekBar.Mode.MODE_LIGHTNESS
-
     val pickers = arrayListOf(
       andColorPickerHView,
       andColorPickerSView,

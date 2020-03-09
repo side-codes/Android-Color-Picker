@@ -12,7 +12,6 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
-import me.dummyco.andcolorpicker.HSLColorPickerSeekBar.Mode.*
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
 // TODO: Add logger solution
@@ -50,7 +49,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   private val colorPickListeners = hashSetOf<OnColorPickListener>()
   private var isInitialized = false
 
-  private var _mode = MODE_HUE
+  private var _mode = Mode.MODE_HUE
   var mode: Mode
     get() {
       return _mode
@@ -80,8 +79,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   var currentColor: DiscreteHSLColor
     get() {
       return when (mode) {
-        MODE_VALUE -> TODO()
-        MODE_ALPHA -> TODO()
+        Mode.MODE_VALUE -> TODO()
+        Mode.MODE_ALPHA -> TODO()
         else -> _currentColor.copy()
       }
     }
@@ -132,7 +131,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     context,
     attrs
   ) {
-    init()
+    init(attrs)
   }
 
   constructor(
@@ -144,10 +143,11 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     attrs,
     defStyleAttr
   ) {
-    init()
+    init(attrs)
   }
 
-  private fun init() {
+  // TODO: Make use of JvmOverloads
+  private fun init(attrs: AttributeSet? = null) {
     setOnSeekBarChangeListener(this)
 
     splitTrack = false
@@ -254,6 +254,24 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     refreshInternalCurrentColorFromProgress()
     refreshProgressDrawable()
     refreshThumb()
+
+    if (attrs != null) {
+      val a = context.theme.obtainStyledAttributes(
+        attrs,
+        R.styleable.HSLColorPickerSeekBar,
+        0,
+        0
+      )
+
+      try {
+        mode = Mode.values()[a.getInteger(
+          R.styleable.HSLColorPickerSeekBar_mode,
+          0
+        )]
+      } finally {
+        a.recycle()
+      }
+    }
   }
 
   override fun setMin(min: Int) {
@@ -374,13 +392,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     }
 
     ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
-      MODE_HUE -> {
+      Mode.MODE_HUE -> {
         when (coloringMode) {
           ColoringMode.PURE_COLOR -> HUE_COLOR_CHECKPOINTS
           ColoringMode.OUTPUT_COLOR -> createHueOutputColorCheckpoints()
         }
       }
-      MODE_SATURATION -> {
+      Mode.MODE_SATURATION -> {
         when (coloringMode) {
           ColoringMode.PURE_COLOR -> {
             progressDrawableSaturationColorsCache.also {
@@ -399,8 +417,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           }
         }
       }
-      MODE_VALUE -> TODO()
-      MODE_LIGHTNESS -> {
+      Mode.MODE_LIGHTNESS -> {
         progressDrawableLightnessColorsCache.also {
           it[0] = Color.BLACK
           it[1] = when (coloringMode) {
@@ -410,7 +427,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           it[2] = Color.WHITE
         }
       }
-      MODE_ALPHA -> TODO()
+      Mode.MODE_VALUE -> TODO()
+      Mode.MODE_ALPHA -> TODO()
     }
   }
 
@@ -446,7 +464,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     val currentProgress = progress
     // TODO: Use Atomic and compare/set?
     val changed: Boolean = when (mode) {
-      MODE_HUE -> {
+      Mode.MODE_HUE -> {
         val currentH = _currentColor.intH
         if (currentH != currentProgress) {
           _currentColor.intH = currentProgress
@@ -455,7 +473,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           false
         }
       }
-      MODE_SATURATION -> {
+      Mode.MODE_SATURATION -> {
         val currentS = _currentColor.intS
         if (currentS != currentProgress) {
           _currentColor.intS = currentProgress
@@ -464,8 +482,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           false
         }
       }
-      MODE_VALUE -> TODO()
-      MODE_LIGHTNESS -> {
+      Mode.MODE_LIGHTNESS -> {
         val currentL = _currentColor.intL
         if (currentL != currentProgress) {
           _currentColor.intL = currentProgress
@@ -474,7 +491,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           false
         }
       }
-      MODE_ALPHA -> TODO()
+      Mode.MODE_VALUE -> TODO()
+      Mode.MODE_ALPHA -> TODO()
     }
 
     if (changed) {
@@ -491,17 +509,17 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     }
 
     progress = when (mode) {
-      MODE_HUE -> {
+      Mode.MODE_HUE -> {
         _currentColor.intH
       }
-      MODE_SATURATION -> {
+      Mode.MODE_SATURATION -> {
         _currentColor.intS
       }
-      MODE_VALUE -> TODO()
-      MODE_LIGHTNESS -> {
+      Mode.MODE_LIGHTNESS -> {
         _currentColor.intL
       }
-      MODE_ALPHA -> TODO()
+      Mode.MODE_VALUE -> TODO()
+      Mode.MODE_ALPHA -> TODO()
     }
   }
 
@@ -511,7 +529,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     drawable.setStroke(
       thumbStrokeWidthPx,
       when (mode) {
-        MODE_HUE -> {
+        Mode.MODE_HUE -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
               _currentColor.pureColorInt
@@ -521,7 +539,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
             }
           }
         }
-        MODE_SATURATION -> {
+        Mode.MODE_SATURATION -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
               paintDrawableStrokeSaturationHSLCache.setFromHSL(
@@ -535,8 +553,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
             }
           }
         }
-        MODE_VALUE -> TODO()
-        MODE_LIGHTNESS -> {
+        Mode.MODE_LIGHTNESS -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
               paintDrawableStrokeLightnessHSLCache.setFromHSL(
@@ -550,7 +567,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
             }
           }
         }
-        MODE_ALPHA -> TODO()
+        Mode.MODE_VALUE -> TODO()
+        Mode.MODE_ALPHA -> TODO()
       }
     )
   }
@@ -676,15 +694,15 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       100
     ),
 
-    // BRIGHTNESS, V/B from HSV/HSB
-    // TODO: Do we need this mode?
-    MODE_VALUE(
+    // INTENSITY, L/I from HSL/HSI
+    MODE_LIGHTNESS(
       0,
       100
     ),
 
-    // INTENSITY, L/I from HSL/HSI
-    MODE_LIGHTNESS(
+    // BRIGHTNESS, V/B from HSV/HSB
+    // TODO: Do we need this mode?
+    MODE_VALUE(
       0,
       100
     ),

@@ -28,7 +28,8 @@
     android:layout_marginEnd="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView" />
+    app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView"
+    app:mode="hue" />
 
   <TextView
     android:id="@+id/saturationTitleTextView"
@@ -51,7 +52,8 @@
     android:layout_marginEnd="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView" />
+    app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView"
+    app:mode="saturation" />
 
   <TextView
     android:id="@+id/lightnessTitleTextView"
@@ -74,7 +76,8 @@
     android:layout_marginEnd="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView" />
+    app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView"
+    app:mode="lightness" />
 
   <TextView
     android:id="@+id/dynamicTitleTextView"
@@ -97,7 +100,8 @@
     android:layout_marginEnd="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView" />
+    app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView"
+    app:mode="saturation" />
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/dynamicSwitchButton"
