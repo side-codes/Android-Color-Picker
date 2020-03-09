@@ -25,6 +25,7 @@
 - Add sample app analytics
 - Add call flow diagram
 - Add tests
+- Add docs
 
 ### Picker types
 
