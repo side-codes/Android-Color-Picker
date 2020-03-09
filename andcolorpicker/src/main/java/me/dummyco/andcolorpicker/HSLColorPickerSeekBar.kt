@@ -64,7 +64,14 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       }
     }
 
-  var coloringMode = ColoringMode.OUTPUT_COLOR
+  private var _coloringMode = ColoringMode.PURE_COLOR
+  var coloringMode: ColoringMode
+    get() = _coloringMode
+    set(value) {
+      _coloringMode = value
+      refreshProgressDrawable()
+      refreshThumb()
+    }
 
   private var _currentColor = DiscreteHSLColor()
 
@@ -491,22 +498,43 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       thumbStrokeWidthPx,
       when (mode) {
         MODE_HUE -> {
-          _currentColor.pureColorInt
+          when (coloringMode) {
+            ColoringMode.PURE_COLOR -> {
+              _currentColor.pureColorInt
+            }
+            ColoringMode.OUTPUT_COLOR -> {
+              _currentColor.colorInt
+            }
+          }
         }
         MODE_SATURATION -> {
-          paintDrawableStrokeSaturationHSLCache.setFromHSL(
-            _currentColor.intH.toFloat(),
-            progress / mode.maxProgress.toFloat(),
-            DiscreteHSLColor.DEFAULT_L
-          ).colorInt
+          when (coloringMode) {
+            ColoringMode.PURE_COLOR -> {
+              paintDrawableStrokeSaturationHSLCache.setFromHSL(
+                _currentColor.intH.toFloat(),
+                progress / mode.maxProgress.toFloat(),
+                DiscreteHSLColor.DEFAULT_L
+              ).colorInt
+            }
+            ColoringMode.OUTPUT_COLOR -> {
+              _currentColor.colorInt
+            }
+          }
         }
         MODE_VALUE -> TODO()
         MODE_LIGHTNESS -> {
-          paintDrawableStrokeLightnessHSLCache.setFromHSL(
-            _currentColor.intH.toFloat(),
-            DiscreteHSLColor.DEFAULT_S,
-            progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
-          ).colorInt
+          when (coloringMode) {
+            ColoringMode.PURE_COLOR -> {
+              paintDrawableStrokeLightnessHSLCache.setFromHSL(
+                _currentColor.intH.toFloat(),
+                DiscreteHSLColor.DEFAULT_S,
+                progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
+              ).colorInt
+            }
+            ColoringMode.OUTPUT_COLOR -> {
+              _currentColor.colorInt
+            }
+          }
         }
         MODE_ALPHA -> TODO()
       }
