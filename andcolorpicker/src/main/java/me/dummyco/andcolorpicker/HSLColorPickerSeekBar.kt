@@ -33,11 +33,17 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       Color.MAGENTA,
       Color.RED
     )
-    private val ZERO_SATURATION_COLOR = Color.rgb(
+    private val ZERO_SATURATION_COLOR_INT = Color.rgb(
       128,
       128,
       128
     )
+    private val ZERO_SATURATION_COLOR_HSL = FloatArray(3).also {
+      ColorUtils.colorToHSL(
+        ZERO_SATURATION_COLOR_INT,
+        it
+      )
+    }
   }
 
   private val colorPickListeners = hashSetOf<OnColorPickListener>()
@@ -326,10 +332,17 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         it,
         createHueOutputColorCheckpointsHSLCache
       )
-      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.S_INDEX] = currentColor.floatS
-      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.L_INDEX] = currentColor.floatL
+      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.S_INDEX] = _currentColor.floatS
+      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.L_INDEX] = _currentColor.floatL
       ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
     }.toIntArray()
+  }
+
+  private val zeroSaturationOutputColorHSLCache =
+    ZERO_SATURATION_COLOR_HSL.clone()
+
+  private fun refreshZeroSaturationOutputColorHSLCache() {
+    zeroSaturationOutputColorHSLCache[2] = _currentColor.floatL
   }
 
   private fun refreshProgressDrawable() {
@@ -348,16 +361,32 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         }
       }
       MODE_SATURATION -> {
-        progressDrawableSaturationColorsCache.also {
-          it[0] = ZERO_SATURATION_COLOR
-          it[1] = _currentColor.pureColorInt
+        when (coloringMode) {
+          ColoringMode.PURE_COLOR -> {
+            progressDrawableSaturationColorsCache.also {
+              it[0] = ZERO_SATURATION_COLOR_INT
+              it[1] = _currentColor.pureColorInt
+            }
+          }
+          ColoringMode.OUTPUT_COLOR -> {
+            refreshZeroSaturationOutputColorHSLCache()
+
+            progressDrawableSaturationColorsCache.also {
+              it[0] =
+                ColorUtils.HSLToColor(zeroSaturationOutputColorHSLCache)
+              it[1] = _currentColor.colorInt
+            }
+          }
         }
       }
       MODE_VALUE -> TODO()
       MODE_LIGHTNESS -> {
         progressDrawableLightnessColorsCache.also {
           it[0] = Color.BLACK
-          it[1] = _currentColor.pureColorInt
+          it[1] = when (coloringMode) {
+            ColoringMode.PURE_COLOR -> _currentColor.pureColorInt
+            ColoringMode.OUTPUT_COLOR -> _currentColor.colorInt
+          }
           it[2] = Color.WHITE
         }
       }
