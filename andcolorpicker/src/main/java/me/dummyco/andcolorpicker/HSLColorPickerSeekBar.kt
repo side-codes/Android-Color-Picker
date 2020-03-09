@@ -22,7 +22,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   OnSeekBarChangeListener {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
-    private const val DEBUG = true
+    private const val DEBUG = false
     private const val COERCE_AT_MOST_LIGHTNING = 90
     private val HUE_COLOR_CHECKPOINTS = intArrayOf(
       Color.RED,

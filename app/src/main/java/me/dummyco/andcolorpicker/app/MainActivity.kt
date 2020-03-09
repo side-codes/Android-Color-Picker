@@ -98,12 +98,18 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
         )
       }
       else -> {
+        if (supportFragmentManager
+            .findFragmentByTag(page.toString()) != null
+        ) {
+          return
+        }
         page.fragmentProducer?.let {
           supportFragmentManager
             .beginTransaction()
             .replace(
               R.id.fragmentContainer,
-              it.invoke()
+              it.invoke(),
+              page.toString()
             )
             .commit()
         }
