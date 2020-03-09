@@ -24,6 +24,7 @@
 - Add logger solution
 - Add sample app analytics
 - Add call flow diagram
+- Add tests
 
 ### Picker types
 
