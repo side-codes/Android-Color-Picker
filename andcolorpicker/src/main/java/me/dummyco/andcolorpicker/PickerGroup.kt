@@ -2,6 +2,7 @@ package me.dummyco.andcolorpicker
 
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
+// TODO: Add foreach or smth like that
 class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
   // Kinda prioritized collection
   private val pickers = linkedSetOf<HSLColorPickerSeekBar>()

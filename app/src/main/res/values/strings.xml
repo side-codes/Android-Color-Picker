@@ -1,9 +1,10 @@
 <resources>
   <string name="app_name">AndColorPicker Sample</string>
-  <string name="action_switch_mode">Switch mode</string>
-  <string name="action_set_random_color">Set random color</string>
+  <string name="action_switch_dynamic_color_model">Color model</string>
+  <string name="action_set_random_color">Randomize</string>
   <string name="title_dynamic">Dynamic</string>
   <string name="title_lightness">Lightness</string>
   <string name="title_saturation">Saturation</string>
   <string name="title_hue">Hue</string>
+  <string name="action_switch_coloring_mode">Coloring mode</string>
 </resources>

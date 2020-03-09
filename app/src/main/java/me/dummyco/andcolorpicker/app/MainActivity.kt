@@ -30,9 +30,14 @@ class MainActivity : AppCompatActivity() {
       Mode.MODE_SATURATION,
       Mode.MODE_LIGHTNESS
     )
+    private val AVAILABLE_COLORING_MODES = listOf(
+      ColoringMode.PURE_COLOR,
+      ColoringMode.OUTPUT_COLOR
+    )
   }
 
   private val colorfulViews = hashSetOf<View>()
+  private val pickerGroup = PickerGroup()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -40,12 +45,14 @@ class MainActivity : AppCompatActivity() {
 
     dynamicSwitchButton.icon = IconicsDrawable(this).icon(MaterialDesignDx.Icon.gmf_loop)
     setRandomColorButton.icon = IconicsDrawable(this).icon(MaterialDesignDx.Icon.gmf_invert_colors)
+    coloringModeSwitchButton.icon = IconicsDrawable(this).icon(MaterialDesignDx.Icon.gmf_color_lens)
 
     colorfulViews.add(dynamicSwitchButton)
     colorfulViews.add(setRandomColorButton)
+    colorfulViews.add(coloringModeSwitchButton)
     colorfulViews.add(colorTextView)
 
-    andColorPickerHViewPure.addListener(
+    andColorPickerHView.addListener(
       // TODO: Add default listener
       object : HSLColorPickerSeekBar.OnColorPickListener {
         override fun onColorPicking(
@@ -77,27 +84,17 @@ class MainActivity : AppCompatActivity() {
       }
     )
 
-    andColorPickerSViewPure.mode = Mode.MODE_SATURATION
-    andColorPickerLViewPure.mode = Mode.MODE_LIGHTNESS
-    andColorPickerSViewOutput.mode = Mode.MODE_SATURATION
-    andColorPickerLViewOutput.mode = Mode.MODE_LIGHTNESS
+    andColorPickerSView.mode = Mode.MODE_SATURATION
+    andColorPickerLView.mode = Mode.MODE_LIGHTNESS
 
-    andColorPickerHViewOutput.coloringMode = ColoringMode.OUTPUT_COLOR
-    andColorPickerLViewOutput.coloringMode = ColoringMode.OUTPUT_COLOR
-    andColorPickerSViewOutput.coloringMode = ColoringMode.OUTPUT_COLOR
-    andColorPickerDynamicViewOutput.coloringMode = ColoringMode.OUTPUT_COLOR
-
-    val group = PickerGroup()
-    group.registerPickers(
-      andColorPickerHViewPure,
-      andColorPickerHViewOutput,
-      andColorPickerSViewPure,
-      andColorPickerSViewOutput,
-      andColorPickerLViewPure,
-      andColorPickerLViewOutput,
-      andColorPickerDynamicViewPure,
-      andColorPickerDynamicViewOutput
+    val pickers = arrayListOf(
+      andColorPickerHView,
+      andColorPickerSView,
+      andColorPickerLView,
+      andColorPickerDynamicView
     )
+
+    pickerGroup.registerPickers(pickers)
 
     randomizePickedColor()
 
@@ -107,14 +104,22 @@ class MainActivity : AppCompatActivity() {
 
     dynamicSwitchButton.setOnClickListener {
       val newMode =
-        AVAILABLE_SWITCH_MODES[(AVAILABLE_SWITCH_MODES.indexOf(andColorPickerDynamicViewPure.mode) + 1) % AVAILABLE_SWITCH_MODES.size]
-      andColorPickerDynamicViewPure.mode = newMode
-      andColorPickerDynamicViewOutput.mode = newMode
+        AVAILABLE_SWITCH_MODES[(AVAILABLE_SWITCH_MODES.indexOf(andColorPickerDynamicView.mode) + 1) % AVAILABLE_SWITCH_MODES.size]
+      andColorPickerDynamicView.mode = newMode
+    }
+
+    coloringModeSwitchButton.setOnClickListener {
+      val newMode =
+        AVAILABLE_COLORING_MODES[(AVAILABLE_COLORING_MODES.indexOf(andColorPickerHView.coloringMode) + 1) % AVAILABLE_COLORING_MODES.size]
+
+      pickers.forEach {
+        it.coloringMode = newMode
+      }
     }
   }
 
   private fun randomizePickedColor() {
-    andColorPickerHViewPure.currentColor = createRandomColor().also {
+    andColorPickerHView.currentColor = createRandomColor().also {
       it.intL = it.intL / 2
     }
   }
