@@ -256,6 +256,20 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     refreshThumb()
   }
 
+  override fun setMin(min: Int) {
+    if (isInitialized && min != mode.minProgress) {
+      throw IllegalArgumentException("Current mode supports ${_mode.minProgress} min value only")
+    }
+    super.setMin(min)
+  }
+
+  override fun setMax(max: Int) {
+    if (isInitialized && max != mode.maxProgress) {
+      throw IllegalArgumentException("Current mode supports ${_mode.maxProgress} max value only")
+    }
+    super.setMax(max)
+  }
+
   private fun setupProgressDrawable() {
     if (DEBUG) {
       Log.d(
