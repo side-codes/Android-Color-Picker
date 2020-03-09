@@ -15,10 +15,11 @@
 - Enhance API
 - Add XML attributes
 - Add thumb animation
-- Add more HSLColorPickerSeekBar checks and reduce calls count
+- Add *MaterialDrawer* & sample fragments
+- Add more *HSLColorPickerSeekBar* checks and reduce calls count
 - Add more encapsulation to limit picker modification capabilities
 - Add Rx support
-- Add/Revisit RecyclerView support
+- Add/Revisit *RecyclerView* support
 - Add logger solution
 - Add call flow diagram
 
