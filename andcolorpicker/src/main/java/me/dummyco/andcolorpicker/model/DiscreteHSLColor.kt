@@ -1,5 +1,6 @@
 package me.dummyco.andcolorpicker.model
 
+import android.graphics.Color
 import androidx.core.graphics.ColorUtils
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -97,6 +98,18 @@ class DiscreteHSLColor {
         0,
         100
       )
+    }
+  val rInt: Int
+    get() {
+      return Color.red(colorInt)
+    }
+  val gInt: Int
+    get() {
+      return Color.green(colorInt)
+    }
+  val bInt: Int
+    get() {
+      return Color.blue(colorInt)
     }
 
   private val hsColorIntHSLCache = FloatArray(3)
