@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
   private fun randomizePickedColor() {
     andColorPickerHView.currentColor = createRandomColor().also {
-      it.intL = it.intL / 2
+      it.intL = 20 + it.intL / 2
     }
   }
 
