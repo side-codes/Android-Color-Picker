@@ -23,6 +23,7 @@
 - [ ] Package repository publish
 - [ ] Add Rx support
 - [ ] Add/Revisit *RecyclerView* support
+- [ ] Add sample app icon
 - [ ] Add logger solution
 - [ ] Add sample app analytics
 - [ ] Add call flow diagram
@@ -50,7 +51,7 @@
   app:mode="hue" />
 ```
 
-#### Kotlin snippet
+#### Kotlin Snippet
 ```
 andColorPicker.addListener(
   object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
