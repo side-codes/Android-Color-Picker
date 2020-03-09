@@ -2,10 +2,13 @@ package me.dummyco.andcolorpicker.app
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
@@ -36,12 +39,24 @@ class MainActivity : AppCompatActivity() {
     )
   }
 
+  private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
   private val colorfulViews = hashSetOf<View>()
   private val pickerGroup = PickerGroup()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    setSupportActionBar(toolbar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    supportActionBar?.setHomeButtonEnabled(true)
+
+    actionBarDrawerToggle = ActionBarDrawerToggle(
+      this,
+      root,
+      toolbar,
+      com.mikepenz.materialdrawer.R.string.material_drawer_open,
+      com.mikepenz.materialdrawer.R.string.material_drawer_close
+    )
 
     dynamicSwitchButton.icon = IconicsDrawable(this).icon(MaterialDesignDx.Icon.gmf_loop)
     setRandomColorButton.icon = IconicsDrawable(this).icon(MaterialDesignDx.Icon.gmf_invert_colors)
@@ -53,26 +68,7 @@ class MainActivity : AppCompatActivity() {
     colorfulViews.add(colorTextView)
 
     andColorPickerHView.addListener(
-      // TODO: Add default listener
-      object : HSLColorPickerSeekBar.OnColorPickListener {
-        override fun onColorPicking(
-          picker: HSLColorPickerSeekBar,
-          color: DiscreteHSLColor,
-          mode: Mode,
-          value: Int,
-          fromUser: Boolean
-        ) {
-        }
-
-        override fun onColorPicked(
-          picker: HSLColorPickerSeekBar,
-          color: DiscreteHSLColor,
-          mode: Mode,
-          value: Int,
-          fromUser: Boolean
-        ) {
-        }
-
+      object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: HSLColorPickerSeekBar,
           color: DiscreteHSLColor,
@@ -153,6 +149,8 @@ class MainActivity : AppCompatActivity() {
     toolbar.setTitleTextColor(textColor)
     toolbar.setSubtitleTextColor(textColor)
 
+    actionBarDrawerToggle.drawerArrowDrawable.color = textColor
+
     colorTextView.text =
       "RGB: [$red $green $blue]\n" +
           "HEX: ${String.format(
@@ -160,5 +158,23 @@ class MainActivity : AppCompatActivity() {
             0xFFFFFF and color.colorInt
           )}\n" +
           "HSL: $color"
+  }
+
+  override fun onConfigurationChanged(newConfig: Configuration) {
+    super.onConfigurationChanged(newConfig)
+    actionBarDrawerToggle.onConfigurationChanged(newConfig)
+  }
+
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    actionBarDrawerToggle.syncState()
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      else -> {
+        return actionBarDrawerToggle.onOptionsItemSelected(item)
+      }
+    }
   }
 }

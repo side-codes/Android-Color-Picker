@@ -6,6 +6,9 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+
+    <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
+    <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
   </style>
 
 </resources>
