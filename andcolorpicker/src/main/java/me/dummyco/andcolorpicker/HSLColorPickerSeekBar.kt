@@ -102,14 +102,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   private var propertiesUpdateInProcess = false
 
   // TODO: Make caches lazy?
-  private val paintDrawableStrokeSaturationHSLCache = DiscreteHSLColor()
-  private val paintDrawableStrokeLightnessHSLCache = DiscreteHSLColor()
+  private val paintDrawableStrokeSaturationHSLCache by lazy { DiscreteHSLColor() }
+  private val paintDrawableStrokeLightnessHSLCache by lazy { DiscreteHSLColor() }
 
-  private val progressDrawableSaturationColorsCache = IntArray(2)
-  private val progressDrawableLightnessColorsCache = IntArray(3)
+  private val progressDrawableSaturationColorsCache by lazy { IntArray(2) }
+  private val progressDrawableLightnessColorsCache by lazy { IntArray(3) }
 
-  private val zeroSaturationOutputColorHSLCache =
-    ZERO_SATURATION_COLOR_HSL.clone()
+  private val zeroSaturationOutputColorHSLCache by lazy { ZERO_SATURATION_COLOR_HSL.clone() }
 
   private val createHueOutputColorCheckpointsHSLCache by lazy {
     FloatArray(3)
