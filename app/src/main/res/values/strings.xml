@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">AndColorPicker Sample</string>
+  <string name="app_name">andColorPicker Sample</string>
   <string name="action_switch_dynamic_color_model">Color model</string>
   <string name="action_set_random_color">Randomize</string>
   <string name="title_dynamic">Dynamic</string>

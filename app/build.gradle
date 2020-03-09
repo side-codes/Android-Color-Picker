@@ -5,6 +5,7 @@ plugins {
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
+apply plugin: "com.google.android.gms.oss-licenses-plugin"
 
 android {
   compileSdkVersion 29
@@ -38,7 +39,9 @@ android {
 
 dependencies {
   implementation fileTree(dir: "libs", include: ["*.jar"])
-  implementation project(":andcolorpicker")
+  // TODO: Wait for https://github.com/google/play-services-plugins/pull/128 released
+  debugImplementation project(":andcolorpicker")
+  releaseImplementation project(":andcolorpicker")
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   implementation "androidx.appcompat:appcompat:1.2.0-alpha03"
@@ -54,6 +57,8 @@ dependencies {
 
   implementation "com.mikepenz:iconics-core:5.0.0-b01"
   implementation "com.mikepenz:material-design-icons-dx-typeface:5.0.1.0-kotlin@aar"
+
+  implementation "com.google.android.gms:play-services-oss-licenses:17.0.0"
 
   testImplementation "junit:junit:4.13"
   androidTestImplementation "androidx.test.ext:junit:1.1.2-alpha04"

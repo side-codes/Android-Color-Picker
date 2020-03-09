@@ -1,5 +1,6 @@
 package me.dummyco.andcolorpicker.app
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
 import com.mikepenz.iconics.utils.icon
@@ -15,6 +17,7 @@ import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
+
 
 class MainActivity : AppCompatActivity(), ColorizationConsumer {
 
@@ -50,6 +53,7 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
             it.icon = ImageHolder(
               IconicsDrawable(this@MainActivity).icon(page.icon)
             )
+            it.isSelectable = page.fragmentCreator != null
           }
         }
       )
@@ -69,13 +73,27 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
   }
 
   private fun navigateTo(page: Page) {
-    supportFragmentManager
-      .beginTransaction()
-      .replace(
-        R.id.fragmentContainer,
-        page.fragment.invoke()
-      )
-      .commit()
+    when (page) {
+      Page.OSS -> {
+        startActivity(
+          Intent(
+            this,
+            OssLicensesMenuActivity::class.java
+          )
+        )
+      }
+      else -> {
+        page.fragmentCreator?.let {
+          supportFragmentManager
+            .beginTransaction()
+            .replace(
+              R.id.fragmentContainer,
+              it.invoke()
+            )
+            .commit()
+        }
+      }
+    }
   }
 
   override fun onConfigurationChanged(newConfig: Configuration) {
@@ -129,7 +147,7 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
   enum class Page(
     val title: String,
     val icon: MaterialDesignDx.Icon,
-    val fragment: () -> Fragment
+    val fragmentCreator: (() -> Fragment)? = null
   ) {
     HLS_SEEK_BAR(
       "HSL SeekBar",
@@ -161,5 +179,9 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
       MaterialDesignDx.Icon.gmf_color_lens,
       { WipFragment() }
     ),
+    OSS(
+      "Open Source Notices",
+      MaterialDesignDx.Icon.gmf_color_lens
+    )
   }
 }
