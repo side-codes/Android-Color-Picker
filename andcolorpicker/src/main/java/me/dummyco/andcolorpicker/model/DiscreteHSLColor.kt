@@ -99,11 +99,15 @@ class DiscreteHSLColor {
       )
     }
 
-  private val colorIntHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
+  private val hsColorIntHSLCache = FloatArray(3)
+  val hsColorInt: Int
+    get() {
+      hsColorIntHSLCache[H_INDEX] = values[H_INDEX].toFloat()
+      hsColorIntHSLCache[S_INDEX] = values[S_INDEX] / 100f
+      hsColorIntHSLCache[L_INDEX] = DEFAULT_L
+      return ColorUtils.HSLToColor(hsColorIntHSLCache)
+    }
+  private val colorIntHSLCache = FloatArray(3)
   val colorInt: Int
     get() {
       colorIntHSLCache[H_INDEX] = values[H_INDEX].toFloat()
@@ -111,11 +115,7 @@ class DiscreteHSLColor {
       colorIntHSLCache[L_INDEX] = values[L_INDEX] / 100f
       return ColorUtils.HSLToColor(colorIntHSLCache)
     }
-  private val pureColorIntHSLCache = floatArrayOf(
-    0f,
-    0f,
-    0f
-  )
+  private val pureColorIntHSLCache = FloatArray(3)
   val pureColorInt: Int
     get() {
       pureColorIntHSLCache[H_INDEX] = intH.toFloat()

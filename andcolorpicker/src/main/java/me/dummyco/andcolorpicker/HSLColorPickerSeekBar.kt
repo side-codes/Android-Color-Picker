@@ -384,7 +384,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           it[0] = Color.BLACK
           it[1] = when (coloringMode) {
             ColoringMode.PURE_COLOR -> _currentColor.pureColorInt
-            ColoringMode.OUTPUT_COLOR -> _currentColor.colorInt
+            ColoringMode.OUTPUT_COLOR -> _currentColor.hsColorInt
           }
           it[2] = Color.WHITE
         }
