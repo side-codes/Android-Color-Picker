@@ -256,7 +256,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     refreshThumb()
 
     if (attrs != null) {
-      val a = context.theme.obtainStyledAttributes(
+      val typedArray = context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.HSLColorPickerSeekBar,
         0,
@@ -264,12 +264,16 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       )
 
       try {
-        mode = Mode.values()[a.getInteger(
+        mode = Mode.values()[typedArray.getInteger(
           R.styleable.HSLColorPickerSeekBar_mode,
           0
         )]
+        coloringMode = ColoringMode.values()[typedArray.getInteger(
+          R.styleable.HSLColorPickerSeekBar_coloring,
+          0
+        )]
       } finally {
-        a.recycle()
+        typedArray.recycle()
       }
     }
   }

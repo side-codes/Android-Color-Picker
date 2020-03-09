@@ -8,5 +8,9 @@
       <enum name="value" value="3" />
       <enum name="alpha" value="3" />
     </attr>
+    <attr name="coloring" format="enum">
+      <enum name="pure" value="0" />
+      <enum name="output" value="1" />
+    </attr>
   </declare-styleable>
 </resources>

@@ -52,7 +52,6 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(coloringModeSwitchButton)
     colorfulViews.add(colorTextView)
 
-
     andColorPickerHView.addListener(
       object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
