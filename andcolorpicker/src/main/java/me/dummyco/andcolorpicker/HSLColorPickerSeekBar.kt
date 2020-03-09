@@ -108,6 +108,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   private val progressDrawableSaturationColorsCache = IntArray(2)
   private val progressDrawableLightnessColorsCache = IntArray(3)
 
+  private val zeroSaturationOutputColorHSLCache =
+    ZERO_SATURATION_COLOR_HSL.clone()
+
+  private val createHueOutputColorCheckpointsHSLCache by lazy {
+    FloatArray(3)
+  }
+
   constructor(context: Context) : super(context) {
     init()
   }
@@ -321,10 +328,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     propertiesUpdateInProcess = false
   }
 
-  private val createHueOutputColorCheckpointsHSLCache by lazy {
-    FloatArray(3)
-  }
-
   // TODO: Get rid of toIntArray allocations
   private fun createHueOutputColorCheckpoints(): IntArray {
     return HUE_COLOR_CHECKPOINTS.map {
@@ -337,9 +340,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
     }.toIntArray()
   }
-
-  private val zeroSaturationOutputColorHSLCache =
-    ZERO_SATURATION_COLOR_HSL.clone()
 
   private fun refreshZeroSaturationOutputColorHSLCache() {
     zeroSaturationOutputColorHSLCache[2] = _currentColor.floatL
