@@ -13,6 +13,7 @@
     - HSL (S+L) plane
     - Swatches
 - Enhance API
+- Add XML attributes
 - Add thumb animation
 - Add more HSLColorPickerSeekBar checks and reduce calls count
 - Add more encapsulation to limit picker modification capabilities
