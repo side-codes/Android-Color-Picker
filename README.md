@@ -18,6 +18,7 @@
 - Add *MaterialDrawer* & sample fragments
 - Add more *HSLColorPickerSeekBar* checks and reduce calls count
 - Add more encapsulation to limit picker modification capabilities
+- Package repository publish
 - Add Rx support
 - Add/Revisit *RecyclerView* support
 - Add logger solution
