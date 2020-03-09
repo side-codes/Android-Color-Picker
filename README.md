@@ -25,6 +25,9 @@
 - Add sample app analytics
 - Add call flow diagram
 - Add tests
+- Add docs
+- Add OSS licenses
+- Add license
 
 ### Picker types
 
