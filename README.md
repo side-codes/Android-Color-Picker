@@ -5,27 +5,32 @@
 :speech_balloon: Work-In-Progress
 ## Roadmap
 
-- Add more picker types
-    - RGB seekbars
-    - RGB circle
-    - RGB plane
-    - Alpha seekbar
-    - HSL (S+L) plane
-    - Swatches
-- Enhance API
-- Add XML attributes
-- Add thumb animation
-- Add *MaterialDrawer* & sample fragments
-- Add more *HSLColorPickerSeekBar* checks and reduce calls count
-- Add more encapsulation to limit picker modification capabilities
-- Package repository publish
-- Add Rx support
-- Add/Revisit *RecyclerView* support
-- Add logger solution
-- Add sample app analytics
-- Add call flow diagram
-- Add tests
-- Add docs
+- [ ] Add more picker types
+    - [x] HLS seekbars
+    - [ ] RGB seekbars
+    - [ ] RGB circle
+    - [ ] RGB plane
+    - [ ] Alpha seekbar
+    - [ ] HSL (S+L) plane
+    - [ ] Swatches
+- [ ] Sample buttons -> radios
+- [ ] Enhance API
+- [x] Add XML attributes
+- [ ] Add thumb animation
+- [x] Add *MaterialDrawer* & sample fragments
+- [ ] Add more *HSLColorPickerSeekBar* checks and reduce calls count
+- [ ] Add more encapsulation to limit picker modification capabilities
+- [ ] Package repository publish
+- [ ] Add Rx support
+- [ ] Add/Revisit *RecyclerView* support
+- [ ] Add sample app icon
+- [ ] Add logger solution
+- [ ] Add sample app analytics
+- [ ] Add call flow diagram
+- [ ] Add tests
+- [ ] Add docs
+- [x] Add OSS licenses	
+- [x] Add license
 
 ## Picker types
 
@@ -46,7 +51,7 @@
   app:mode="hue" />
 ```
 
-#### Kotlin snippet
+#### Kotlin Snippet
 ```
 andColorPicker.addListener(
   object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
