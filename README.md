@@ -29,7 +29,8 @@
 - [ ] Add call flow diagram
 - [ ] Add tests
 - [ ] Add docs
-- [x] Add OSS licenses	
+- [ ] Add contribution guidelines
+- [x] Add OSS licenses
 - [x] Add license
 
 ## Picker types
