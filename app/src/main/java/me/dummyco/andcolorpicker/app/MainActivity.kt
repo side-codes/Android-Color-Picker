@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
 import com.mikepenz.iconics.utils.icon
@@ -41,45 +42,38 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
 
     slider.apply {
       itemAdapter.add(
-        PrimaryDrawerItem().also {
-          it.name = StringHolder("HSL SeekBar")
-          it.icon = ImageHolder(
-            IconicsDrawable(this@MainActivity).icon(MaterialDesignDx.Icon.gmf_color_lens)
-          )
-        },
-        PrimaryDrawerItem().also {
-          it.name = StringHolder("HSL Plane")
-          it.icon = ImageHolder(
-            IconicsDrawable(this@MainActivity).icon(MaterialDesignDx.Icon.gmf_color_lens)
-          )
-        },
-        PrimaryDrawerItem().also {
-          it.name = StringHolder("RGB SeekBar")
-          it.icon = ImageHolder(
-            IconicsDrawable(this@MainActivity).icon(MaterialDesignDx.Icon.gmf_color_lens)
-          )
-        },
-        PrimaryDrawerItem().also {
-          it.name = StringHolder("RGB Plane")
-          it.icon = ImageHolder(
-            IconicsDrawable(this@MainActivity).icon(MaterialDesignDx.Icon.gmf_color_lens)
-          )
-        },
-        PrimaryDrawerItem().also {
-          it.name = StringHolder("Swatches")
-          it.icon = ImageHolder(
-            IconicsDrawable(this@MainActivity).icon(MaterialDesignDx.Icon.gmf_color_lens)
-          )
+        Page.values().map { page ->
+          PrimaryDrawerItem().also {
+            it.tag = page
+            it.identifier = page.hashCode().toLong()
+            it.name = StringHolder(page.title)
+            it.icon = ImageHolder(
+              IconicsDrawable(this@MainActivity).icon(page.icon)
+            )
+          }
         }
       )
+
+      onDrawerItemClickListener = { _, drawerItem, _ ->
+        navigateTo(drawerItem.tag as Page)
+        false
+      }
+
       setSavedInstance(savedInstanceState)
     }
 
+    if (savedInstanceState == null) {
+      // TODO: Get rid of hashCode-based identifiers
+      slider.setSelection(Page.HLS_SEEK_BAR.hashCode().toLong())
+    }
+  }
+
+  private fun navigateTo(page: Page) {
     supportFragmentManager
       .beginTransaction()
       .replace(
         R.id.fragmentContainer,
-        HslSeekBarFragment()
+        page.fragment.invoke()
       )
       .commit()
   }
@@ -130,5 +124,42 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
     toolbar.setSubtitleTextColor(contrastColor)
 
     actionBarDrawerToggle.drawerArrowDrawable.color = contrastColor
+  }
+
+  enum class Page(
+    val title: String,
+    val icon: MaterialDesignDx.Icon,
+    val fragment: () -> Fragment
+  ) {
+    HLS_SEEK_BAR(
+      "HSL SeekBar",
+      MaterialDesignDx.Icon.gmf_color_lens,
+      { HslSeekBarFragment() }
+    ),
+    HLS_PLANE(
+      "HSL Plane",
+      MaterialDesignDx.Icon.gmf_color_lens,
+      { WipFragment() }
+    ),
+    RGB_SEEK_BAR(
+      "RGB SeekBar",
+      MaterialDesignDx.Icon.gmf_color_lens,
+      { WipFragment() }
+    ),
+    RGB_PLANE(
+      "RGB Plane",
+      MaterialDesignDx.Icon.gmf_color_lens,
+      { WipFragment() }
+    ),
+    RGB_CIRCLE(
+      "RGB Circle",
+      MaterialDesignDx.Icon.gmf_color_lens,
+      { WipFragment() }
+    ),
+    SWATCHES(
+      "Swatches",
+      MaterialDesignDx.Icon.gmf_color_lens,
+      { WipFragment() }
+    ),
   }
 }

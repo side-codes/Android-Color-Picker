@@ -109,7 +109,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   // Dirty hack to stop onProgressChanged while playing with min/max
   private var propertiesUpdateInProcess = false
 
-  // TODO: Make caches lazy?
   private val paintDrawableStrokeSaturationHSLCache by lazy { DiscreteHSLColor() }
   private val paintDrawableStrokeLightnessHSLCache by lazy { DiscreteHSLColor() }
 
