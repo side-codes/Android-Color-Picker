@@ -23,9 +23,9 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.app.ColorizationConsumer
 import me.dummyco.andcolorpicker.app.R
-import me.dummyco.andcolorpicker.app.util.createContrastColor
 import me.dummyco.andcolorpicker.app.fragment.HslSeekBarFragment
 import me.dummyco.andcolorpicker.app.fragment.WipFragment
+import me.dummyco.andcolorpicker.app.util.createContrastColor
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
 
@@ -59,18 +59,18 @@ class MainActivity : AppCompatActivity(),
       itemAdapter.add(
         Page
           .values().map { page ->
-          PrimaryDrawerItem().also {
-            it.tag = page
-            it.identifier = page.hashCode().toLong()
-            it.name = StringHolder(page.title)
-            it.icon = ImageHolder(
-              IconicsDrawable(this@MainActivity)
-                .icon(page.icon)
-                .color { IconicsColor.colorRes(R.color.colorPrimary) }
-            )
-            it.isSelectable = page.fragmentProducer != null
+            PrimaryDrawerItem().also {
+              it.tag = page
+              it.identifier = page.hashCode().toLong()
+              it.name = StringHolder(page.title)
+              it.icon = ImageHolder(
+                IconicsDrawable(this@MainActivity)
+                  .icon(page.icon)
+                  .color { IconicsColor.colorRes(R.color.colorPrimary) }
+              )
+              it.isSelectable = page.fragmentProducer != null
+            }
           }
-        }
       )
 
       onDrawerItemClickListener = { _, drawerItem, _ ->
@@ -84,7 +84,8 @@ class MainActivity : AppCompatActivity(),
     if (savedInstanceState == null) {
       // TODO: Get rid of hashCode-based identifiers
       slider.setSelection(
-        Page.HLS_SEEK_BAR.hashCode().toLong())
+        Page.HLS_SEEK_BAR.hashCode().toLong()
+      )
     }
   }
 
