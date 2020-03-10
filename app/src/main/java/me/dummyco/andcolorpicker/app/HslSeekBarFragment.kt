@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
-import android.widget.RadioButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
@@ -40,9 +40,6 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     coloringModeSwitchButton.icon =
       IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_color_lens)
 
-    colorfulViews.add(hueRadioButton)
-    colorfulViews.add(saturationRadioButton)
-    colorfulViews.add(lightnessRadioButton)
     colorfulViews.add(setRandomColorButton)
     colorfulViews.add(coloringModeSwitchButton)
     colorfulViews.add(colorTextView)
@@ -113,13 +110,15 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     val contrastColor = color.createContrastColor()
 
     colorfulViews.forEach {
-      if (it is RadioButton) {
-        it.buttonTintList = ColorStateList.valueOf(color.colorInt)
-      }
-      if (it is MaterialButton) {
-        it.setTextColor(contrastColor)
-        it.backgroundTintList = ColorStateList.valueOf(color.colorInt)
-        it.iconTint = ColorStateList.valueOf(contrastColor)
+      when (it) {
+        is MaterialButton -> {
+          it.setTextColor(contrastColor)
+          it.backgroundTintList = ColorStateList.valueOf(color.colorInt)
+          it.iconTint = ColorStateList.valueOf(contrastColor)
+        }
+        is TextView -> {
+          it.setBackgroundColor(color.colorInt)
+        }
       }
     }
 
