@@ -23,7 +23,9 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
     private const val DEBUG = false
-    private const val COERCE_AT_MOST_LIGHTNING = 90
+
+    // TODO: Make configurable
+    private const val COERCE_AT_MOST_LIGHTNING = 0.9f
     private val HUE_COLOR_CHECKPOINTS = intArrayOf(
       Color.RED,
       Color.YELLOW,
@@ -561,13 +563,17 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
               paintDrawableStrokeLightnessHSLCache.setFromHSL(
-                _currentColor.intH.toFloat(),
+                _currentColor.floatH,
                 DiscreteHSLColor.DEFAULT_S,
-                progress.coerceAtMost(COERCE_AT_MOST_LIGHTNING) / mode.maxProgress.toFloat()
+                _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
               ).colorInt
             }
             ColoringMode.OUTPUT_COLOR -> {
-              _currentColor.colorInt
+              paintDrawableStrokeLightnessHSLCache.setFromHSL(
+                _currentColor.floatH,
+                _currentColor.floatS,
+                _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+              ).colorInt
             }
           }
         }

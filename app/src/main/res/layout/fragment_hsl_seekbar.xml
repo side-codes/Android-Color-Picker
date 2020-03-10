@@ -11,6 +11,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <com.google.android.material.card.MaterialCardView
+      android:id="@+id/colorCardView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      app:cardElevation="4dp"
+      app:cardUseCompatPadding="true"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <TextView
+        android:id="@+id/colorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        tools:background="@color/colorPrimary"
+        tools:text="#FFFFFF" />
+    </com.google.android.material.card.MaterialCardView>
+
     <TextView
       android:id="@+id/hueTitleTextView"
       android:layout_width="0dp"
@@ -20,7 +39,7 @@
       android:text="@string/title_hue"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toBottomOf="@+id/colorCardView" />
 
     <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
       android:id="@+id/andColorPickerHView"
@@ -166,18 +185,5 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/setRandomColorButton" />
-
-    <TextView
-      android:id="@+id/colorTextView"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginHorizontal="8dp"
-      android:layout_marginTop="8dp"
-      android:padding="4dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/coloringModeSwitchButton"
-      tools:background="@color/colorPrimary"
-      tools:text="#FFFFFF" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

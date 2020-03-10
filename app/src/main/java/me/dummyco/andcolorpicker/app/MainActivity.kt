@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
   }
 
   private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+  private val colorizeHSLColorCache = DiscreteHSLColor()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -152,12 +153,16 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
   override fun colorize(color: DiscreteHSLColor) {
     val contrastColor = color.createContrastColor()
 
-    appBarLayout.backgroundTintList = ColorStateList.valueOf(color.colorInt)
+    // Overwrite cache for AppBar
+    colorizeHSLColorCache.setFromHSLColor(color)
+    colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
-    val statusBarColor = color.copy().also {
-      it.intL += PRIMARY_DARK_LIGHTNESS_SHIFT
-    }
-    window.statusBarColor = statusBarColor.colorInt
+    appBarLayout.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.colorInt)
+
+    // Overwrite cache for StatusBar
+    colorizeHSLColorCache.floatL -= 0.1f
+
+    window.statusBarColor = colorizeHSLColorCache.colorInt
 
     toolbar.setTitleTextColor(contrastColor)
     toolbar.setSubtitleTextColor(contrastColor)
