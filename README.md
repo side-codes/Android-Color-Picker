@@ -23,7 +23,7 @@
 - [ ] Package repository publish
 - [ ] Add Rx support
 - [ ] Add/Revisit *RecyclerView* support
-- [ ] Add sample app icon
+- [x] Add sample app icon
 - [ ] Add logger solution
 - [ ] Add sample app analytics
 - [ ] Add call flow diagram
