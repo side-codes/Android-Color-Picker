@@ -45,24 +45,77 @@
 #### Layout XML Snippet
 ```
 <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-  android:id="@+id/andColorPicker"
+  android:id="@+id/hueColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:coloring="pure"
   app:mode="hue" />
+
+<me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+  android:id="@+id/saturationColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:coloring="pure"
+  app:mode="saturation" />
+
+<me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+  android:id="@+id/lightnessColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:coloring="pure"
+  app:mode="lightness" />
 ```
 
 #### Kotlin Snippet
 ```
-andColorPicker.addListener(
+// Configure picker color model programmatically
+hueColorPickerSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LIGHTNESS
+
+// Configure coloring mode programmatically
+hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
+
+// Group pickers with PickerGroup to automatically synchronize color across them
+val pickerGroup = PickerGroup().also {
+  it.registerPickers(
+    hueColorPickerSeekBar,
+    saturationColorPickerSeekBar,
+    lightnessColorPickerSeekBar
+  )
+}
+
+// Set desired color programmatically
+pickerGroup.setColor(
+  IntegerHSLColor().setFromColor(
+    Color.rgb(
+      28,
+      84,
+      187
+    )
+  )
+)
+
+// Set color components programmatically
+hueColorPickerSeekBar.progress = 50
+
+// Get current color immediatly
+Log.d(
+  TAG,
+  "Current color is ${hueColorPickerSeekBar.currentColor}"
+)
+
+// Listen for changes
+hueColorPickerSeekBar.addListener(
   object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
     override fun onColorChanged(
       picker: HSLColorPickerSeekBar,
       color: IntegerHSLColor,
-      mode: HSLColorPickerSeekBar.Mode,
+      mode: Mode,
       value: Int
     ) {
-      // Client code
+      Log.d(
+        TAG,
+        "$color picked"
+      )
     }
   }
 )
