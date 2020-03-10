@@ -42,7 +42,7 @@
       app:layout_constraintTop_toBottomOf="@+id/colorCardView" />
 
     <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-      android:id="@+id/andColorPickerHView"
+      android:id="@+id/hueColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -62,10 +62,10 @@
       android:text="@string/title_saturation"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/andColorPickerHView" />
+      app:layout_constraintTop_toBottomOf="@+id/hueColorPickerSeekBar" />
 
     <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-      android:id="@+id/andColorPickerSView"
+      android:id="@+id/saturationColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -85,10 +85,10 @@
       android:text="@string/title_lightness"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/andColorPickerSView" />
+      app:layout_constraintTop_toBottomOf="@+id/saturationColorPickerSeekBar" />
 
     <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-      android:id="@+id/andColorPickerLView"
+      android:id="@+id/lightnessColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -108,10 +108,10 @@
       android:text="@string/title_dynamic"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/andColorPickerLView" />
+      app:layout_constraintTop_toBottomOf="@+id/lightnessColorPickerSeekBar" />
 
     <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-      android:id="@+id/andColorPickerDynamicView"
+      android:id="@+id/dynamicColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -131,7 +131,7 @@
       android:text="@string/title_dynamic_color_model"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/andColorPickerDynamicView" />
+      app:layout_constraintTop_toBottomOf="@+id/dynamicColorPickerSeekBar" />
 
     <RadioGroup
       android:id="@+id/colorModelRadioGroup"

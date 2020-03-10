@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="4dp">
+
+  <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+    android:id="@+id/hueColorPickerSeekBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:coloring="pure"
+    app:mode="hue" />
+
+  <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+    android:id="@+id/saturationColorPickerSeekBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:coloring="pure"
+    app:mode="saturation" />
+
+  <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+    android:id="@+id/lightnessColorPickerSeekBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:coloring="pure"
+    app:mode="lightness" />
+</LinearLayout>

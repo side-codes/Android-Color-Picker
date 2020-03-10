@@ -24,10 +24,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import me.dummyco.andcolorpicker.app.ColorizationConsumer
 import me.dummyco.andcolorpicker.app.R
 import me.dummyco.andcolorpicker.app.fragment.HslSeekBarFragment
+import me.dummyco.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
 import me.dummyco.andcolorpicker.app.fragment.WipFragment
 import me.dummyco.andcolorpicker.app.util.createContrastColor
 import me.dummyco.andcolorpicker.model.IntegerHSLColor
-
 
 class MainActivity : AppCompatActivity(),
   ColorizationConsumer {
@@ -188,6 +188,11 @@ class MainActivity : AppCompatActivity(),
       "HSL SeekBar",
       MaterialDesignDx.Icon.gmf_space_bar,
       { HslSeekBarFragment() }
+    ),
+    HLS_SEEK_BAR_GITHUB(
+      "HSL SeekBar GitHub",
+      FontAwesome.Icon.faw_github,
+      { HslSeekBarGithubSampleFragment() }
     ),
     HLS_PLANE(
       "HSL Plane",

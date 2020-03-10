@@ -1,6 +1,7 @@
 package me.dummyco.andcolorpicker.model
 
 import android.graphics.Color
+import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -46,10 +47,10 @@ class IntegerHSLColor {
     }
   var intH: Int
     get() {
-      return values[H_INDEX]
+      return intValues[H_INDEX]
     }
     set(value) {
-      values[H_INDEX] = value.coerceIn(
+      intValues[H_INDEX] = value.coerceIn(
         0,
         360
       )
@@ -63,10 +64,10 @@ class IntegerHSLColor {
     }
   var intS: Int
     get() {
-      return values[S_INDEX]
+      return intValues[S_INDEX]
     }
     set(value) {
-      values[S_INDEX] = value.coerceIn(
+      intValues[S_INDEX] = value.coerceIn(
         0,
         100
       )
@@ -80,10 +81,10 @@ class IntegerHSLColor {
     }
   var intL: Int
     get() {
-      return values[L_INDEX]
+      return intValues[L_INDEX]
     }
     set(value) {
-      values[L_INDEX] = value.coerceIn(
+      intValues[L_INDEX] = value.coerceIn(
         0,
         100
       )
@@ -115,17 +116,17 @@ class IntegerHSLColor {
   private val hsColorIntHSLCache = FloatArray(3)
   val hsColorInt: Int
     get() {
-      hsColorIntHSLCache[H_INDEX] = values[H_INDEX].toFloat()
-      hsColorIntHSLCache[S_INDEX] = values[S_INDEX] / 100f
+      hsColorIntHSLCache[H_INDEX] = intValues[H_INDEX].toFloat()
+      hsColorIntHSLCache[S_INDEX] = intValues[S_INDEX] / 100f
       hsColorIntHSLCache[L_INDEX] = DEFAULT_L
       return ColorUtils.HSLToColor(hsColorIntHSLCache)
     }
   private val colorIntHSLCache = FloatArray(3)
   val colorInt: Int
     get() {
-      colorIntHSLCache[H_INDEX] = values[H_INDEX].toFloat()
-      colorIntHSLCache[S_INDEX] = values[S_INDEX] / 100f
-      colorIntHSLCache[L_INDEX] = values[L_INDEX] / 100f
+      colorIntHSLCache[H_INDEX] = intValues[H_INDEX].toFloat()
+      colorIntHSLCache[S_INDEX] = intValues[S_INDEX] / 100f
+      colorIntHSLCache[L_INDEX] = intValues[L_INDEX] / 100f
       return ColorUtils.HSLToColor(colorIntHSLCache)
     }
   private val pureColorIntHSLCache = FloatArray(3)
@@ -137,7 +138,7 @@ class IntegerHSLColor {
       return ColorUtils.HSLToColor(pureColorIntHSLCache)
     }
 
-  private val values = IntArray(3)
+  private val intValues = IntArray(3)
 
   fun setFromHSL(h: Float, s: Float, l: Float): IntegerHSLColor {
     this.intH = h.roundToInt()
@@ -154,6 +155,15 @@ class IntegerHSLColor {
     )
   }
 
+  fun setFromColor(@ColorInt color: Int): IntegerHSLColor {
+    val hslOutput = FloatArray(3)
+    ColorUtils.colorToHSL(
+      color,
+      hslOutput
+    )
+    return setFromHSL(hslOutput)
+  }
+
   // TODO: Cache output?
   fun setFromRGB(r: Int, g: Int, b: Int): IntegerHSLColor {
     val output = FloatArray(3)
@@ -163,25 +173,24 @@ class IntegerHSLColor {
       b,
       output
     )
-    setFromHSL(
+    return setFromHSL(
       output
     )
-    return this
   }
 
   fun setFromHSLColor(hslColor: IntegerHSLColor): IntegerHSLColor {
-    hslColor.copyValuesTo(values)
+    hslColor.copyValuesTo(intValues)
     return this
   }
 
   // FIXME: Unsafe, provide checks
   fun copyValuesFrom(inValues: IntArray): IntegerHSLColor {
-    inValues.copyInto(values)
+    inValues.copyInto(intValues)
     return this
   }
 
   fun copyValuesTo(outValues: IntArray) {
-    values.copyInto(outValues)
+    intValues.copyInto(outValues)
   }
 
   fun copy(): IntegerHSLColor {
@@ -189,7 +198,7 @@ class IntegerHSLColor {
   }
 
   override fun toString(): String {
-    return "HSLColor(a=$intA, values=${values.contentToString()})"
+    return "HSLColor(a=$intA, values=${intValues.contentToString()})"
   }
 
   override fun equals(other: Any?): Boolean {
@@ -199,14 +208,14 @@ class IntegerHSLColor {
     other as IntegerHSLColor
 
     if (_a != other._a) return false
-    if (!values.contentEquals(other.values)) return false
+    if (!intValues.contentEquals(other.intValues)) return false
 
     return true
   }
 
   override fun hashCode(): Int {
     var result = _a.hashCode()
-    result = 31 * result + values.contentHashCode()
+    result = 31 * result + intValues.contentHashCode()
     return result
   }
 }

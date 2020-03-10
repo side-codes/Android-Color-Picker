@@ -53,7 +53,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(setRandomColorButton)
     colorfulViews.add(colorTextView)
 
-    andColorPickerHView.addListener(
+    hueColorPickerSeekBar.addListener(
       object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: HSLColorPickerSeekBar,
@@ -66,14 +66,12 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       }
     )
 
-    val pickers = arrayListOf(
-      andColorPickerHView,
-      andColorPickerSView,
-      andColorPickerLView,
-      andColorPickerDynamicView
+    pickerGroup.registerPickers(
+      hueColorPickerSeekBar,
+      saturationColorPickerSeekBar,
+      lightnessColorPickerSeekBar,
+      dynamicColorPickerSeekBar
     )
-
-    pickerGroup.registerPickers(pickers)
 
     randomizePickedColor()
 
@@ -83,7 +81,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       R.id.lightnessRadioButton to HSLColorPickerSeekBar.Mode.MODE_LIGHTNESS
     )
     colorModelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-      andColorPickerDynamicView.mode = requireNotNull(radioColorModelsMap[checkedId])
+      dynamicColorPickerSeekBar.mode = requireNotNull(radioColorModelsMap[checkedId])
     }
 
     val radioColoringModesMap = hashMapOf(
