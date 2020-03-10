@@ -14,6 +14,7 @@
     - [ ] HSL (S+L) plane
     - [ ] Swatches
 - [x] Sample buttons -> radios
+- [x] Remove sample app child press delays
 - [ ] Enhance API
 - [x] Add XML attributes
 - [ ] Add thumb animation
