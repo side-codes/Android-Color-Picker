@@ -58,7 +58,7 @@ andColorPicker.addListener(
   object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
     override fun onColorChanged(
       picker: HSLColorPickerSeekBar,
-      color: DiscreteHSLColor,
+      color: IntegerHSLColor,
       mode: HSLColorPickerSeekBar.Mode,
       value: Int
     ) {
