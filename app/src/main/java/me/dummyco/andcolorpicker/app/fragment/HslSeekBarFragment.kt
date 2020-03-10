@@ -27,10 +27,7 @@ import me.dummyco.andcolorpicker.registerPickers
 
 class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   companion object {
-    private val AVAILABLE_COLORING_MODES = listOf(
-      HSLColorPickerSeekBar.ColoringMode.PURE_COLOR,
-      HSLColorPickerSeekBar.ColoringMode.OUTPUT_COLOR
-    )
+    private const val TAG = "HslSeekBarFragment"
   }
 
   private val colorfulViews = hashSetOf<View>()
@@ -49,8 +46,9 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(hueRadioButton)
     colorfulViews.add(saturationRadioButton)
     colorfulViews.add(lightnessRadioButton)
+    colorfulViews.add(pureRadioButton)
+    colorfulViews.add(outputRadioButton)
     colorfulViews.add(setRandomColorButton)
-    colorfulViews.add(coloringModeSwitchButton)
     colorfulViews.add(colorTextView)
 
     andColorPickerHView.addListener(
@@ -77,26 +75,27 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
 
     randomizePickedColor()
 
-    val radioModesMap = hashMapOf(
+    val radioColorModelsMap = hashMapOf(
       R.id.hueRadioButton to HSLColorPickerSeekBar.Mode.MODE_HUE,
       R.id.saturationRadioButton to HSLColorPickerSeekBar.Mode.MODE_SATURATION,
       R.id.lightnessRadioButton to HSLColorPickerSeekBar.Mode.MODE_LIGHTNESS
     )
     colorModelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-      andColorPickerDynamicView.mode = requireNotNull(radioModesMap[checkedId])
+      andColorPickerDynamicView.mode = requireNotNull(radioColorModelsMap[checkedId])
+    }
+
+    val radioColoringModesMap = hashMapOf(
+      R.id.pureRadioButton to HSLColorPickerSeekBar.ColoringMode.PURE_COLOR,
+      R.id.outputRadioButton to HSLColorPickerSeekBar.ColoringMode.OUTPUT_COLOR
+    )
+    coloringModeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+      pickers.forEach {
+        it.coloringMode = requireNotNull(radioColoringModesMap[checkedId])
+      }
     }
 
     setRandomColorButton.setOnClickListener {
       randomizePickedColor()
-    }
-
-    coloringModeSwitchButton.setOnClickListener {
-      val newMode =
-        AVAILABLE_COLORING_MODES[(AVAILABLE_COLORING_MODES.indexOf(andColorPickerHView.coloringMode) + 1) % AVAILABLE_COLORING_MODES.size]
-
-      pickers.forEach {
-        it.coloringMode = newMode
-      }
     }
   }
 
@@ -112,8 +111,6 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       )
     setRandomColorButton.icon =
       IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_invert_colors)
-    coloringModeSwitchButton.icon =
-      IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_color_lens)
   }
 
   override fun onAttach(context: Context) {
