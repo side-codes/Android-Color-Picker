@@ -25,10 +25,10 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_github_sample)
       savedInstanceState
     )
 
-    // Configure picker color model programmatically:
+    // Configure picker color model programmatically
     hueColorPickerSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LIGHTNESS
 
-    // Configure coloring mode programmatically:
+    // Configure coloring mode programmatically
     hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
 
     // Group pickers with PickerGroup to automatically synchronize color across them
