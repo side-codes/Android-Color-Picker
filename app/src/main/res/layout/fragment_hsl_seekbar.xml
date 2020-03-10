@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<me.dummyco.andcolorpicker.app.view.DelayFreeScrollView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/scrollView"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fillViewport="true">
 
   <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/containerConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -213,4 +215,4 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/coloringModeRadioGroup" />
   </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</me.dummyco.andcolorpicker.app.view.DelayFreeScrollView>

@@ -21,7 +21,7 @@ import me.dummyco.andcolorpicker.PickerGroup
 import me.dummyco.andcolorpicker.app.ColorizationConsumer
 import me.dummyco.andcolorpicker.app.R
 import me.dummyco.andcolorpicker.app.util.createContrastColor
-import me.dummyco.andcolorpicker.app.util.firstIsInstance
+import me.dummyco.andcolorpicker.app.util.firstIsInstanceOrNull
 import me.dummyco.andcolorpicker.model.IntegerHSLColor
 import me.dummyco.andcolorpicker.registerPickers
 
@@ -116,7 +116,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorizationConsumer = arrayOf(
       parentFragment,
       activity
-    ).firstIsInstance<ColorizationConsumer>()
+    ).firstIsInstanceOrNull<ColorizationConsumer>()
   }
 
   // TODO: Delegate to group?
