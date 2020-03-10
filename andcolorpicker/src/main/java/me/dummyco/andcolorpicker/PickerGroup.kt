@@ -1,11 +1,21 @@
 package me.dummyco.andcolorpicker
 
-import me.dummyco.andcolorpicker.model.DiscreteHSLColor
+import me.dummyco.andcolorpicker.model.IntegerHSLColor
 
 // TODO: Add foreach or smth like that
 class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
   // Kinda prioritized collection
   private val pickers = linkedSetOf<HSLColorPickerSeekBar>()
+
+  fun setColor(color: IntegerHSLColor) {
+    pickers.firstOrNull()?.currentColor = color
+  }
+
+  fun setColoringMode(coloringMode: HSLColorPickerSeekBar.ColoringMode) {
+    pickers.forEach {
+      it.coloringMode = coloringMode
+    }
+  }
 
   fun registerPicker(picker: HSLColorPickerSeekBar) {
     picker.addListener(this)
@@ -24,7 +34,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   override fun onColorPicking(
     picker: HSLColorPickerSeekBar,
-    color: DiscreteHSLColor,
+    color: IntegerHSLColor,
     mode: HSLColorPickerSeekBar.Mode,
     value: Int,
     fromUser: Boolean
@@ -37,7 +47,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   override fun onColorPicked(
     picker: HSLColorPickerSeekBar,
-    color: DiscreteHSLColor,
+    color: IntegerHSLColor,
     mode: HSLColorPickerSeekBar.Mode,
     value: Int,
     fromUser: Boolean
@@ -50,7 +60,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   override fun onColorChanged(
     picker: HSLColorPickerSeekBar,
-    color: DiscreteHSLColor,
+    color: IntegerHSLColor,
     mode: HSLColorPickerSeekBar.Mode,
     value: Int
   ) {
@@ -62,7 +72,7 @@ class PickerGroup : HSLColorPickerSeekBar.OnColorPickListener {
 
   private fun notifyGroupOnBroadcastFrom(
     picker: HSLColorPickerSeekBar,
-    color: DiscreteHSLColor
+    color: IntegerHSLColor
   ) {
     pickers.filter { it != picker }.forEach {
       it.currentColor = color

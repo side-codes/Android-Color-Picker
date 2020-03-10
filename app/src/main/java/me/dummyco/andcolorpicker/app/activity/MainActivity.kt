@@ -26,7 +26,7 @@ import me.dummyco.andcolorpicker.app.R
 import me.dummyco.andcolorpicker.app.fragment.HslSeekBarFragment
 import me.dummyco.andcolorpicker.app.fragment.WipFragment
 import me.dummyco.andcolorpicker.app.util.createContrastColor
-import me.dummyco.andcolorpicker.model.DiscreteHSLColor
+import me.dummyco.andcolorpicker.model.IntegerHSLColor
 
 
 class MainActivity : AppCompatActivity(),
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(),
   }
 
   private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-  private val colorizeHSLColorCache = DiscreteHSLColor()
+  private val colorizeHSLColorCache = IntegerHSLColor()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity(),
     }
   }
 
-  override fun colorize(color: DiscreteHSLColor) {
+  override fun colorize(color: IntegerHSLColor) {
     val contrastColor = color.createContrastColor()
 
     // Overwrite cache for AppBar

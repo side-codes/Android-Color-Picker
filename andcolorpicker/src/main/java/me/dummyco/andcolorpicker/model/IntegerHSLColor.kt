@@ -7,7 +7,7 @@ import kotlin.random.Random
 
 // TODO: Invent hierarchy
 // TODO: Provide precision options
-class DiscreteHSLColor {
+class IntegerHSLColor {
   companion object {
     const val H_INDEX = 0
     const val S_INDEX = 1
@@ -26,8 +26,8 @@ class DiscreteHSLColor {
       return DEFAULT_HSL_VALUES[index]
     }
 
-    fun createRandomColor(): DiscreteHSLColor {
-      return DiscreteHSLColor().setFromHSL(
+    fun createRandomColor(): IntegerHSLColor {
+      return IntegerHSLColor().setFromHSL(
         floatArrayOf(
           Random.Default.nextFloat() * 360f,
           Random.Default.nextFloat(),
@@ -139,14 +139,14 @@ class DiscreteHSLColor {
 
   private val values = IntArray(3)
 
-  fun setFromHSL(h: Float, s: Float, l: Float): DiscreteHSLColor {
+  fun setFromHSL(h: Float, s: Float, l: Float): IntegerHSLColor {
     this.intH = h.roundToInt()
     this.intS = (s * 100f).roundToInt()
     this.intL = (l * 100f).roundToInt()
     return this
   }
 
-  fun setFromHSL(hsl: FloatArray): DiscreteHSLColor {
+  fun setFromHSL(hsl: FloatArray): IntegerHSLColor {
     return setFromHSL(
       hsl[H_INDEX],
       hsl[S_INDEX],
@@ -155,7 +155,7 @@ class DiscreteHSLColor {
   }
 
   // TODO: Cache output?
-  fun setFromRGB(r: Int, g: Int, b: Int): DiscreteHSLColor {
+  fun setFromRGB(r: Int, g: Int, b: Int): IntegerHSLColor {
     val output = FloatArray(3)
     ColorUtils.RGBToHSL(
       r,
@@ -169,13 +169,13 @@ class DiscreteHSLColor {
     return this
   }
 
-  fun setFromHSLColor(hslColor: DiscreteHSLColor): DiscreteHSLColor {
+  fun setFromHSLColor(hslColor: IntegerHSLColor): IntegerHSLColor {
     hslColor.copyValuesTo(values)
     return this
   }
 
   // FIXME: Unsafe, provide checks
-  fun copyValuesFrom(inValues: IntArray): DiscreteHSLColor {
+  fun copyValuesFrom(inValues: IntArray): IntegerHSLColor {
     inValues.copyInto(values)
     return this
   }
@@ -184,8 +184,8 @@ class DiscreteHSLColor {
     values.copyInto(outValues)
   }
 
-  fun copy(): DiscreteHSLColor {
-    return DiscreteHSLColor().setFromHSLColor(this)
+  fun copy(): IntegerHSLColor {
+    return IntegerHSLColor().setFromHSLColor(this)
   }
 
   override fun toString(): String {
@@ -196,7 +196,7 @@ class DiscreteHSLColor {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as DiscreteHSLColor
+    other as IntegerHSLColor
 
     if (_a != other._a) return false
     if (!values.contentEquals(other.values)) return false

@@ -1,7 +1,7 @@
 package me.dummyco.andcolorpicker.app
 
-import me.dummyco.andcolorpicker.model.DiscreteHSLColor
+import me.dummyco.andcolorpicker.model.IntegerHSLColor
 
 interface ColorizationConsumer {
-  fun colorize(color: DiscreteHSLColor)
+  fun colorize(color: IntegerHSLColor)
 }

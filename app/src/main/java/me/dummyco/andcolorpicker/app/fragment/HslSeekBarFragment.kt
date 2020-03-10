@@ -22,18 +22,20 @@ import me.dummyco.andcolorpicker.app.ColorizationConsumer
 import me.dummyco.andcolorpicker.app.R
 import me.dummyco.andcolorpicker.app.util.createContrastColor
 import me.dummyco.andcolorpicker.app.util.firstIsInstance
-import me.dummyco.andcolorpicker.model.DiscreteHSLColor
+import me.dummyco.andcolorpicker.model.IntegerHSLColor
 import me.dummyco.andcolorpicker.registerPickers
 
 class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   companion object {
     private const val TAG = "HslSeekBarFragment"
+    private const val colorTextViewIconSizeDp = 24
+    private const val colorTextViewIconPaddingDp = 6
   }
 
   private val colorfulViews = hashSetOf<View>()
   private val pickerGroup = PickerGroup()
   private var colorizationConsumer: ColorizationConsumer? = null
-  private val colorizeHSLColorCache = DiscreteHSLColor()
+  private val colorizeHSLColorCache = IntegerHSLColor()
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
@@ -55,7 +57,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: HSLColorPickerSeekBar,
-          color: DiscreteHSLColor,
+          color: IntegerHSLColor,
           mode: HSLColorPickerSeekBar.Mode,
           value: Int
         ) {
@@ -89,9 +91,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       R.id.outputRadioButton to HSLColorPickerSeekBar.ColoringMode.OUTPUT_COLOR
     )
     coloringModeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-      pickers.forEach {
-        it.coloringMode = requireNotNull(radioColoringModesMap[checkedId])
-      }
+      pickerGroup.setColoringMode(requireNotNull(radioColoringModesMap[checkedId]))
     }
 
     setRandomColorButton.setOnClickListener {
@@ -103,8 +103,8 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorTextView
       .setCompoundDrawables(
         IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_colorize)
-          .size { IconicsSize.dp(24 + 6 * 2) }
-          .padding { IconicsSize.dp(6) },
+          .size { IconicsSize.dp(colorTextViewIconSizeDp + colorTextViewIconPaddingDp * 2) }
+          .padding { IconicsSize.dp(colorTextViewIconPaddingDp) },
         null,
         null,
         null
@@ -123,13 +123,15 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
 
   // TODO: Delegate to group?
   private fun randomizePickedColor() {
-    andColorPickerHView.currentColor = DiscreteHSLColor.createRandomColor().also {
-      it.intL = 20 + it.intL / 2
-    }
+    pickerGroup.setColor(
+      IntegerHSLColor.createRandomColor().also {
+        it.intL = 20 + it.intL / 2
+      }
+    )
   }
 
   @SuppressLint("SetTextI18n")
-  private fun colorize(color: DiscreteHSLColor) {
+  private fun colorize(color: IntegerHSLColor) {
     val contrastColor = color.createContrastColor()
     colorizeHSLColorCache.setFromHSLColor(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)

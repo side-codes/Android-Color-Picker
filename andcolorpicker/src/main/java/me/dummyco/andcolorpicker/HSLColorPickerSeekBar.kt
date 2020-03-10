@@ -12,7 +12,7 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
-import me.dummyco.andcolorpicker.model.DiscreteHSLColor
+import me.dummyco.andcolorpicker.model.IntegerHSLColor
 
 // TODO: Add logger solution
 // TODO: Add call flow diagram
@@ -75,10 +75,10 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       refreshThumb()
     }
 
-  private var _currentColor = DiscreteHSLColor()
+  private var _currentColor = IntegerHSLColor()
 
   // TODO: To method?
-  var currentColor: DiscreteHSLColor
+  var currentColor: IntegerHSLColor
     get() {
       return when (mode) {
         Mode.MODE_VALUE -> TODO()
@@ -110,8 +110,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   // Dirty hack to stop onProgressChanged while playing with min/max
   private var propertiesUpdateInProcess = false
 
-  private val paintDrawableStrokeSaturationHSLCache by lazy { DiscreteHSLColor() }
-  private val paintDrawableStrokeLightnessHSLCache by lazy { DiscreteHSLColor() }
+  private val paintDrawableStrokeSaturationHSLCache by lazy { IntegerHSLColor() }
+  private val paintDrawableStrokeLightnessHSLCache by lazy { IntegerHSLColor() }
 
   private val progressDrawableSaturationColorsCache by lazy { IntArray(2) }
   private val progressDrawableLightnessColorsCache by lazy { IntArray(3) }
@@ -379,8 +379,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         it,
         createHueOutputColorCheckpointsHSLCache
       )
-      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.S_INDEX] = _currentColor.floatS
-      createHueOutputColorCheckpointsHSLCache[DiscreteHSLColor.L_INDEX] = _currentColor.floatL
+      createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.S_INDEX] = _currentColor.floatS
+      createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.L_INDEX] = _currentColor.floatL
       ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
     }.toIntArray()
   }
@@ -551,7 +551,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
               paintDrawableStrokeSaturationHSLCache.setFromHSL(
                 _currentColor.intH.toFloat(),
                 progress / mode.maxProgress.toFloat(),
-                DiscreteHSLColor.DEFAULT_L
+                IntegerHSLColor.DEFAULT_L
               ).colorInt
             }
             ColoringMode.OUTPUT_COLOR -> {
@@ -564,7 +564,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
             ColoringMode.PURE_COLOR -> {
               paintDrawableStrokeLightnessHSLCache.setFromHSL(
                 _currentColor.floatH,
-                DiscreteHSLColor.DEFAULT_S,
+                IntegerHSLColor.DEFAULT_S,
                 _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
               ).colorInt
             }
@@ -630,7 +630,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   interface OnColorPickListener {
     fun onColorPicking(
       picker: HSLColorPickerSeekBar,
-      color: DiscreteHSLColor,
+      color: IntegerHSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
@@ -638,7 +638,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     fun onColorPicked(
       picker: HSLColorPickerSeekBar,
-      color: DiscreteHSLColor,
+      color: IntegerHSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
@@ -646,7 +646,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     fun onColorChanged(
       picker: HSLColorPickerSeekBar,
-      color: DiscreteHSLColor,
+      color: IntegerHSLColor,
       mode: Mode,
       value: Int
     )
@@ -655,7 +655,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   open class DefaultOnColorPickListener : OnColorPickListener {
     override fun onColorPicking(
       picker: HSLColorPickerSeekBar,
-      color: DiscreteHSLColor,
+      color: IntegerHSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
@@ -665,7 +665,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     override fun onColorPicked(
       picker: HSLColorPickerSeekBar,
-      color: DiscreteHSLColor,
+      color: IntegerHSLColor,
       mode: Mode,
       value: Int,
       fromUser: Boolean
@@ -675,7 +675,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     override fun onColorChanged(
       picker: HSLColorPickerSeekBar,
-      color: DiscreteHSLColor,
+      color: IntegerHSLColor,
       mode: Mode,
       value: Int
     ) {
