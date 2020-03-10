@@ -1,4 +1,4 @@
-package me.dummyco.andcolorpicker.app
+package me.dummyco.andcolorpicker.app.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,6 +18,10 @@ import com.mikepenz.iconics.utils.size
 import kotlinx.android.synthetic.main.fragment_hsl_seekbar.*
 import me.dummyco.andcolorpicker.HSLColorPickerSeekBar
 import me.dummyco.andcolorpicker.PickerGroup
+import me.dummyco.andcolorpicker.app.ColorizationConsumer
+import me.dummyco.andcolorpicker.app.R
+import me.dummyco.andcolorpicker.app.util.createContrastColor
+import me.dummyco.andcolorpicker.app.util.firstIsInstance
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 import me.dummyco.andcolorpicker.registerPickers
 
@@ -120,6 +124,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     ).firstIsInstance<ColorizationConsumer>()
   }
 
+  // TODO: Delegate to group?
   private fun randomizePickedColor() {
     andColorPickerHView.currentColor = DiscreteHSLColor.createRandomColor().also {
       it.intL = 20 + it.intL / 2

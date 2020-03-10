@@ -1,4 +1,4 @@
-package me.dummyco.andcolorpicker.app
+package me.dummyco.andcolorpicker.app.activity
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -21,10 +21,16 @@ import com.mikepenz.materialdrawer.holder.ImageHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import kotlinx.android.synthetic.main.activity_main.*
+import me.dummyco.andcolorpicker.app.ColorizationConsumer
+import me.dummyco.andcolorpicker.app.R
+import me.dummyco.andcolorpicker.app.util.createContrastColor
+import me.dummyco.andcolorpicker.app.fragment.HslSeekBarFragment
+import me.dummyco.andcolorpicker.app.fragment.WipFragment
 import me.dummyco.andcolorpicker.model.DiscreteHSLColor
 
 
-class MainActivity : AppCompatActivity(), ColorizationConsumer {
+class MainActivity : AppCompatActivity(),
+  ColorizationConsumer {
 
   companion object {
     private const val TAG = "MainActivity"
@@ -51,7 +57,8 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
 
     slider.apply {
       itemAdapter.add(
-        Page.values().map { page ->
+        Page
+          .values().map { page ->
           PrimaryDrawerItem().also {
             it.tag = page
             it.identifier = page.hashCode().toLong()
@@ -76,7 +83,8 @@ class MainActivity : AppCompatActivity(), ColorizationConsumer {
 
     if (savedInstanceState == null) {
       // TODO: Get rid of hashCode-based identifiers
-      slider.setSelection(Page.HLS_SEEK_BAR.hashCode().toLong())
+      slider.setSelection(
+        Page.HLS_SEEK_BAR.hashCode().toLong())
     }
   }
 

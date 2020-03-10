@@ -1,4 +1,4 @@
-package me.dummyco.andcolorpicker.app
+package me.dummyco.andcolorpicker.app.util
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
