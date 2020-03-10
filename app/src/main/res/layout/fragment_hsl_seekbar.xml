@@ -1,157 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".MainActivity">
+  android:fillViewport="true">
 
-  <TextView
-    android:id="@+id/hueTitleTextView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:text="@string/title_hue"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-  <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-    android:id="@+id/andColorPickerHView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    app:coloring="pure"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView"
-    app:mode="hue" />
+    <TextView
+      android:id="@+id/hueTitleTextView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      android:text="@string/title_hue"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
-  <TextView
-    android:id="@+id/saturationTitleTextView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:text="@string/title_saturation"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/andColorPickerHView" />
+    <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+      android:id="@+id/andColorPickerHView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      app:coloring="pure"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView"
+      app:mode="hue" />
 
-  <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-    android:id="@+id/andColorPickerSView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    app:coloring="pure"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView"
-    app:mode="saturation" />
+    <TextView
+      android:id="@+id/saturationTitleTextView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      android:text="@string/title_saturation"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/andColorPickerHView" />
 
-  <TextView
-    android:id="@+id/lightnessTitleTextView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:text="@string/title_lightness"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/andColorPickerSView" />
+    <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+      android:id="@+id/andColorPickerSView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      app:coloring="pure"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView"
+      app:mode="saturation" />
 
-  <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-    android:id="@+id/andColorPickerLView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    app:coloring="pure"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView"
-    app:mode="lightness" />
+    <TextView
+      android:id="@+id/lightnessTitleTextView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      android:text="@string/title_lightness"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/andColorPickerSView" />
 
-  <TextView
-    android:id="@+id/dynamicTitleTextView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:text="@string/title_dynamic"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/andColorPickerLView" />
+    <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+      android:id="@+id/andColorPickerLView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      app:coloring="pure"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView"
+      app:mode="lightness" />
 
-  <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
-    android:id="@+id/andColorPickerDynamicView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    app:coloring="pure"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView"
-    app:mode="saturation" />
+    <TextView
+      android:id="@+id/dynamicTitleTextView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      android:text="@string/title_dynamic"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/andColorPickerLView" />
 
-  <com.google.android.material.button.MaterialButton
-    android:id="@+id/dynamicSwitchButton"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:text="@string/action_switch_dynamic_color_model"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/andColorPickerDynamicView" />
+    <me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+      android:id="@+id/andColorPickerDynamicView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      app:coloring="pure"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView"
+      app:mode="hue" />
 
-  <com.google.android.material.button.MaterialButton
-    android:id="@+id/setRandomColorButton"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:text="@string/action_set_random_color"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/dynamicSwitchButton" />
+    <TextView
+      android:id="@+id/modeTitleTextView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      android:text="@string/title_dynamic_color_model"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/andColorPickerDynamicView" />
 
-  <com.google.android.material.button.MaterialButton
-    android:id="@+id/coloringModeSwitchButton"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:text="@string/action_switch_coloring_mode"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/setRandomColorButton" />
+    <RadioGroup
+      android:id="@+id/colorModelRadioGroup"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/modeTitleTextView">
 
-  <TextView
-    android:id="@+id/colorTextView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:padding="4dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/coloringModeSwitchButton"
-    tools:background="@color/colorPrimary"
-    tools:text="#FFFFFF" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+      <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/hueRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:minHeight="0dp"
+        android:text="@string/title_hue" />
+
+      <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/saturationRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:text="@string/title_saturation" />
+
+      <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/lightnessRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:text="@string/title_lightness" />
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/setRandomColorButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:text="@string/action_set_random_color"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/colorModelRadioGroup" />
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/coloringModeSwitchButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:text="@string/action_switch_coloring_mode"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/setRandomColorButton" />
+
+    <TextView
+      android:id="@+id/colorTextView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="8dp"
+      android:padding="4dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/coloringModeSwitchButton"
+      tools:background="@color/colorPrimary"
+      tools:text="#FFFFFF" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

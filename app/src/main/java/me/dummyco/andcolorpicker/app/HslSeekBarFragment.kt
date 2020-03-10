@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
+import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
@@ -19,11 +19,6 @@ import me.dummyco.andcolorpicker.registerPickers
 
 class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   companion object {
-    private val AVAILABLE_SWITCH_MODES = listOf(
-      HSLColorPickerSeekBar.Mode.MODE_HUE,
-      HSLColorPickerSeekBar.Mode.MODE_SATURATION,
-      HSLColorPickerSeekBar.Mode.MODE_LIGHTNESS
-    )
     private val AVAILABLE_COLORING_MODES = listOf(
       HSLColorPickerSeekBar.ColoringMode.PURE_COLOR,
       HSLColorPickerSeekBar.ColoringMode.OUTPUT_COLOR
@@ -40,14 +35,14 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       savedInstanceState
     )
 
-    dynamicSwitchButton.icon =
-      IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_loop)
     setRandomColorButton.icon =
       IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_invert_colors)
     coloringModeSwitchButton.icon =
       IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_color_lens)
 
-    colorfulViews.add(dynamicSwitchButton)
+    colorfulViews.add(hueRadioButton)
+    colorfulViews.add(saturationRadioButton)
+    colorfulViews.add(lightnessRadioButton)
     colorfulViews.add(setRandomColorButton)
     colorfulViews.add(coloringModeSwitchButton)
     colorfulViews.add(colorTextView)
@@ -76,14 +71,17 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
 
     randomizePickedColor()
 
-    setRandomColorButton.setOnClickListener {
-      randomizePickedColor()
+    val radioModesMap = hashMapOf(
+      R.id.hueRadioButton to HSLColorPickerSeekBar.Mode.MODE_HUE,
+      R.id.saturationRadioButton to HSLColorPickerSeekBar.Mode.MODE_SATURATION,
+      R.id.lightnessRadioButton to HSLColorPickerSeekBar.Mode.MODE_LIGHTNESS
+    )
+    colorModelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+      andColorPickerDynamicView.mode = requireNotNull(radioModesMap[checkedId])
     }
 
-    dynamicSwitchButton.setOnClickListener {
-      val newMode =
-        AVAILABLE_SWITCH_MODES[(AVAILABLE_SWITCH_MODES.indexOf(andColorPickerDynamicView.mode) + 1) % AVAILABLE_SWITCH_MODES.size]
-      andColorPickerDynamicView.mode = newMode
+    setRandomColorButton.setOnClickListener {
+      randomizePickedColor()
     }
 
     coloringModeSwitchButton.setOnClickListener {
@@ -115,11 +113,12 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     val contrastColor = color.createContrastColor()
 
     colorfulViews.forEach {
-      it.setBackgroundColor(color.colorInt)
-      if (it is TextView) {
-        it.setTextColor(contrastColor)
+      if (it is RadioButton) {
+        it.buttonTintList = ColorStateList.valueOf(color.colorInt)
       }
       if (it is MaterialButton) {
+        it.setTextColor(contrastColor)
+        it.backgroundTintList = ColorStateList.valueOf(color.colorInt)
         it.iconTint = ColorStateList.valueOf(contrastColor)
       }
     }
