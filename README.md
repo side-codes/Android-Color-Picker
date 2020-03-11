@@ -17,6 +17,8 @@
 - [x] Remove sample app child press delays
 - [ ] Enhance API
 - [x] Add XML attributes
+- [ ] Provide *git-flow*
+- [ ] Automate release/publish flow
 - [ ] Add thumb animation
 - [x] Add *MaterialDrawer* & sample fragments
 - [ ] Add more *HSLColorPickerSeekBar* checks and reduce calls count
