@@ -5,14 +5,14 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import codes.side.andcolorpicker.HSLColorPickerSeekBar
+import codes.side.andcolorpicker.app.R
+import codes.side.andcolorpicker.model.IntegerHSLColor
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.fragment_hsl_seekbar_recyclerview.*
 import kotlinx.android.synthetic.main.layout_item_hsl_seekbar.view.*
-import codes.side.andcolorpicker.HSLColorPickerSeekBar
-import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.model.IntegerHSLColor
 
 class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_recyclerview) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

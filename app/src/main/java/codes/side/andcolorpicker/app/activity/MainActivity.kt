@@ -9,6 +9,14 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import codes.side.andcolorpicker.app.ColorizationConsumer
+import codes.side.andcolorpicker.app.R
+import codes.side.andcolorpicker.app.fragment.HslSeekBarFragment
+import codes.side.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
+import codes.side.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
+import codes.side.andcolorpicker.app.fragment.WipFragment
+import codes.side.andcolorpicker.app.util.createContrastColor
+import codes.side.andcolorpicker.model.IntegerHSLColor
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
@@ -21,14 +29,6 @@ import com.mikepenz.materialdrawer.holder.ImageHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import kotlinx.android.synthetic.main.activity_main.*
-import codes.side.andcolorpicker.app.ColorizationConsumer
-import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.app.fragment.HslSeekBarFragment
-import codes.side.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
-import codes.side.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
-import codes.side.andcolorpicker.app.fragment.WipFragment
-import codes.side.andcolorpicker.app.util.createContrastColor
-import codes.side.andcolorpicker.model.IntegerHSLColor
 
 class MainActivity : AppCompatActivity(),
   ColorizationConsumer {

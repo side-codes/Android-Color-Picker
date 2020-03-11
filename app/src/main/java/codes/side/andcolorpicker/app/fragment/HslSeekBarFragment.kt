@@ -8,14 +8,6 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.android.material.button.MaterialButton
-import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.IconicsSize
-import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
-import com.mikepenz.iconics.utils.icon
-import com.mikepenz.iconics.utils.padding
-import com.mikepenz.iconics.utils.size
-import kotlinx.android.synthetic.main.fragment_hsl_seekbar.*
 import codes.side.andcolorpicker.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.PickerGroup
 import codes.side.andcolorpicker.app.ColorizationConsumer
@@ -24,6 +16,14 @@ import codes.side.andcolorpicker.app.util.createContrastColor
 import codes.side.andcolorpicker.app.util.firstIsInstanceOrNull
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.registerPickers
+import com.google.android.material.button.MaterialButton
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.IconicsSize
+import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
+import com.mikepenz.iconics.utils.icon
+import com.mikepenz.iconics.utils.padding
+import com.mikepenz.iconics.utils.size
+import kotlinx.android.synthetic.main.fragment_hsl_seekbar.*
 
 class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   companion object {
