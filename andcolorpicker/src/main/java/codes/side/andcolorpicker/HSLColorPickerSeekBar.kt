@@ -154,19 +154,42 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
     splitTrack = false
 
-    background = background.mutate()
-      .also {
-        if (it is RippleDrawable) {
-          // TODO: Set ripple size for pre-M too
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val rippleSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_ripple_radius)
-            it.radius = rippleSizePx
-          }
-        }
-      }
-
+    setupBackground()
     setupProgressDrawable()
+    setupThumb()
 
+    isInitialized = true
+
+    // TODO: Find good place for that
+    refreshProperties()
+    refreshInternalCurrentColorFromProgress()
+    refreshProgressDrawable()
+    refreshThumb()
+
+    if (attrs != null) {
+      val typedArray = context.theme.obtainStyledAttributes(
+        attrs,
+        R.styleable.HSLColorPickerSeekBar,
+        0,
+        0
+      )
+
+      try {
+        mode = Mode.values()[typedArray.getInteger(
+          R.styleable.HSLColorPickerSeekBar_mode,
+          0
+        )]
+        coloringMode = ColoringMode.values()[typedArray.getInteger(
+          R.styleable.HSLColorPickerSeekBar_coloring,
+          0
+        )]
+      } finally {
+        typedArray.recycle()
+      }
+    }
+  }
+
+  private fun setupThumb() {
     val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_background_padding)
     val thumbFullSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_full)
     val thumbDefaultSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_default)
@@ -248,36 +271,19 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     }
 
     thumbOffset -= backgroundPaddingPx / 2
+  }
 
-    isInitialized = true
-
-    // TODO: Find good place for that
-    refreshProperties()
-    refreshInternalCurrentColorFromProgress()
-    refreshProgressDrawable()
-    refreshThumb()
-
-    if (attrs != null) {
-      val typedArray = context.theme.obtainStyledAttributes(
-        attrs,
-        R.styleable.HSLColorPickerSeekBar,
-        0,
-        0
-      )
-
-      try {
-        mode = Mode.values()[typedArray.getInteger(
-          R.styleable.HSLColorPickerSeekBar_mode,
-          0
-        )]
-        coloringMode = ColoringMode.values()[typedArray.getInteger(
-          R.styleable.HSLColorPickerSeekBar_coloring,
-          0
-        )]
-      } finally {
-        typedArray.recycle()
+  private fun setupBackground() {
+    background = background.mutate()
+      .also {
+        if (it is RippleDrawable) {
+          // TODO: Set ripple size for pre-M too
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val rippleSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_ripple_radius)
+            it.radius = rippleSizePx
+          }
+        }
       }
-    }
   }
 
   override fun setMin(min: Int) {
@@ -355,6 +361,30 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         _currentColor,
         mode,
         progress
+      )
+    }
+  }
+
+  private fun notifyListenersOnColorPicking(fromUser: Boolean) {
+    colorPickListeners.forEach {
+      it.onColorPicking(
+        this,
+        _currentColor,
+        mode,
+        progress,
+        fromUser
+      )
+    }
+  }
+
+  private fun notifyListenersOnColorPicked(fromUser: Boolean) {
+    colorPickListeners.forEach {
+      it.onColorPicked(
+        this,
+        _currentColor,
+        mode,
+        progress,
+        fromUser
       )
     }
   }
@@ -602,14 +632,10 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     refreshInternalCurrentColorFromProgress()
     refreshProgressDrawable()
     refreshThumb()
-    colorPickListeners.forEach {
-      it.onColorPicking(
-        this,
-        _currentColor,
-        mode,
-        progress,
-        fromUser
-      )
+    notifyListenersOnColorPicking(fromUser)
+
+    if (!fromUser) {
+      notifyListenersOnColorPicked(fromUser)
     }
   }
 
