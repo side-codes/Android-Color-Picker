@@ -691,37 +691,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     )
   }
 
-  open class DefaultOnColorPickListener : OnColorPickListener {
-    override fun onColorPicking(
-      picker: HSLColorPickerSeekBar,
-      color: IntegerHSLColor,
-      mode: Mode,
-      value: Int,
-      fromUser: Boolean
-    ) {
-
-    }
-
-    override fun onColorPicked(
-      picker: HSLColorPickerSeekBar,
-      color: IntegerHSLColor,
-      mode: Mode,
-      value: Int,
-      fromUser: Boolean
-    ) {
-
-    }
-
-    override fun onColorChanged(
-      picker: HSLColorPickerSeekBar,
-      color: IntegerHSLColor,
-      mode: Mode,
-      value: Int
-    ) {
-
-    }
-  }
-
   enum class ColoringMode {
     PURE_COLOR,
     OUTPUT_COLOR

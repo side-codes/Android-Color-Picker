@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import codes.side.andcolorpicker.DefaultOnColorPickListener
 import codes.side.andcolorpicker.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.HSLColorPickerSeekBar.ColoringMode
 import codes.side.andcolorpicker.HSLColorPickerSeekBar.Mode
@@ -64,7 +65,7 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
 
     // Listen for changes
     hueColorPickerSeekBar.addListener(
-      object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+      object : DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: HSLColorPickerSeekBar,
           color: IntegerHSLColor,

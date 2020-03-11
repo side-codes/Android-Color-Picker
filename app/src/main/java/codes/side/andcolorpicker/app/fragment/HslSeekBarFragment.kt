@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import codes.side.andcolorpicker.DefaultOnColorPickListener
 import codes.side.andcolorpicker.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.PickerGroup
 import codes.side.andcolorpicker.app.ColorizationConsumer
@@ -54,7 +55,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(colorTextView)
 
     hueColorPickerSeekBar.addListener(
-      object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+      object : DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: HSLColorPickerSeekBar,
           color: IntegerHSLColor,
