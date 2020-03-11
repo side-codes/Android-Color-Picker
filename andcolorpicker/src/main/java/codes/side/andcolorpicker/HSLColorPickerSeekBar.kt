@@ -548,11 +548,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         Mode.MODE_SATURATION -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
-              paintDrawableStrokeSaturationHSLCache.setFromHSL(
-                _currentColor.intH.toFloat(),
-                progress / mode.maxProgress.toFloat(),
-                IntegerHSLColor.DEFAULT_L
-              ).colorInt
+              paintDrawableStrokeSaturationHSLCache.also {
+                it.setFromHSL(
+                  _currentColor.intH.toFloat(),
+                  progress / mode.maxProgress.toFloat(),
+                  IntegerHSLColor.DEFAULT_L
+                )
+              }.colorInt
             }
             ColoringMode.OUTPUT_COLOR -> {
               _currentColor.colorInt
@@ -562,18 +564,22 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         Mode.MODE_LIGHTNESS -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
-              paintDrawableStrokeLightnessHSLCache.setFromHSL(
-                _currentColor.floatH,
-                IntegerHSLColor.DEFAULT_S,
-                _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
-              ).colorInt
+              paintDrawableStrokeLightnessHSLCache.also {
+                it.setFromHSL(
+                  _currentColor.floatH,
+                  IntegerHSLColor.DEFAULT_S,
+                  _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                )
+              }.colorInt
             }
             ColoringMode.OUTPUT_COLOR -> {
-              paintDrawableStrokeLightnessHSLCache.setFromHSL(
-                _currentColor.floatH,
-                _currentColor.floatS,
-                _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
-              ).colorInt
+              paintDrawableStrokeLightnessHSLCache.also {
+                it.setFromHSL(
+                  _currentColor.floatH,
+                  _currentColor.floatS,
+                  _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                )
+              }.colorInt
             }
           }
         }

@@ -42,13 +42,15 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
 
     // Set desired color programmatically
     pickerGroup.setColor(
-      IntegerHSLColor().setFromColor(
-        Color.rgb(
-          28,
-          84,
-          187
+      IntegerHSLColor().also {
+        it.setFromColor(
+          Color.rgb(
+            28,
+            84,
+            187
+          )
         )
-      )
+      }
     )
 
     // Set color components programmatically

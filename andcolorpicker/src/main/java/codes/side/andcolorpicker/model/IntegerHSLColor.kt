@@ -1,6 +1,5 @@
 package codes.side.andcolorpicker.model
 
-import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import kotlin.math.roundToInt
@@ -8,7 +7,7 @@ import kotlin.random.Random
 
 // TODO: Invent hierarchy
 // TODO: Provide precision options
-class IntegerHSLColor {
+class IntegerHSLColor : Color {
   companion object {
     const val H_INDEX = 0
     const val S_INDEX = 1
@@ -28,13 +27,15 @@ class IntegerHSLColor {
     }
 
     fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
-      return IntegerHSLColor().setFromHSL(
-        floatArrayOf(
-          Random.Default.nextFloat() * 360f,
-          if (pure) DEFAULT_S else Random.Default.nextFloat(),
-          if (pure) DEFAULT_L else Random.Default.nextFloat()
+      return IntegerHSLColor().also {
+        it.setFromHSL(
+          floatArrayOf(
+            Random.Default.nextFloat() * 360f,
+            if (pure) DEFAULT_S else Random.Default.nextFloat(),
+            if (pure) DEFAULT_L else Random.Default.nextFloat()
+          )
         )
-      )
+      }
     }
   }
 
@@ -102,15 +103,15 @@ class IntegerHSLColor {
     }
   val rInt: Int
     get() {
-      return Color.red(colorInt)
+      return android.graphics.Color.red(colorInt)
     }
   val gInt: Int
     get() {
-      return Color.green(colorInt)
+      return android.graphics.Color.green(colorInt)
     }
   val bInt: Int
     get() {
-      return Color.blue(colorInt)
+      return android.graphics.Color.blue(colorInt)
     }
 
   private val hsColorIntHSLCache = FloatArray(3)
@@ -140,32 +141,31 @@ class IntegerHSLColor {
 
   private val intValues = IntArray(3)
 
-  fun setFromHSL(h: Float, s: Float, l: Float): IntegerHSLColor {
+  override fun setFromHSL(h: Float, s: Float, l: Float) {
     this.intH = h.roundToInt()
     this.intS = (s * 100f).roundToInt()
     this.intL = (l * 100f).roundToInt()
-    return this
   }
 
-  fun setFromHSL(hsl: FloatArray): IntegerHSLColor {
-    return setFromHSL(
+  override fun setFromHSL(hsl: FloatArray) {
+    setFromHSL(
       hsl[H_INDEX],
       hsl[S_INDEX],
       hsl[L_INDEX]
     )
   }
 
-  fun setFromColor(@ColorInt color: Int): IntegerHSLColor {
+  override fun setFromColor(@ColorInt color: Int) {
     val hslOutput = FloatArray(3)
     ColorUtils.colorToHSL(
       color,
       hslOutput
     )
-    return setFromHSL(hslOutput)
+    setFromHSL(hslOutput)
   }
 
   // TODO: Cache output?
-  fun setFromRGB(r: Int, g: Int, b: Int): IntegerHSLColor {
+  override fun setFromRGB(r: Int, g: Int, b: Int) {
     val output = FloatArray(3)
     ColorUtils.RGBToHSL(
       r,
@@ -173,14 +173,13 @@ class IntegerHSLColor {
       b,
       output
     )
-    return setFromHSL(
+    setFromHSL(
       output
     )
   }
 
-  fun setFromHSLColor(hslColor: IntegerHSLColor): IntegerHSLColor {
+  fun setFromHSLColor(hslColor: IntegerHSLColor) {
     hslColor.copyValuesTo(intValues)
-    return this
   }
 
   // FIXME: Unsafe, provide checks
@@ -194,7 +193,9 @@ class IntegerHSLColor {
   }
 
   fun copy(): IntegerHSLColor {
-    return IntegerHSLColor().setFromHSLColor(this)
+    return IntegerHSLColor().also {
+      it.setFromHSLColor(this)
+    }
   }
 
   override fun toString(): String {

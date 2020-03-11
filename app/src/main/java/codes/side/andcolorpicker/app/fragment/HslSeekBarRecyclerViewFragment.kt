@@ -40,7 +40,9 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
   }
 
   class HSLItem(@ColorInt initialColor: Int) : AbstractItem<HSLItem.ViewHolder>() {
-    private val hslColor = IntegerHSLColor().setFromColor(initialColor)
+    private val hslColor = IntegerHSLColor().also {
+      it.setFromColor(initialColor)
+    }
 
     class ViewHolder(itemView: View) : FastAdapter.ViewHolder<HSLItem>(itemView) {
       private var lastBoundItem: HSLItem? = null
