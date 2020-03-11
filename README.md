@@ -39,7 +39,6 @@
 ### HSL (hue, saturation, lightness)
 
 - *Add color model description*
-- *Add usage sample*
 
 ![](github/type_hsl.png)
 
