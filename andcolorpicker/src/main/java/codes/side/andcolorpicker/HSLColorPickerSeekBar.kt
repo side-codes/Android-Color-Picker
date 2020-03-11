@@ -619,6 +619,13 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     )
   }
 
+  override fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
+    if (l != this) {
+      throw IllegalStateException("Custom OnSeekBarChangeListener not supported yet")
+    }
+    super.setOnSeekBarChangeListener(l)
+  }
+
   // TODO: Revisit
   override fun onProgressChanged(
     seekBar: SeekBar,
