@@ -21,9 +21,9 @@
 - [x] Add *MaterialDrawer* & sample fragments
 - [ ] Add more *HSLColorPickerSeekBar* checks and reduce calls count
 - [ ] Add more encapsulation to limit picker modification capabilities
-- [ ] Package repository publish
-- [ ] Add Rx support
-- [ ] Add/Revisit *RecyclerView* support
+- [ ] Package repository publish *(Bintray)*
+- [ ] Add *Rx* support
+- [x] Add/Revisit *RecyclerView* support
 - [x] Add sample app icon
 - [ ] Add logger solution
 - [ ] Add sample app analytics
@@ -39,7 +39,6 @@
 ### HSL (hue, saturation, lightness)
 
 - *Add color model description*
-- *Add usage sample*
 
 ![](github/type_hsl.png)
 
