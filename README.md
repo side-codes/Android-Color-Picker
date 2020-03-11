@@ -10,6 +10,7 @@
     - [ ] RGB seekbars
     - [ ] RGB circle
     - [ ] RGB plane
+    - [ ] CMYK seekbars
     - [ ] Alpha seekbar
     - [ ] HSL (S+L) plane
     - [ ] Swatches
@@ -54,7 +55,7 @@ implementation "codes.side:andcolorpicker:0.1.0"
 ![](github/type_hsl.png)
 
 #### Layout XML Snippet
-```
+```xml
 <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/hueColorPickerSeekBar"
   android:layout_width="match_parent"
@@ -78,7 +79,7 @@ implementation "codes.side:andcolorpicker:0.1.0"
 ```
 
 #### Kotlin Snippet
-```
+```kotlin
 // Configure picker color model programmatically
 hueColorPickerSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LIGHTNESS
 
