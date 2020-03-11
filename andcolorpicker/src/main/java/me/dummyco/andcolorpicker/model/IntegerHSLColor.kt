@@ -27,12 +27,12 @@ class IntegerHSLColor {
       return DEFAULT_HSL_VALUES[index]
     }
 
-    fun createRandomColor(): IntegerHSLColor {
+    fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
       return IntegerHSLColor().setFromHSL(
         floatArrayOf(
           Random.Default.nextFloat() * 360f,
-          Random.Default.nextFloat(),
-          Random.Default.nextFloat()
+          if (pure) DEFAULT_S else Random.Default.nextFloat(),
+          if (pure) DEFAULT_L else Random.Default.nextFloat()
         )
       )
     }

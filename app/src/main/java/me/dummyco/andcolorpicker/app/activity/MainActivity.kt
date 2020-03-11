@@ -25,6 +25,7 @@ import me.dummyco.andcolorpicker.app.ColorizationConsumer
 import me.dummyco.andcolorpicker.app.R
 import me.dummyco.andcolorpicker.app.fragment.HslSeekBarFragment
 import me.dummyco.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
+import me.dummyco.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
 import me.dummyco.andcolorpicker.app.fragment.WipFragment
 import me.dummyco.andcolorpicker.app.util.createContrastColor
 import me.dummyco.andcolorpicker.model.IntegerHSLColor
@@ -34,7 +35,6 @@ class MainActivity : AppCompatActivity(),
 
   companion object {
     private const val TAG = "MainActivity"
-    private const val PRIMARY_DARK_LIGHTNESS_SHIFT = -10
   }
 
   private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
@@ -188,6 +188,11 @@ class MainActivity : AppCompatActivity(),
       "HSL SeekBar",
       MaterialDesignDx.Icon.gmf_space_bar,
       { HslSeekBarFragment() }
+    ),
+    HLS_SEEK_BAR_RV(
+      "HSL SeekBar RecyclerView",
+      MaterialDesignDx.Icon.gmf_list,
+      { HslSeekBarRecyclerViewFragment() }
     ),
     HLS_SEEK_BAR_GITHUB(
       "HSL SeekBar GitHub",
