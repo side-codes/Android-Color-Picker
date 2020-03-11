@@ -55,21 +55,21 @@ implementation "codes.side:andcolorpicker:0.1.0"
 
 #### Layout XML Snippet
 ```
-<codes.side.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/hueColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:coloring="pure"
   app:mode="hue" />
 
-<codes.side.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/saturationColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:coloring="pure"
   app:mode="saturation" />
 
-<codes.side.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/lightnessColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -86,7 +86,7 @@ hueColorPickerSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LI
 hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
 
 // Group pickers with PickerGroup to automatically synchronize color across them
-val pickerGroup = PickerGroup().also {
+val pickerGroup = PickerGroup<IntegerHSLColorModel>().also {
   it.registerPickers(
     hueColorPickerSeekBar,
     saturationColorPickerSeekBar,
@@ -96,13 +96,15 @@ val pickerGroup = PickerGroup().also {
 
 // Set desired color programmatically
 pickerGroup.setColor(
-  IntegerHSLColor().setFromColor(
-    Color.rgb(
-      28,
-      84,
-      187
+  IntegerHSLColorModel().also {
+    it.setFromColor(
+      Color.rgb(
+        28,
+        84,
+        187
+      )
     )
-  )
+  }
 )
 
 // Set color components programmatically
@@ -116,11 +118,10 @@ Log.d(
 
 // Listen for changes
 hueColorPickerSeekBar.addListener(
-  object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+  object : DefaultOnColorPickListener<IntegerHSLColorModel>() {
     override fun onColorChanged(
-      picker: HSLColorPickerSeekBar,
-      color: IntegerHSLColor,
-      mode: Mode,
+      picker: ColorSeekBar<IntegerHSLColorModel>,
+      color: IntegerHSLColorModel,
       value: Int
     ) {
       Log.d(

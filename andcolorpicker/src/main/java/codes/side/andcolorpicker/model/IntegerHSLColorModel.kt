@@ -7,7 +7,7 @@ import kotlin.random.Random
 
 // TODO: Invent hierarchy
 // TODO: Provide precision options
-class IntegerHSLColor : Color {
+class IntegerHSLColorModel : ColorModel {
   companion object {
     const val H_INDEX = 0
     const val S_INDEX = 1
@@ -26,8 +26,8 @@ class IntegerHSLColor : Color {
       return DEFAULT_HSL_VALUES[index]
     }
 
-    fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
-      return IntegerHSLColor().also {
+    fun createRandomColor(pure: Boolean = false): IntegerHSLColorModel {
+      return IntegerHSLColorModel().also {
         it.setFromHSL(
           floatArrayOf(
             Random.Default.nextFloat() * 360f,
@@ -178,12 +178,12 @@ class IntegerHSLColor : Color {
     )
   }
 
-  fun setFromHSLColor(hslColor: IntegerHSLColor) {
+  fun setFromHSLColor(hslColor: IntegerHSLColorModel) {
     hslColor.copyValuesTo(intValues)
   }
 
   // FIXME: Unsafe, provide checks
-  fun copyValuesFrom(inValues: IntArray): IntegerHSLColor {
+  fun copyValuesFrom(inValues: IntArray): IntegerHSLColorModel {
     inValues.copyInto(intValues)
     return this
   }
@@ -192,8 +192,8 @@ class IntegerHSLColor : Color {
     intValues.copyInto(outValues)
   }
 
-  fun copy(): IntegerHSLColor {
-    return IntegerHSLColor().also {
+  fun copy(): IntegerHSLColorModel {
+    return IntegerHSLColorModel().also {
       it.setFromHSLColor(this)
     }
   }
@@ -206,7 +206,7 @@ class IntegerHSLColor : Color {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as IntegerHSLColor
+    other as IntegerHSLColorModel
 
     if (_a != other._a) return false
     if (!intValues.contentEquals(other.intValues)) return false

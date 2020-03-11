@@ -8,15 +8,16 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import codes.side.andcolorpicker.DefaultOnColorPickListener
-import codes.side.andcolorpicker.HSLColorPickerSeekBar
-import codes.side.andcolorpicker.PickerGroup
+import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.app.util.createContrastColor
 import codes.side.andcolorpicker.app.util.firstIsInstanceOrNull
-import codes.side.andcolorpicker.model.IntegerHSLColor
-import codes.side.andcolorpicker.registerPickers
+import codes.side.andcolorpicker.group.PickerGroup
+import codes.side.andcolorpicker.group.registerPickers
+import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
+import codes.side.andcolorpicker.listener.DefaultOnColorPickListener
+import codes.side.andcolorpicker.model.IntegerHSLColorModel
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.IconicsSize
@@ -34,9 +35,10 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   }
 
   private val colorfulViews = hashSetOf<View>()
-  private val pickerGroup = PickerGroup()
+  private val pickerGroup =
+    PickerGroup<IntegerHSLColorModel>()
   private var colorizationConsumer: ColorizationConsumer? = null
-  private val colorizeHSLColorCache = IntegerHSLColor()
+  private val colorizeHSLColorCache = IntegerHSLColorModel()
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
@@ -55,11 +57,10 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(colorTextView)
 
     hueColorPickerSeekBar.addListener(
-      object : DefaultOnColorPickListener() {
+      object : DefaultOnColorPickListener<IntegerHSLColorModel>() {
         override fun onColorChanged(
-          picker: HSLColorPickerSeekBar,
-          color: IntegerHSLColor,
-          mode: HSLColorPickerSeekBar.Mode,
+          picker: ColorSeekBar<IntegerHSLColorModel>,
+          color: IntegerHSLColorModel,
           value: Int
         ) {
           colorize(color)
@@ -90,7 +91,10 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       R.id.outputRadioButton to HSLColorPickerSeekBar.ColoringMode.OUTPUT_COLOR
     )
     coloringModeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-      pickerGroup.setColoringMode(requireNotNull(radioColoringModesMap[checkedId]))
+      pickerGroup.forEach {
+        (it as HSLColorPickerSeekBar).coloringMode =
+          requireNotNull(radioColoringModesMap[checkedId])
+      }
     }
 
     setRandomColorButton.setOnClickListener {
@@ -123,14 +127,14 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   // TODO: Delegate to group?
   private fun randomizePickedColor() {
     pickerGroup.setColor(
-      IntegerHSLColor.createRandomColor().also {
+      IntegerHSLColorModel.createRandomColor().also {
         it.intL = 20 + it.intL / 2
       }
     )
   }
 
   @SuppressLint("SetTextI18n")
-  private fun colorize(color: IntegerHSLColor) {
+  private fun colorize(color: IntegerHSLColorModel) {
     val contrastColor = color.createContrastColor()
     colorizeHSLColorCache.setFromHSLColor(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)

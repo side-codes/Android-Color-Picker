@@ -10,4 +10,5 @@
   <string name="action_set_random_color">Randomize</string>
   <string name="title_coloring_mode_pure">Pure</string>
   <string name="title_coloring_mode_output">Output</string>
+  <string name="title_toolbar_subtitle">Color picking made easy</string>
 </resources>

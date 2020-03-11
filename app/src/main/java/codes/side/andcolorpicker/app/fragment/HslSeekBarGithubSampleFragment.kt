@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import codes.side.andcolorpicker.DefaultOnColorPickListener
-import codes.side.andcolorpicker.HSLColorPickerSeekBar
-import codes.side.andcolorpicker.HSLColorPickerSeekBar.ColoringMode
-import codes.side.andcolorpicker.HSLColorPickerSeekBar.Mode
-import codes.side.andcolorpicker.PickerGroup
+import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.model.IntegerHSLColor
-import codes.side.andcolorpicker.registerPickers
+import codes.side.andcolorpicker.group.PickerGroup
+import codes.side.andcolorpicker.group.registerPickers
+import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.ColoringMode
+import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.Mode
+import codes.side.andcolorpicker.listener.DefaultOnColorPickListener
+import codes.side.andcolorpicker.model.IntegerHSLColorModel
 import kotlinx.android.synthetic.main.fragment_hsl_seekbar_github_sample.*
 
 class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_github_sample) {
@@ -33,7 +33,7 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
     hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
 
     // Group pickers with PickerGroup to automatically synchronize color across them
-    val pickerGroup = PickerGroup().also {
+    val pickerGroup = PickerGroup<IntegerHSLColorModel>().also {
       it.registerPickers(
         hueColorPickerSeekBar,
         saturationColorPickerSeekBar,
@@ -43,7 +43,7 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
 
     // Set desired color programmatically
     pickerGroup.setColor(
-      IntegerHSLColor().also {
+      IntegerHSLColorModel().also {
         it.setFromColor(
           Color.rgb(
             28,
@@ -65,11 +65,10 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
 
     // Listen for changes
     hueColorPickerSeekBar.addListener(
-      object : DefaultOnColorPickListener() {
+      object : DefaultOnColorPickListener<IntegerHSLColorModel>() {
         override fun onColorChanged(
-          picker: HSLColorPickerSeekBar,
-          color: IntegerHSLColor,
-          mode: Mode,
+          picker: ColorSeekBar<IntegerHSLColorModel>,
+          color: IntegerHSLColorModel,
           value: Int
         ) {
           Log.d(

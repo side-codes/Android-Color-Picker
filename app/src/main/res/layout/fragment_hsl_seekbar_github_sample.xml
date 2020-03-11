@@ -7,21 +7,21 @@
   android:orientation="vertical"
   android:padding="4dp">
 
-  <codes.side.andcolorpicker.HSLColorPickerSeekBar
+  <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
     android:id="@+id/hueColorPickerSeekBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:coloring="pure"
     app:mode="hue" />
 
-  <codes.side.andcolorpicker.HSLColorPickerSeekBar
+  <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
     android:id="@+id/saturationColorPickerSeekBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:coloring="pure"
     app:mode="saturation" />
 
-  <codes.side.andcolorpicker.HSLColorPickerSeekBar
+  <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
     android:id="@+id/lightnessColorPickerSeekBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

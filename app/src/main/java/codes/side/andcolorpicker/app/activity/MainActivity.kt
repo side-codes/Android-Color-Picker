@@ -16,7 +16,7 @@ import codes.side.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
 import codes.side.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
 import codes.side.andcolorpicker.app.fragment.WipFragment
 import codes.side.andcolorpicker.app.util.createContrastColor
-import codes.side.andcolorpicker.model.IntegerHSLColor
+import codes.side.andcolorpicker.model.IntegerHSLColorModel
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(),
   }
 
   private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-  private val colorizeHSLColorCache = IntegerHSLColor()
+  private val colorizeHSLColorCache = IntegerHSLColorModel()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity(),
     }
   }
 
-  override fun colorize(color: IntegerHSLColor) {
+  override fun colorize(color: IntegerHSLColorModel) {
     val contrastColor = color.createContrastColor()
 
     // Overwrite cache for AppBar

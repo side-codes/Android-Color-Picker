@@ -1,7 +1,7 @@
 package codes.side.andcolorpicker.app
 
-import codes.side.andcolorpicker.model.IntegerHSLColor
+import codes.side.andcolorpicker.model.IntegerHSLColorModel
 
 interface ColorizationConsumer {
-  fun colorize(color: IntegerHSLColor)
+  fun colorize(color: IntegerHSLColorModel)
 }

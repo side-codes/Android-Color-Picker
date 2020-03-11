@@ -1,4 +1,4 @@
-package codes.side.andcolorpicker
+package codes.side.andcolorpicker.hsl
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -9,17 +9,17 @@ import android.util.AttributeSet
 import android.util.Log
 import android.util.StateSet
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
-import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.graphics.ColorUtils
-import codes.side.andcolorpicker.model.IntegerHSLColor
+import codes.side.andcolorpicker.ColorSeekBar
+import codes.side.andcolorpicker.R
+import codes.side.andcolorpicker.model.IntegerHSLColorModel
 
 // TODO: Add logger solution
 // TODO: Add call flow diagram
 // TODO: Add checks and reduce calls count
 // TODO: Limit used SDK properties usage
-class HSLColorPickerSeekBar : AppCompatSeekBar,
-  OnSeekBarChangeListener {
+class HSLColorPickerSeekBar :
+  ColorSeekBar<IntegerHSLColorModel> {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
     private const val DEBUG = false
@@ -48,10 +48,10 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     }
   }
 
-  private val colorPickListeners = hashSetOf<OnColorPickListener>()
   private var isInitialized = false
 
-  private var _mode = Mode.MODE_HUE
+  private var _mode =
+    Mode.MODE_HUE
   var mode: Mode
     get() {
       return _mode
@@ -66,7 +66,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       }
     }
 
-  private var _coloringMode = ColoringMode.PURE_COLOR
+  private var _coloringMode =
+    ColoringMode.PURE_COLOR
   var coloringMode: ColoringMode
     get() = _coloringMode
     set(value) {
@@ -75,16 +76,12 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       refreshThumb()
     }
 
-  private var _currentColor = IntegerHSLColor()
+  private var _currentColor = IntegerHSLColorModel()
 
   // TODO: To method?
-  var currentColor: IntegerHSLColor
+  override var currentColor: IntegerHSLColorModel
     get() {
-      return when (mode) {
-        Mode.MODE_VALUE -> TODO()
-        Mode.MODE_ALPHA -> TODO()
-        else -> _currentColor.copy()
-      }
+      return _currentColor.copy()
     }
     set(value) {
       if (DEBUG) {
@@ -110,8 +107,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
   // Dirty hack to stop onProgressChanged while playing with min/max
   private var propertiesUpdateInProcess = false
 
-  private val paintDrawableStrokeSaturationHSLCache by lazy { IntegerHSLColor() }
-  private val paintDrawableStrokeLightnessHSLCache by lazy { IntegerHSLColor() }
+  private val paintDrawableStrokeSaturationHSLCache by lazy { IntegerHSLColorModel() }
+  private val paintDrawableStrokeLightnessHSLCache by lazy { IntegerHSLColorModel() }
 
   private val progressDrawableSaturationColorsCache by lazy { IntArray(2) }
   private val progressDrawableLightnessColorsCache by lazy { IntArray(3) }
@@ -342,53 +339,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     refreshProgressDrawable()
   }
 
-  fun addListener(listener: OnColorPickListener) {
-    colorPickListeners.add(listener)
-  }
-
-  fun removeListener(listener: OnColorPickListener) {
-    colorPickListeners.remove(listener)
-  }
-
-  fun clearListeners() {
-    colorPickListeners.clear()
-  }
-
-  private fun notifyListenersOnColorChanged() {
-    colorPickListeners.forEach {
-      it.onColorChanged(
-        this,
-        _currentColor,
-        mode,
-        progress
-      )
-    }
-  }
-
-  private fun notifyListenersOnColorPicking(fromUser: Boolean) {
-    colorPickListeners.forEach {
-      it.onColorPicking(
-        this,
-        _currentColor,
-        mode,
-        progress,
-        fromUser
-      )
-    }
-  }
-
-  private fun notifyListenersOnColorPicked(fromUser: Boolean) {
-    colorPickListeners.forEach {
-      it.onColorPicked(
-        this,
-        _currentColor,
-        mode,
-        progress,
-        fromUser
-      )
-    }
-  }
-
   private fun refreshProperties() {
     if (DEBUG) {
       Log.d(
@@ -404,15 +354,16 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
 
   // TODO: Get rid of toIntArray allocations
   private fun createHueOutputColorCheckpoints(): IntArray {
-    return HUE_COLOR_CHECKPOINTS.map {
-      ColorUtils.colorToHSL(
-        it,
-        createHueOutputColorCheckpointsHSLCache
-      )
-      createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.S_INDEX] = _currentColor.floatS
-      createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.L_INDEX] = _currentColor.floatL
-      ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
-    }.toIntArray()
+    return HUE_COLOR_CHECKPOINTS
+      .map {
+        ColorUtils.colorToHSL(
+          it,
+          createHueOutputColorCheckpointsHSLCache
+        )
+        createHueOutputColorCheckpointsHSLCache[IntegerHSLColorModel.S_INDEX] = _currentColor.floatS
+        createHueOutputColorCheckpointsHSLCache[IntegerHSLColorModel.L_INDEX] = _currentColor.floatL
+        ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
+      }.toIntArray()
   }
 
   private fun refreshZeroSaturationOutputColorHSLCache() {
@@ -438,7 +389,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
         when (coloringMode) {
           ColoringMode.PURE_COLOR -> {
             progressDrawableSaturationColorsCache.also {
-              it[0] = ZERO_SATURATION_COLOR_INT
+              it[0] =
+                ZERO_SATURATION_COLOR_INT
               it[1] = _currentColor.pureColorInt
             }
           }
@@ -463,8 +415,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           it[2] = Color.WHITE
         }
       }
-      Mode.MODE_VALUE -> TODO()
-      Mode.MODE_ALPHA -> TODO()
     }
   }
 
@@ -527,8 +477,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
           false
         }
       }
-      Mode.MODE_VALUE -> TODO()
-      Mode.MODE_ALPHA -> TODO()
     }
 
     if (changed) {
@@ -554,8 +502,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
       Mode.MODE_LIGHTNESS -> {
         _currentColor.intL
       }
-      Mode.MODE_VALUE -> TODO()
-      Mode.MODE_ALPHA -> TODO()
     }
   }
 
@@ -582,7 +528,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
                 it.setFromHSL(
                   _currentColor.intH.toFloat(),
                   progress / mode.maxProgress.toFloat(),
-                  IntegerHSLColor.DEFAULT_L
+                  IntegerHSLColorModel.DEFAULT_L
                 )
               }.colorInt
             }
@@ -597,7 +543,7 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
               paintDrawableStrokeLightnessHSLCache.also {
                 it.setFromHSL(
                   _currentColor.floatH,
-                  IntegerHSLColor.DEFAULT_S,
+                  IntegerHSLColorModel.DEFAULT_S,
                   _currentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
                 )
               }.colorInt
@@ -613,17 +559,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
             }
           }
         }
-        Mode.MODE_VALUE -> TODO()
-        Mode.MODE_ALPHA -> TODO()
       }
     )
-  }
-
-  override fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
-    if (l != this) {
-      throw IllegalStateException("Custom OnSeekBarChangeListener not supported yet")
-    }
-    super.setOnSeekBarChangeListener(l)
   }
 
   // TODO: Revisit
@@ -646,49 +583,8 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     }
   }
 
-  override fun onStartTrackingTouch(seekBar: SeekBar) {
-  }
-
-  override fun onStopTrackingTouch(seekBar: SeekBar) {
-    colorPickListeners.forEach {
-      it.onColorPicked(
-        this,
-        currentColor,
-        mode,
-        progress,
-        true
-      )
-    }
-  }
-
   override fun toString(): String {
     return "HSLColorPickerSeekBar(tag = $tag, _mode=$_mode, _currentColor=$_currentColor)"
-  }
-
-  // TODO: Rename
-  interface OnColorPickListener {
-    fun onColorPicking(
-      picker: HSLColorPickerSeekBar,
-      color: IntegerHSLColor,
-      mode: Mode,
-      value: Int,
-      fromUser: Boolean
-    )
-
-    fun onColorPicked(
-      picker: HSLColorPickerSeekBar,
-      color: IntegerHSLColor,
-      mode: Mode,
-      value: Int,
-      fromUser: Boolean
-    )
-
-    fun onColorChanged(
-      picker: HSLColorPickerSeekBar,
-      color: IntegerHSLColor,
-      mode: Mode,
-      value: Int
-    )
   }
 
   enum class ColoringMode {
@@ -716,17 +612,6 @@ class HSLColorPickerSeekBar : AppCompatSeekBar,
     MODE_LIGHTNESS(
       0,
       100
-    ),
-
-    // BRIGHTNESS, V/B from HSV/HSB
-    // TODO: Do we need this mode?
-    MODE_VALUE(
-      0,
-      100
-    ),
-    MODE_ALPHA(
-      0,
-      360
     )
   }
 }

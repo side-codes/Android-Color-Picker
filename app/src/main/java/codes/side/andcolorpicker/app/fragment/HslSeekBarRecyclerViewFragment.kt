@@ -5,10 +5,10 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import codes.side.andcolorpicker.DefaultOnColorPickListener
-import codes.side.andcolorpicker.HSLColorPickerSeekBar
+import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.model.IntegerHSLColor
+import codes.side.andcolorpicker.listener.DefaultOnColorPickListener
+import codes.side.andcolorpicker.model.IntegerHSLColorModel
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
@@ -31,7 +31,7 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
     repeat(100) {
       items.add(
         HSLItem(
-          IntegerHSLColor.createRandomColor(true).colorInt
+          IntegerHSLColorModel.createRandomColor(true).colorInt
         )
       )
     }
@@ -41,7 +41,7 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
   }
 
   class HSLItem(@ColorInt initialColor: Int) : AbstractItem<HSLItem.ViewHolder>() {
-    private val hslColor = IntegerHSLColor().also {
+    private val hslColor = IntegerHSLColorModel().also {
       it.setFromColor(initialColor)
     }
 
@@ -50,11 +50,10 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
 
       init {
         itemView.hslSeekBar.addListener(
-          object : DefaultOnColorPickListener() {
+          object : DefaultOnColorPickListener<IntegerHSLColorModel>() {
             override fun onColorChanged(
-              picker: HSLColorPickerSeekBar,
-              color: IntegerHSLColor,
-              mode: HSLColorPickerSeekBar.Mode,
+              picker: ColorSeekBar<IntegerHSLColorModel>,
+              color: IntegerHSLColorModel,
               value: Int
             ) {
               lastBoundItem?.hslColor?.setFromHSLColor(color)
