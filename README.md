@@ -35,6 +35,14 @@
 - [x] Add OSS licenses
 - [x] Add license
 
+## Setup
+
+Gradle dependency:
+
+```gradle
+implementation "codes.side:andcolorpicker:0.1.0"
+```
+
 ## Picker types
 
 ### HSL (hue, saturation, lightness)
