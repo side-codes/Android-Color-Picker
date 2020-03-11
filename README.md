@@ -27,6 +27,7 @@
 - [x] Add sample app icon
 - [ ] Add logger solution
 - [ ] Add sample app analytics
+- [ ] Add GIFs media
 - [ ] Add call flow diagram
 - [ ] Add tests
 - [ ] Add docs
