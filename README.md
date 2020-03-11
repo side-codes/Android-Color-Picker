@@ -10,6 +10,7 @@
     - [ ] RGB seekbars
     - [ ] RGB circle
     - [ ] RGB plane
+    - [ ] CMYK seekbars
     - [ ] Alpha seekbar
     - [ ] HSL (S+L) plane
     - [ ] Swatches
