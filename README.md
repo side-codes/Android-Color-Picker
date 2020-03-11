@@ -45,21 +45,21 @@
 
 #### Layout XML Snippet
 ```
-<me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.HSLColorPickerSeekBar
   android:id="@+id/hueColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:coloring="pure"
   app:mode="hue" />
 
-<me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.HSLColorPickerSeekBar
   android:id="@+id/saturationColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:coloring="pure"
   app:mode="saturation" />
 
-<me.dummyco.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.HSLColorPickerSeekBar
   android:id="@+id/lightnessColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"

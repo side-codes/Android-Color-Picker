@@ -12,7 +12,7 @@ android {
   buildToolsVersion "29.0.3"
 
   defaultConfig {
-    applicationId "me.dummyco.andcolorpicker.app"
+    applicationId "codes.side.andcolorpicker.app"
     minSdkVersion 21
     targetSdkVersion 29
     versionCode 1
