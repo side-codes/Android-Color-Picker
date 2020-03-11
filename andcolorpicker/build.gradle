@@ -5,6 +5,7 @@ plugins {
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
+apply plugin: "com.novoda.bintray-release"
 
 android {
   compileSdkVersion 29
@@ -19,7 +20,9 @@ android {
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles "consumer-rules.pro"
   }
-
+  lintOptions {
+    abortOnError false
+  }
   buildTypes {
     release {
       minifyEnabled false
@@ -36,4 +39,17 @@ dependencies {
   testImplementation "junit:junit:4.13"
   androidTestImplementation "androidx.test.ext:junit:1.1.2-alpha04"
   androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0-alpha04"
+}
+
+publish {
+  def groupProjectID = "codes.side"
+  def artifactProjectID = "andcolorpicker"
+  def publishVersionID = "0.1.0"
+  userOrg = "side-codes"
+  repoName = "andColorPicker"
+  groupId = groupProjectID
+  artifactId = artifactProjectID
+  publishVersion = publishVersionID
+  desc = "Handy, flexible and lightning-fast material color picker UI component for Android"
+  website = "https://github.com/side-codes/andColorPicker"
 }
