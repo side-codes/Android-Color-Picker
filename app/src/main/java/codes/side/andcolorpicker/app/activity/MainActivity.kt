@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(),
         startActivity(
           Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("https://github.com/DummyCo/andColorPicker")
+            Uri.parse("https://github.com/side-codes/andColorPicker")
           )
         )
       }
