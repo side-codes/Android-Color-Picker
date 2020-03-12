@@ -123,7 +123,9 @@ class IntegerHSLColorModel : ColorModel {
       return ColorUtils.HSLToColor(hsColorIntHSLCache)
     }
   private val colorIntHSLCache = FloatArray(3)
-  val colorInt: Int
+
+  @get:ColorInt
+  override val colorInt: Int
     get() {
       colorIntHSLCache[H_INDEX] = intValues[H_INDEX].toFloat()
       colorIntHSLCache[S_INDEX] = intValues[S_INDEX] / 100f
