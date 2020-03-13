@@ -12,8 +12,8 @@ import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
 import codes.side.andcolorpicker.model.ColorModel
 import codes.side.andcolorpicker.model.factory.ColorFactory
-import codes.side.andcolorpicker.util.marker
 
+@Suppress("ConstantConditionIf")
 abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
   SeekBar.OnSeekBarChangeListener {
 
@@ -50,8 +50,8 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     }
 
   // Dirty hack to stop onProgressChanged while playing with min/max
-  private var minUpdating = false
-  private var maxUpdating = false
+  //private var minUpdating = false
+  //private var maxUpdating = false
 
   private val colorFactory: ColorFactory<C>
   private val colorPickListeners = hashSetOf<OnColorPickListener<C>>()
@@ -247,7 +247,12 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
   }
 
   protected open fun updateInternalCurrentColorFrom(value: C) {
-
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "updateInternalCurrentColorFrom() called on $this"
+      )
+    }
   }
 
   protected open fun refreshProperties() {
@@ -296,15 +301,15 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
   }
 
   override fun setMin(min: Int) {
-    ::minUpdating.marker {
-      super.setMin(min)
-    }
+    //::minUpdating.marker {
+    super.setMin(min)
+    //}
   }
 
   override fun setMax(max: Int) {
-    ::maxUpdating.marker {
-      super.setMax(max)
-    }
+    //::maxUpdating.marker {
+    super.setMax(max)
+    //}
   }
 
   fun addListener(listener: OnColorPickListener<C>) {
@@ -319,6 +324,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     colorPickListeners.clear()
   }
 
+  // TODO: Add (mask) delegating OnSeekBarChangeListener
   override fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
     if (l != this) {
       throw IllegalStateException("Custom OnSeekBarChangeListener not supported yet")
@@ -336,7 +342,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     }
   }
 
-  protected fun notifyListenersOnColorPicking(fromUser: Boolean) {
+  private fun notifyListenersOnColorPicking(fromUser: Boolean) {
     colorPickListeners.forEach {
       it.onColorPicking(
         this,
@@ -347,7 +353,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     }
   }
 
-  protected fun notifyListenersOnColorPicked(fromUser: Boolean) {
+  private fun notifyListenersOnColorPicked(fromUser: Boolean) {
     colorPickListeners.forEach {
       it.onColorPicked(
         this,
@@ -364,9 +370,10 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     progress: Int,
     fromUser: Boolean
   ) {
-    if (minUpdating || maxUpdating) {
-      return
-    }
+    // TODO: Revisit
+    //if (minUpdating || maxUpdating) {
+    //  return
+    //}
 
     refreshInternalCurrentColorFromProgress()
     refreshProgressDrawable()
@@ -382,14 +389,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
   }
 
   override fun onStopTrackingTouch(seekBar: SeekBar) {
-    colorPickListeners.forEach {
-      it.onColorPicked(
-        this,
-        currentColor,
-        progress,
-        true
-      )
-    }
+    notifyListenersOnColorPicked(true)
   }
 
   // TODO: Rename

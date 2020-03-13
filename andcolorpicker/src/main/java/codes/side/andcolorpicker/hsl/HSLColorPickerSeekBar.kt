@@ -307,11 +307,11 @@ class HSLColorPickerSeekBar :
   }
 
   private fun paintDrawableStroke(drawable: GradientDrawable) {
-    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
-
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
+
+    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
 
     drawable.setStroke(
       thumbStrokeWidthPx,
