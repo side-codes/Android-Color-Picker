@@ -52,7 +52,7 @@ implementation "codes.side:andcolorpicker:0.1.0"
 
 - *Add color model description*
 
-![](github/type_hsl.png)
+![](github/picker_hsl.png)
 
 #### Layout XML Snippet
 ```xml
