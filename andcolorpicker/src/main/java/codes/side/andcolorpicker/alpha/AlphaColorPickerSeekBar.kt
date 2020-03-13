@@ -2,46 +2,36 @@ package codes.side.andcolorpicker.alpha
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.SeekBar
 import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.model.ColorModel
+import codes.side.andcolorpicker.model.factory.ColorFactory
 
-class AlphaColorPickerSeekBar : ColorSeekBar<ColorModel> {
-  override var currentColor: ColorModel
-    get() = TODO("Not yet implemented")
-    set(value) {}
-
-  constructor(context: Context) : super(context) {
-    init()
-  }
+// TODO: Think on making that non-abstract
+abstract class AlphaColorPickerSeekBar<C : ColorModel> : ColorSeekBar<C> {
+  constructor(colorFactory: ColorFactory<C>, context: Context) : super(
+    colorFactory,
+    context
+  )
 
   constructor(
+    colorFactory: ColorFactory<C>,
     context: Context,
     attrs: AttributeSet?
   ) : super(
+    colorFactory,
     context,
     attrs
-  ) {
-    init()
-  }
+  )
 
   constructor(
+    colorFactory: ColorFactory<C>,
     context: Context,
     attrs: AttributeSet?,
     defStyleAttr: Int
   ) : super(
+    colorFactory,
     context,
     attrs,
     defStyleAttr
-  ) {
-    init()
-  }
-
-  private fun init() {
-
-  }
-
-  override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-
-  }
+  )
 }

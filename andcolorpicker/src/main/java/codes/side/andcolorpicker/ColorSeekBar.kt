@@ -11,6 +11,8 @@ import android.util.StateSet
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
 import codes.side.andcolorpicker.model.ColorModel
+import codes.side.andcolorpicker.model.factory.ColorFactory
+import codes.side.andcolorpicker.util.marker
 
 abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
   SeekBar.OnSeekBarChangeListener {
@@ -20,9 +22,38 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     private const val DEBUG = false
   }
 
-  // TODO: To method?
-  abstract var currentColor: C
+  private val _currentColor: C
+  var currentColor: C
+    get() {
+      return colorFactory.createColorFrom(_currentColor)
+    }
+    set(value) {
+      if (DEBUG) {
+        Log.d(
+          TAG,
+          "currentColor set() called on $this with $value"
+        )
+      }
+      if (_currentColor == value) {
+        return
+      }
+      updateInternalCurrentColorFrom(value)
+      refreshProgressFromCurrentColor()
+      refreshProgressDrawable()
+      refreshThumb()
+      notifyListenersOnColorChanged()
+    }
 
+  protected val internalCurrentColor: C
+    get() {
+      return _currentColor
+    }
+
+  // Dirty hack to stop onProgressChanged while playing with min/max
+  private var minUpdating = false
+  private var maxUpdating = false
+
+  private val colorFactory: ColorFactory<C>
   private val colorPickListeners = hashSetOf<OnColorPickListener<C>>()
   private lateinit var thumbDrawableDefaultWrapper: LayerDrawable
   private lateinit var thumbDrawablePressed: GradientDrawable
@@ -30,21 +61,31 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
   // TODO: Rename
   protected val coloringDrawables = hashSetOf<Drawable>()
 
-  constructor(context: Context) : super(context) {
+  // TODO: Make use of JvmOverloads
+  constructor(
+    colorFactory: ColorFactory<C>,
+    context: Context
+  ) : super(context) {
+    this.colorFactory = colorFactory
+    this._currentColor = colorFactory.create()
     init()
   }
 
   constructor(
+    colorFactory: ColorFactory<C>,
     context: Context,
     attrs: AttributeSet?
   ) : super(
     context,
     attrs
   ) {
+    this.colorFactory = colorFactory
+    this._currentColor = colorFactory.create()
     init()
   }
 
   constructor(
+    colorFactory: ColorFactory<C>,
     context: Context,
     attrs: AttributeSet?,
     defStyleAttr: Int
@@ -53,11 +94,14 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     attrs,
     defStyleAttr
   ) {
+    this.colorFactory = colorFactory
+    this._currentColor = colorFactory.create()
     init()
   }
 
   private fun init() {
     splitTrack = false
+
     setOnSeekBarChangeListener(this)
 
     setupBackground()
@@ -202,6 +246,67 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     thumbOffset -= backgroundPaddingPx / 2
   }
 
+  protected open fun updateInternalCurrentColorFrom(value: C) {
+
+  }
+
+  protected open fun refreshProperties() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshProperties() called on $this"
+      )
+    }
+  }
+
+  protected open fun refreshProgressFromCurrentColor() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshProgressFromCurrentColor() called on $this"
+      )
+    }
+  }
+
+  protected open fun refreshInternalCurrentColorFromProgress() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshInternalCurrentColorFromProgress() called on $this"
+      )
+    }
+  }
+
+  protected open fun refreshProgressDrawable() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshProgressDrawable() called on $this"
+      )
+    }
+  }
+
+  protected open fun refreshThumb() {
+    if (DEBUG) {
+      Log.d(
+        TAG,
+        "refreshThumb() called on $this"
+      )
+    }
+  }
+
+  override fun setMin(min: Int) {
+    ::minUpdating.marker {
+      super.setMin(min)
+    }
+  }
+
+  override fun setMax(max: Int) {
+    ::maxUpdating.marker {
+      super.setMax(max)
+    }
+  }
+
   fun addListener(listener: OnColorPickListener<C>) {
     colorPickListeners.add(listener)
   }
@@ -250,6 +355,26 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
         progress,
         fromUser
       )
+    }
+  }
+
+  // TODO: Revisit
+  override fun onProgressChanged(
+    seekBar: SeekBar,
+    progress: Int,
+    fromUser: Boolean
+  ) {
+    if (minUpdating || maxUpdating) {
+      return
+    }
+
+    refreshInternalCurrentColorFromProgress()
+    refreshProgressDrawable()
+    refreshThumb()
+    notifyListenersOnColorPicking(fromUser)
+
+    if (!fromUser) {
+      notifyListenersOnColorPicked(fromUser)
     }
   }
 
