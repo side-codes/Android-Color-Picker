@@ -20,6 +20,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     private const val DEBUG = false
   }
 
+  // TODO: To method?
   abstract var currentColor: C
 
   private val colorPickListeners = hashSetOf<OnColorPickListener<C>>()
@@ -201,11 +202,11 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     thumbOffset -= backgroundPaddingPx / 2
   }
 
-  open fun addListener(listener: OnColorPickListener<C>) {
+  fun addListener(listener: OnColorPickListener<C>) {
     colorPickListeners.add(listener)
   }
 
-  open fun removeListener(listener: OnColorPickListener<C>) {
+  fun removeListener(listener: OnColorPickListener<C>) {
     colorPickListeners.remove(listener)
   }
 

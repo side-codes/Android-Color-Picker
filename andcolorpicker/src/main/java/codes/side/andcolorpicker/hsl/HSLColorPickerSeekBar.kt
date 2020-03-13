@@ -46,7 +46,28 @@ class HSLColorPickerSeekBar :
     }
   }
 
-  private var isInitialized = false
+  private val _currentColor = IntegerHSLColorModel()
+
+  override var currentColor: IntegerHSLColorModel
+    get() {
+      return _currentColor.clone()
+    }
+    set(value) {
+      if (DEBUG) {
+        Log.d(
+          TAG,
+          "currentColor set() called on $this with $value"
+        )
+      }
+      if (_currentColor == value) {
+        return
+      }
+      _currentColor.setFromHSLColor(value)
+      refreshProgressFromCurrentColor()
+      refreshProgressDrawable()
+      refreshThumb()
+      notifyListenersOnColorChanged()
+    }
 
   private var _mode =
     Mode.MODE_HUE
@@ -74,29 +95,7 @@ class HSLColorPickerSeekBar :
       refreshThumb()
     }
 
-  private var _currentColor = IntegerHSLColorModel()
-
-  // TODO: To method?
-  override var currentColor: IntegerHSLColorModel
-    get() {
-      return _currentColor.copy()
-    }
-    set(value) {
-      if (DEBUG) {
-        Log.d(
-          TAG,
-          "currentColor set() called on $this with $value"
-        )
-      }
-      if (_currentColor == value) {
-        return
-      }
-      _currentColor = value.copy()
-      refreshProgressFromCurrentColor()
-      refreshProgressDrawable()
-      refreshThumb()
-      notifyListenersOnColorChanged()
-    }
+  private var isInitialized = false
 
   // Dirty hack to stop onProgressChanged while playing with min/max
   private var propertiesUpdateInProcess = false

@@ -74,7 +74,7 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
       }
 
       private fun colorize() {
-        val hslColor = requireNotNull(lastBoundItem).hslColor.copy().also {
+        val hslColor = requireNotNull(lastBoundItem).hslColor.clone().also {
           it.floatL += 0.45f
         }
         itemView.cardView.setCardBackgroundColor(

@@ -194,7 +194,7 @@ class IntegerHSLColorModel : ColorModel {
     intValues.copyInto(outValues)
   }
 
-  fun copy(): IntegerHSLColorModel {
+  override fun clone(): IntegerHSLColorModel {
     return IntegerHSLColorModel().also {
       it.setFromHSLColor(this)
     }
