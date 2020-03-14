@@ -2,7 +2,6 @@ package codes.side.andcolorpicker
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.*
 import android.os.Build
 import android.util.AttributeSet
@@ -10,11 +9,11 @@ import android.util.Log
 import android.util.StateSet
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
-import codes.side.andcolorpicker.model.ColorModel
+import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.factory.ColorFactory
 
 @Suppress("ConstantConditionIf")
-abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
+abstract class ColorSeekBar<C : Color<C>> : AppCompatSeekBar,
   SeekBar.OnSeekBarChangeListener {
 
   companion object {
@@ -22,10 +21,10 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     private const val DEBUG = false
   }
 
-  private val _currentColor: C
-  var currentColor: C
+  private val _pickedColor: C
+  var pickedColor: C
     get() {
-      return colorFactory.createColorFrom(_currentColor)
+      return colorFactory.createColorFrom(_pickedColor)
     }
     set(value) {
       if (DEBUG) {
@@ -34,7 +33,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
           "currentColor set() called on $this with $value"
         )
       }
-      if (_currentColor == value) {
+      if (_pickedColor == value) {
         return
       }
       updateInternalCurrentColorFrom(value)
@@ -44,9 +43,9 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
       notifyListenersOnColorChanged()
     }
 
-  protected val internalCurrentColor: C
+  protected val internalPickedColor: C
     get() {
-      return _currentColor
+      return _pickedColor
     }
 
   // Dirty hack to stop onProgressChanged while playing with min/max
@@ -67,7 +66,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     context: Context
   ) : super(context) {
     this.colorFactory = colorFactory
-    this._currentColor = colorFactory.create()
+    this._pickedColor = colorFactory.create()
     init()
   }
 
@@ -80,7 +79,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     attrs
   ) {
     this.colorFactory = colorFactory
-    this._currentColor = colorFactory.create()
+    this._pickedColor = colorFactory.create()
     init()
   }
 
@@ -95,7 +94,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     defStyleAttr
   ) {
     this.colorFactory = colorFactory
-    this._currentColor = colorFactory.create()
+    this._pickedColor = colorFactory.create()
     init()
   }
 
@@ -114,6 +113,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
       .also {
         if (it is RippleDrawable) {
           // TODO: Set ripple size for pre-M too
+          // TODO: Make ripple size configurable?
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val rippleSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_ripple_radius)
             it.radius = rippleSizePx
@@ -173,7 +173,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     thumbDrawableDefaultWrapper = LayerDrawable(
       arrayOf(
         GradientDrawable().also {
-          it.color = ColorStateList.valueOf(Color.WHITE)
+          it.color = ColorStateList.valueOf(android.graphics.Color.WHITE)
           it.shape = GradientDrawable.OVAL
           it.setSize(
             thumbDefaultSizePx,
@@ -192,7 +192,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     }
 
     thumbDrawablePressed = GradientDrawable().also {
-      it.color = ColorStateList.valueOf(Color.WHITE)
+      it.color = ColorStateList.valueOf(android.graphics.Color.WHITE)
       it.shape = GradientDrawable.OVAL
       it.setSize(
         thumbFullSizePx,
@@ -300,18 +300,6 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     }
   }
 
-  override fun setMin(min: Int) {
-    //::minUpdating.marker {
-    super.setMin(min)
-    //}
-  }
-
-  override fun setMax(max: Int) {
-    //::maxUpdating.marker {
-    super.setMax(max)
-    //}
-  }
-
   fun addListener(listener: OnColorPickListener<C>) {
     colorPickListeners.add(listener)
   }
@@ -336,7 +324,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     colorPickListeners.forEach {
       it.onColorChanged(
         this,
-        currentColor,
+        pickedColor,
         progress
       )
     }
@@ -346,7 +334,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     colorPickListeners.forEach {
       it.onColorPicking(
         this,
-        currentColor,
+        pickedColor,
         progress,
         fromUser
       )
@@ -357,7 +345,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
     colorPickListeners.forEach {
       it.onColorPicked(
         this,
-        currentColor,
+        pickedColor,
         progress,
         fromUser
       )
@@ -393,7 +381,7 @@ abstract class ColorSeekBar<C : ColorModel> : AppCompatSeekBar,
   }
 
   // TODO: Rename
-  interface OnColorPickListener<C : ColorModel> {
+  interface OnColorPickListener<C : Color<C>> {
     fun onColorPicking(
       picker: ColorSeekBar<C>,
       color: C,

@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.app.util.createContrastColor
 import codes.side.andcolorpicker.app.util.firstIsInstanceOrNull
+import codes.side.andcolorpicker.converter.*
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.listener.DefaultOnColorPickListener
-import codes.side.andcolorpicker.model.IntegerHSLColorModel
+import codes.side.andcolorpicker.model.IntegerHSLColor
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.IconicsSize
@@ -36,9 +36,9 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
 
   private val colorfulViews = hashSetOf<View>()
   private val pickerGroup =
-    PickerGroup<IntegerHSLColorModel>()
+    PickerGroup<IntegerHSLColor>()
   private var colorizationConsumer: ColorizationConsumer? = null
-  private val colorizeHSLColorCache = IntegerHSLColorModel()
+  private val colorizeHSLColorCache = IntegerHSLColor()
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
@@ -57,10 +57,10 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(colorTextView)
 
     hueColorPickerSeekBar.addListener(
-      object : DefaultOnColorPickListener<IntegerHSLColorModel>() {
+      object : DefaultOnColorPickListener<IntegerHSLColor>() {
         override fun onColorChanged(
-          picker: ColorSeekBar<IntegerHSLColorModel>,
-          color: IntegerHSLColorModel,
+          picker: ColorSeekBar<IntegerHSLColor>,
+          color: IntegerHSLColor,
           value: Int
         ) {
           colorize(color)
@@ -127,15 +127,15 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   // TODO: Delegate to group?
   private fun randomizePickedColor() {
     pickerGroup.setColor(
-      IntegerHSLColorModel.createRandomColor().also {
+      IntegerHSLColor.createRandomColor().also {
         it.intL = 20 + it.intL / 2
       }
     )
   }
 
   @SuppressLint("SetTextI18n")
-  private fun colorize(color: IntegerHSLColorModel) {
-    val contrastColor = color.createContrastColor()
+  private fun colorize(color: IntegerHSLColor) {
+    val contrastColor = color.getContrastColor()
     colorizeHSLColorCache.setFromHSLColor(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
@@ -143,26 +143,26 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       when (it) {
         is MaterialButton -> {
           it.setTextColor(contrastColor)
-          it.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.colorInt)
+          it.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.convertToColorInt())
           it.iconTint = ColorStateList.valueOf(contrastColor)
         }
         is RadioButton -> {
-          it.buttonTintList = ColorStateList.valueOf(colorizeHSLColorCache.colorInt)
+          it.buttonTintList = ColorStateList.valueOf(colorizeHSLColorCache.convertToColorInt())
         }
         // Any other TextView is considered as true color holder
         is TextView -> {
           it.setTextColor(contrastColor)
-          it.setBackgroundColor(color.colorInt)
+          it.setBackgroundColor(color.convertToColorInt())
           it.compoundDrawables.first().setTintList(ColorStateList.valueOf(contrastColor))
         }
       }
     }
 
     colorTextView.text =
-      "RGB: [${color.rInt} ${color.gInt} ${color.bInt}]\n" +
+      "RGB: [${color.getRInt()} ${color.getGInt()} ${color.getBInt()}]\n" +
           "HEX: ${String.format(
             "#%06X",
-            0xFFFFFF and color.colorInt
+            0xFFFFFF and color.convertToColorInt()
           )}\n" +
           "HSL: $color"
 

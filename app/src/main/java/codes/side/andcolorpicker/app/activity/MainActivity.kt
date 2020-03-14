@@ -15,8 +15,9 @@ import codes.side.andcolorpicker.app.fragment.HslSeekBarFragment
 import codes.side.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
 import codes.side.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
 import codes.side.andcolorpicker.app.fragment.WipFragment
-import codes.side.andcolorpicker.app.util.createContrastColor
-import codes.side.andcolorpicker.model.IntegerHSLColorModel
+import codes.side.andcolorpicker.converter.convertToColorInt
+import codes.side.andcolorpicker.converter.getContrastColor
+import codes.side.andcolorpicker.model.IntegerHSLColor
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity(),
   }
 
   private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-  private val colorizeHSLColorCache = IntegerHSLColorModel()
+  private val colorizeHSLColorCache = IntegerHSLColor()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -159,19 +160,20 @@ class MainActivity : AppCompatActivity(),
     }
   }
 
-  override fun colorize(color: IntegerHSLColorModel) {
-    val contrastColor = color.createContrastColor()
+  override fun colorize(color: IntegerHSLColor) {
+    val contrastColor = color.getContrastColor()
 
     // Overwrite cache for AppBar
     colorizeHSLColorCache.setFromHSLColor(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
-    appBarLayout.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.colorInt)
+    appBarLayout.backgroundTintList =
+      ColorStateList.valueOf(colorizeHSLColorCache.convertToColorInt())
 
     // Overwrite cache for StatusBar
     colorizeHSLColorCache.floatL -= 0.1f
 
-    window.statusBarColor = colorizeHSLColorCache.colorInt
+    window.statusBarColor = colorizeHSLColorCache.convertToColorInt()
 
     toolbar.setTitleTextColor(contrastColor)
     toolbar.setSubtitleTextColor(contrastColor)

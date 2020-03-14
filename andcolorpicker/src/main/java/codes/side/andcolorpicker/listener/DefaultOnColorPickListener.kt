@@ -1,9 +1,9 @@
 package codes.side.andcolorpicker.listener
 
 import codes.side.andcolorpicker.ColorSeekBar
-import codes.side.andcolorpicker.model.ColorModel
+import codes.side.andcolorpicker.model.Color
 
-open class DefaultOnColorPickListener<C : ColorModel> :
+open class DefaultOnColorPickListener<C : Color<C>> :
   ColorSeekBar.OnColorPickListener<C> {
   override fun onColorPicking(
     picker: ColorSeekBar<C>,

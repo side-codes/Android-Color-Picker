@@ -1,14 +1,15 @@
 <resources>
   <string name="app_name">andColorPicker Sample</string>
-  <string name="title_dynamic_color_model">Dynamic color model</string>
-  <string name="title_dynamic">Dynamic</string>
-  <string name="title_lightness">Lightness</string>
-  <string name="title_saturation">Saturation</string>
+  <string name="title_toolbar_subtitle">Color picking made easy</string>
   <string name="title_hue">Hue</string>
+  <string name="title_saturation">Saturation</string>
+  <string name="title_lightness">Lightness</string>
+  <string name="title_alpha">Alpha</string>
+  <string name="title_dynamic">Dynamic</string>
+  <string name="title_dynamic_color_component">Dynamic color component</string>
   <string name="title_coloring_mode">Coloring mode</string>
-  <string name="title_work_in_progress">Work In Progress :D</string>
-  <string name="action_set_random_color">Randomize</string>
   <string name="title_coloring_mode_pure">Pure</string>
   <string name="title_coloring_mode_output">Output</string>
-  <string name="title_toolbar_subtitle">Color picking made easy</string>
+  <string name="action_set_random_color">Randomize</string>
+  <string name="title_work_in_progress">Work In Progress :D</string>
 </resources>

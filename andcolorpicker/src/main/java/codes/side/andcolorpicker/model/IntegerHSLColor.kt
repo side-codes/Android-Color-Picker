@@ -2,12 +2,14 @@ package codes.side.andcolorpicker.model
 
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
+import codes.side.andcolorpicker.converter.BoundHSLColorConverter
+import codes.side.andcolorpicker.converter.HSLColorConverter
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 // TODO: Invent hierarchy
 // TODO: Provide precision options
-class IntegerHSLColorModel : ColorModel {
+class IntegerHSLColor : Color<IntegerHSLColor> {
   companion object {
     const val H_INDEX = 0
     const val S_INDEX = 1
@@ -22,12 +24,15 @@ class IntegerHSLColorModel : ColorModel {
       DEFAULT_L
     )
 
+    // TODO: Inject
+    private val CONVERTER = HSLColorConverter()
+
     fun getDefaultHSLValueByIndex(index: Int): Float {
       return DEFAULT_HSL_VALUES[index]
     }
 
-    fun createRandomColor(pure: Boolean = false): IntegerHSLColorModel {
-      return IntegerHSLColorModel().also {
+    fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
+      return IntegerHSLColor().also {
         it.setFromHSL(
           floatArrayOf(
             Random.Default.nextFloat() * 360f,
@@ -38,6 +43,17 @@ class IntegerHSLColorModel : ColorModel {
       }
     }
   }
+
+  override val converter = CONVERTER
+
+  override val localConverter = BoundHSLColorConverter(this)
+
+  override val alpha: Float
+    get() {
+      return intA / 100f
+    }
+
+  private val intValues = IntArray(3)
 
   var floatH: Float
     get() {
@@ -101,18 +117,6 @@ class IntegerHSLColorModel : ColorModel {
         100
       )
     }
-  val rInt: Int
-    get() {
-      return android.graphics.Color.red(colorInt)
-    }
-  val gInt: Int
-    get() {
-      return android.graphics.Color.green(colorInt)
-    }
-  val bInt: Int
-    get() {
-      return android.graphics.Color.blue(colorInt)
-    }
 
   private val hsColorIntHSLCache = FloatArray(3)
   val hsColorInt: Int
@@ -122,26 +126,6 @@ class IntegerHSLColorModel : ColorModel {
       hsColorIntHSLCache[L_INDEX] = DEFAULT_L
       return ColorUtils.HSLToColor(hsColorIntHSLCache)
     }
-  private val colorIntHSLCache = FloatArray(3)
-
-  @get:ColorInt
-  override val colorInt: Int
-    get() {
-      colorIntHSLCache[H_INDEX] = intValues[H_INDEX].toFloat()
-      colorIntHSLCache[S_INDEX] = intValues[S_INDEX] / 100f
-      colorIntHSLCache[L_INDEX] = intValues[L_INDEX] / 100f
-      return ColorUtils.HSLToColor(colorIntHSLCache)
-    }
-  private val pureColorIntHSLCache = FloatArray(3)
-  val pureColorInt: Int
-    get() {
-      pureColorIntHSLCache[H_INDEX] = intH.toFloat()
-      pureColorIntHSLCache[S_INDEX] = DEFAULT_S
-      pureColorIntHSLCache[L_INDEX] = DEFAULT_L
-      return ColorUtils.HSLToColor(pureColorIntHSLCache)
-    }
-
-  private val intValues = IntArray(3)
 
   override fun setFromHSL(h: Float, s: Float, l: Float) {
     this.intH = h.roundToInt()
@@ -180,12 +164,12 @@ class IntegerHSLColorModel : ColorModel {
     )
   }
 
-  fun setFromHSLColor(hslColor: IntegerHSLColorModel) {
+  fun setFromHSLColor(hslColor: IntegerHSLColor) {
     hslColor.copyValuesTo(intValues)
   }
 
   // FIXME: Unsafe, provide checks
-  fun copyValuesFrom(inValues: IntArray): IntegerHSLColorModel {
+  fun copyValuesFrom(inValues: IntArray): IntegerHSLColor {
     inValues.copyInto(intValues)
     return this
   }
@@ -194,8 +178,8 @@ class IntegerHSLColorModel : ColorModel {
     intValues.copyInto(outValues)
   }
 
-  override fun clone(): IntegerHSLColorModel {
-    return IntegerHSLColorModel().also {
+  override fun clone(): IntegerHSLColor {
+    return IntegerHSLColor().also {
       it.setFromHSLColor(this)
     }
   }
@@ -208,7 +192,7 @@ class IntegerHSLColorModel : ColorModel {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as IntegerHSLColorModel
+    other as IntegerHSLColor
 
     if (_a != other._a) return false
     if (!intValues.contentEquals(other.intValues)) return false

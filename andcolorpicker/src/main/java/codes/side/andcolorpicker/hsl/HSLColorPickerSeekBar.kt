@@ -8,7 +8,7 @@ import android.util.AttributeSet
 import androidx.core.graphics.ColorUtils
 import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.R
-import codes.side.andcolorpicker.model.IntegerHSLColorModel
+import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
 
 // TODO: Add logger solution
@@ -16,7 +16,7 @@ import codes.side.andcolorpicker.model.factory.HSLColorFactory
 // TODO: Add checks and reduce calls count
 // TODO: Limit used SDK properties usage
 class HSLColorPickerSeekBar :
-  ColorSeekBar<IntegerHSLColorModel> {
+  ColorSeekBar<IntegerHSLColor> {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
 
@@ -70,8 +70,8 @@ class HSLColorPickerSeekBar :
       refreshThumb()
     }
 
-  private val paintDrawableStrokeSaturationHSLCache by lazy { IntegerHSLColorModel() }
-  private val paintDrawableStrokeLightnessHSLCache by lazy { IntegerHSLColorModel() }
+  private val paintDrawableStrokeSaturationHSLCache by lazy { IntegerHSLColor() }
+  private val paintDrawableStrokeLightnessHSLCache by lazy { IntegerHSLColor() }
 
   private val progressDrawableSaturationColorsCache by lazy { IntArray(2) }
   private val progressDrawableLightnessColorsCache by lazy { IntArray(3) }
@@ -157,9 +157,9 @@ class HSLColorPickerSeekBar :
     super.setMax(max)
   }
 
-  override fun updateInternalCurrentColorFrom(value: IntegerHSLColorModel) {
+  override fun updateInternalCurrentColorFrom(value: IntegerHSLColor) {
     super.updateInternalCurrentColorFrom(value)
-    internalCurrentColor.setFromHSLColor(value)
+    internalPickedColor.setFromHSLColor(value)
   }
 
   override fun refreshProperties() {
@@ -175,16 +175,16 @@ class HSLColorPickerSeekBar :
           it,
           createHueOutputColorCheckpointsHSLCache
         )
-        createHueOutputColorCheckpointsHSLCache[IntegerHSLColorModel.S_INDEX] =
-          internalCurrentColor.floatS
-        createHueOutputColorCheckpointsHSLCache[IntegerHSLColorModel.L_INDEX] =
-          internalCurrentColor.floatL
+        createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.S_INDEX] =
+          internalPickedColor.floatS
+        createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.L_INDEX] =
+          internalPickedColor.floatL
         ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
       }.toIntArray()
   }
 
   private fun refreshZeroSaturationOutputColorHSLCache() {
-    zeroSaturationOutputColorHSLCache[2] = internalCurrentColor.floatL
+    zeroSaturationOutputColorHSLCache[2] = internalPickedColor.floatL
   }
 
   override fun refreshProgressDrawable() {
@@ -207,7 +207,7 @@ class HSLColorPickerSeekBar :
             progressDrawableSaturationColorsCache.also {
               it[0] =
                 ZERO_SATURATION_COLOR_INT
-              it[1] = internalCurrentColor.pureColorInt
+              it[1] = internalPickedColor.localConverter.convertToPureColorInt()
             }
           }
           ColoringMode.OUTPUT_COLOR -> {
@@ -216,7 +216,7 @@ class HSLColorPickerSeekBar :
             progressDrawableSaturationColorsCache.also {
               it[0] =
                 ColorUtils.HSLToColor(zeroSaturationOutputColorHSLCache)
-              it[1] = internalCurrentColor.colorInt
+              it[1] = internalPickedColor.localConverter.convertToColorInt()
             }
           }
         }
@@ -225,8 +225,8 @@ class HSLColorPickerSeekBar :
         progressDrawableLightnessColorsCache.also {
           it[0] = Color.BLACK
           it[1] = when (coloringMode) {
-            ColoringMode.PURE_COLOR -> internalCurrentColor.pureColorInt
-            ColoringMode.OUTPUT_COLOR -> internalCurrentColor.hsColorInt
+            ColoringMode.PURE_COLOR -> internalPickedColor.localConverter.convertToPureColorInt()
+            ColoringMode.OUTPUT_COLOR -> internalPickedColor.hsColorInt
           }
           it[2] = Color.WHITE
         }
@@ -257,27 +257,27 @@ class HSLColorPickerSeekBar :
     // TODO: Use Atomic and compare/set?
     val changed: Boolean = when (mode) {
       Mode.MODE_HUE -> {
-        val currentH = internalCurrentColor.intH
+        val currentH = internalPickedColor.intH
         if (currentH != currentProgress) {
-          internalCurrentColor.intH = currentProgress
+          internalPickedColor.intH = currentProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_SATURATION -> {
-        val currentS = internalCurrentColor.intS
+        val currentS = internalPickedColor.intS
         if (currentS != currentProgress) {
-          internalCurrentColor.intS = currentProgress
+          internalPickedColor.intS = currentProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_LIGHTNESS -> {
-        val currentL = internalCurrentColor.intL
+        val currentL = internalPickedColor.intL
         if (currentL != currentProgress) {
-          internalCurrentColor.intL = currentProgress
+          internalPickedColor.intL = currentProgress
           true
         } else {
           false
@@ -295,13 +295,13 @@ class HSLColorPickerSeekBar :
 
     progress = when (mode) {
       Mode.MODE_HUE -> {
-        internalCurrentColor.intH
+        internalPickedColor.intH
       }
       Mode.MODE_SATURATION -> {
-        internalCurrentColor.intS
+        internalPickedColor.intS
       }
       Mode.MODE_LIGHTNESS -> {
-        internalCurrentColor.intL
+        internalPickedColor.intL
       }
     }
   }
@@ -319,10 +319,10 @@ class HSLColorPickerSeekBar :
         Mode.MODE_HUE -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
-              internalCurrentColor.pureColorInt
+              internalPickedColor.localConverter.convertToPureColorInt()
             }
             ColoringMode.OUTPUT_COLOR -> {
-              internalCurrentColor.colorInt
+              internalPickedColor.localConverter.convertToColorInt()
             }
           }
         }
@@ -331,14 +331,14 @@ class HSLColorPickerSeekBar :
             ColoringMode.PURE_COLOR -> {
               paintDrawableStrokeSaturationHSLCache.also {
                 it.setFromHSL(
-                  internalCurrentColor.intH.toFloat(),
+                  internalPickedColor.intH.toFloat(),
                   progress / mode.maxProgress.toFloat(),
-                  IntegerHSLColorModel.DEFAULT_L
+                  IntegerHSLColor.DEFAULT_L
                 )
-              }.colorInt
+              }.localConverter.convertToColorInt()
             }
             ColoringMode.OUTPUT_COLOR -> {
-              internalCurrentColor.colorInt
+              internalPickedColor.localConverter.convertToColorInt()
             }
           }
         }
@@ -347,20 +347,20 @@ class HSLColorPickerSeekBar :
             ColoringMode.PURE_COLOR -> {
               paintDrawableStrokeLightnessHSLCache.also {
                 it.setFromHSL(
-                  internalCurrentColor.floatH,
-                  IntegerHSLColorModel.DEFAULT_S,
-                  internalCurrentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                  internalPickedColor.floatH,
+                  IntegerHSLColor.DEFAULT_S,
+                  internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
                 )
-              }.colorInt
+              }.localConverter.convertToColorInt()
             }
             ColoringMode.OUTPUT_COLOR -> {
               paintDrawableStrokeLightnessHSLCache.also {
                 it.setFromHSL(
-                  internalCurrentColor.floatH,
-                  internalCurrentColor.floatS,
-                  internalCurrentColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                  internalPickedColor.floatH,
+                  internalPickedColor.floatS,
+                  internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
                 )
-              }.colorInt
+              }.localConverter.convertToColorInt()
             }
           }
         }
@@ -369,7 +369,7 @@ class HSLColorPickerSeekBar :
   }
 
   override fun toString(): String {
-    return "HSLColorPickerSeekBar(tag = $tag, _mode=$mode, _currentColor=$internalCurrentColor)"
+    return "HSLColorPickerSeekBar(tag = $tag, _mode=$mode, _currentColor=$internalPickedColor)"
   }
 
   enum class ColoringMode {

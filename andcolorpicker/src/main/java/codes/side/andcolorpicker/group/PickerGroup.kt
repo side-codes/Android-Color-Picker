@@ -1,16 +1,16 @@
 package codes.side.andcolorpicker.group
 
 import codes.side.andcolorpicker.ColorSeekBar
-import codes.side.andcolorpicker.model.ColorModel
+import codes.side.andcolorpicker.model.Color
 
 // TODO: Add foreach or smth like that
-open class PickerGroup<C : ColorModel> : Iterable<ColorSeekBar<C>>,
+open class PickerGroup<C : Color<C>> : Iterable<ColorSeekBar<C>>,
   ColorSeekBar.OnColorPickListener<C> {
   // Kinda prioritized collection
   private val pickers = linkedSetOf<ColorSeekBar<C>>()
 
   fun setColor(color: C) {
-    pickers.firstOrNull()?.currentColor = color
+    pickers.firstOrNull()?.pickedColor = color
   }
 
   fun registerPicker(picker: ColorSeekBar<C>) {
@@ -19,7 +19,7 @@ open class PickerGroup<C : ColorModel> : Iterable<ColorSeekBar<C>>,
     // Sync state on register
     notifyGroupOnBroadcastFrom(
       picker,
-      picker.currentColor
+      picker.pickedColor
     )
   }
 
@@ -68,7 +68,7 @@ open class PickerGroup<C : ColorModel> : Iterable<ColorSeekBar<C>>,
     color: C
   ) {
     pickers.filter { it != picker }.forEach {
-      it.currentColor = color
+      it.pickedColor = color
     }
   }
 

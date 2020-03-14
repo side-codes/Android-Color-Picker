@@ -12,7 +12,7 @@ import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.ColoringMode
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.Mode
 import codes.side.andcolorpicker.listener.DefaultOnColorPickListener
-import codes.side.andcolorpicker.model.IntegerHSLColorModel
+import codes.side.andcolorpicker.model.IntegerHSLColor
 import kotlinx.android.synthetic.main.fragment_hsl_seekbar_github_sample.*
 
 class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_github_sample) {
@@ -33,7 +33,7 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
     hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
 
     // Group pickers with PickerGroup to automatically synchronize color across them
-    val pickerGroup = PickerGroup<IntegerHSLColorModel>().also {
+    val pickerGroup = PickerGroup<IntegerHSLColor>().also {
       it.registerPickers(
         hueColorPickerSeekBar,
         saturationColorPickerSeekBar,
@@ -43,7 +43,7 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
 
     // Set desired color programmatically
     pickerGroup.setColor(
-      IntegerHSLColorModel().also {
+      IntegerHSLColor().also {
         it.setFromColor(
           Color.rgb(
             28,
@@ -60,15 +60,15 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
     // Get current color immediatly
     Log.d(
       TAG,
-      "Current color is ${hueColorPickerSeekBar.currentColor}"
+      "Current color is ${hueColorPickerSeekBar.pickedColor}"
     )
 
     // Listen for changes
     hueColorPickerSeekBar.addListener(
-      object : DefaultOnColorPickListener<IntegerHSLColorModel>() {
+      object : DefaultOnColorPickListener<IntegerHSLColor>() {
         override fun onColorChanged(
-          picker: ColorSeekBar<IntegerHSLColorModel>,
-          color: IntegerHSLColorModel,
+          picker: ColorSeekBar<IntegerHSLColor>,
+          color: IntegerHSLColor,
           value: Int
         ) {
           Log.d(
