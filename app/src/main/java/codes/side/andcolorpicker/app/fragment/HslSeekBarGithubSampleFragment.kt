@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
@@ -13,6 +12,7 @@ import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.ColoringMode
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.Mode
 import codes.side.andcolorpicker.model.IntegerHSLColor
+import codes.side.andcolorpicker.view.ColorSeekBar
 import kotlinx.android.synthetic.main.fragment_hsl_seekbar_github_sample.*
 
 class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_github_sample) {

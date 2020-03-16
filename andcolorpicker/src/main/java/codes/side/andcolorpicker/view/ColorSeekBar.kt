@@ -1,4 +1,4 @@
-package codes.side.andcolorpicker
+package codes.side.andcolorpicker.view
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -9,6 +9,7 @@ import android.util.Log
 import android.util.StateSet
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
+import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.ColorConverter
 import codes.side.andcolorpicker.converter.ColorConverterHub
 import codes.side.andcolorpicker.model.Color
@@ -17,9 +18,21 @@ import codes.side.andcolorpicker.util.marker
 
 // TODO: Split on gradient-based and custom inheritance tree
 // TODO: Make color not generic, but bridge component
-@Suppress("ConstantConditionIf")
-abstract class ColorSeekBar<C : Color> :
-  AppCompatSeekBar,
+@Suppress(
+  "ConstantConditionIf",
+  "LeakingThis"
+)
+abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
+  private val colorFactory: ColorFactory<C>,
+  context: Context,
+  attrs: AttributeSet? = null,
+  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+) :
+  AppCompatSeekBar(
+    context,
+    attrs,
+    defStyle
+  ),
   SeekBar.OnSeekBarChangeListener {
 
   companion object {
@@ -27,7 +40,7 @@ abstract class ColorSeekBar<C : Color> :
     private const val DEBUG = false
   }
 
-  private val _pickedColor: C
+  private val _pickedColor: C = colorFactory.create()
   var pickedColor: C
     get() {
       return colorFactory.createColorFrom(_pickedColor)
@@ -64,7 +77,6 @@ abstract class ColorSeekBar<C : Color> :
   private var minUpdating = false
   private var maxUpdating = false
 
-  private val colorFactory: ColorFactory<C>
   private val colorPickListeners = hashSetOf<OnColorPickListener<ColorSeekBar<C>, C>>()
   private lateinit var thumbDrawableDefaultWrapper: LayerDrawable
   private lateinit var thumbDrawablePressed: GradientDrawable
@@ -72,45 +84,7 @@ abstract class ColorSeekBar<C : Color> :
   // TODO: Rename
   protected val coloringDrawables = hashSetOf<Drawable>()
 
-  // TODO: Make use of JvmOverloads
-  constructor(
-    colorFactory: ColorFactory<C>,
-    context: Context
-  ) : super(context) {
-    this.colorFactory = colorFactory
-    this._pickedColor = colorFactory.create()
-    init()
-  }
-
-  constructor(
-    colorFactory: ColorFactory<C>,
-    context: Context,
-    attrs: AttributeSet?
-  ) : super(
-    context,
-    attrs
-  ) {
-    this.colorFactory = colorFactory
-    this._pickedColor = colorFactory.create()
-    init()
-  }
-
-  constructor(
-    colorFactory: ColorFactory<C>,
-    context: Context,
-    attrs: AttributeSet?,
-    defStyleAttr: Int
-  ) : super(
-    context,
-    attrs,
-    defStyleAttr
-  ) {
-    this.colorFactory = colorFactory
-    this._pickedColor = colorFactory.create()
-    init()
-  }
-
-  private fun init() {
+  init {
     splitTrack = false
 
     setOnSeekBarChangeListener(this)
@@ -118,6 +92,9 @@ abstract class ColorSeekBar<C : Color> :
     setupBackground()
     setupProgressDrawable()
     setupThumb()
+  }
+
+  private fun init() {
   }
 
   private fun setupBackground() {
@@ -142,40 +119,30 @@ abstract class ColorSeekBar<C : Color> :
       )
     }
 
-    val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_background_padding)
+    val progressPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_progress_padding)
+    val progressHeightPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_progress_height)
 
     progressDrawable = LayerDrawable(
-      arrayOf(
-        GradientDrawable().also {
-          it.orientation = GradientDrawable.Orientation.LEFT_RIGHT
-          it.cornerRadius =
-            resources.getDimensionPixelOffset(R.dimen.acp_seek_background_corner_radius)
-              .toFloat()
-          it.shape = GradientDrawable.RECTANGLE
-          // TODO: Make stroke configurable
-          //it.setStroke(
-          //  4,
-          //  Color.rgb(
-          //    192,
-          //    192,
-          //    192
-          //  )
-          //)
-        }
-      )
+      onSetupProgressDrawableLayers(arrayOf())
     ).also {
+      // We're limited to insets on API 21
+      // Migrate to layer height / padding on API 23+
       it.setLayerInset(
         0,
-        backgroundPaddingPx,
-        backgroundPaddingPx,
-        backgroundPaddingPx,
-        backgroundPaddingPx
+        progressPaddingPx,
+        progressPaddingPx,
+        progressPaddingPx,
+        progressPaddingPx
       )
     }
   }
 
+  // Immutable array to limit hacks
+  // Inherited layers may be not fully built by this method invocation moment
+  protected abstract fun onSetupProgressDrawableLayers(layers: Array<Drawable>): Array<Drawable>
+
   private fun setupThumb() {
-    val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_background_padding)
+    val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_progress_padding)
     val thumbFullSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_full)
     val thumbDefaultSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_default)
 
@@ -194,6 +161,8 @@ abstract class ColorSeekBar<C : Color> :
         }
       )
     ).also {
+      // We're limited to insets on API 21
+      // Migrate to layer height / padding on API 23+
       it.setLayerInset(
         0,
         sizeDHalf,
@@ -338,7 +307,7 @@ abstract class ColorSeekBar<C : Color> :
   }
 
   // TODO: Add (mask) delegating OnSeekBarChangeListener
-  override fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
+  final override fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
     if (l != this) {
       throw IllegalStateException("Custom OnSeekBarChangeListener not supported yet")
     }

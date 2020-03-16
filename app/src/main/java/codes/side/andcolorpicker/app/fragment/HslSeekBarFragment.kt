@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.app.util.firstIsInstanceOrNull
@@ -17,6 +16,7 @@ import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.model.IntegerHSLColor
+import codes.side.andcolorpicker.view.ColorSeekBar
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.IconicsSize
@@ -96,7 +96,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     )
     coloringModeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
       pickerGroup.forEach {
-        (it as HSLColorPickerSeekBar).coloringMode =
+        (it as? HSLColorPickerSeekBar)?.coloringMode =
           requireNotNull(radioColoringModesMap[checkedId])
       }
     }

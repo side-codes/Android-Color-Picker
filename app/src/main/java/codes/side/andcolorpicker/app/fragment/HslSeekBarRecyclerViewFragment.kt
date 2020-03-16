@@ -5,11 +5,11 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.converter.convertToColorInt
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.model.IntegerHSLColor
+import codes.side.andcolorpicker.view.ColorSeekBar
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem

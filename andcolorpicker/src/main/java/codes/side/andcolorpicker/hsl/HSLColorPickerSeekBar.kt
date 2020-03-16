@@ -6,18 +6,19 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import androidx.core.graphics.ColorUtils
-import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.HSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
+import codes.side.andcolorpicker.view.ColorSeekBar
+import codes.side.andcolorpicker.view.GradientColorSeekBar
 
 // TODO: Add logger solution
 // TODO: Add call flow diagram
 // TODO: Add checks and reduce calls count
 // TODO: Limit used SDK properties usage
 class HSLColorPickerSeekBar :
-  ColorSeekBar<IntegerHSLColor> {
+  GradientColorSeekBar<IntegerHSLColor> {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
 

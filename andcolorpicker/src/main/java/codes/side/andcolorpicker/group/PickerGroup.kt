@@ -1,7 +1,7 @@
 package codes.side.andcolorpicker.group
 
-import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.model.Color
+import codes.side.andcolorpicker.view.ColorSeekBar
 
 // TODO: Add foreach or smth like that
 open class PickerGroup<C : Color> :
