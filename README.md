@@ -10,10 +10,14 @@
     - [ ] RGB seekbars
     - [ ] RGB circle
     - [ ] RGB plane
+    - [ ] HSV/HSB seekbars
     - [ ] CMYK seekbars
     - [ ] Alpha seekbar
     - [ ] HSL (S+L) plane
     - [ ] Swatches
+    - [ ] LAB
+    - [ ] XYZ
+    - [ ] YPbPr
 - [x] Sample buttons -> radios
 - [x] Remove sample app child press delays
 - [ ] Enhance API
