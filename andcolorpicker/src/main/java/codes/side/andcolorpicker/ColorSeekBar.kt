@@ -15,6 +15,7 @@ import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.factory.ColorFactory
 import codes.side.andcolorpicker.util.marker
 
+// TODO: Split on gradient-based and custom inheritance tree
 // TODO: Make color not generic, but bridge component
 @Suppress("ConstantConditionIf")
 abstract class ColorSeekBar<C : Color> :
