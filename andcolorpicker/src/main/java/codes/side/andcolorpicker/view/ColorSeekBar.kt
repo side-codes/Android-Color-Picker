@@ -16,6 +16,8 @@ import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.factory.ColorFactory
 import codes.side.andcolorpicker.util.marker
 
+// TODO: Support alpha on that level?
+// TODO: Minimize resource reads
 // TODO: Split on gradient-based and custom inheritance tree
 // TODO: Make color not generic, but bridge component
 @Suppress(
@@ -55,7 +57,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       if (_pickedColor == value) {
         return
       }
-      updateInternalCurrentColorFrom(value)
+      updateInternalPickedColorFrom(value)
       refreshProgressFromCurrentColor()
       refreshProgressDrawable()
       refreshThumb()
@@ -94,9 +96,6 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     setupThumb()
   }
 
-  private fun init() {
-  }
-
   private fun setupBackground() {
     background = background.mutate()
       .also {
@@ -122,18 +121,22 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     val progressPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_progress_padding)
     val progressHeightPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_progress_height)
 
+    val layers = onSetupProgressDrawableLayers(arrayOf())
     progressDrawable = LayerDrawable(
-      onSetupProgressDrawableLayers(arrayOf())
+      layers
     ).also {
       // We're limited to insets on API 21
       // Migrate to layer height / padding on API 23+
-      it.setLayerInset(
-        0,
-        progressPaddingPx,
-        progressPaddingPx,
-        progressPaddingPx,
-        progressPaddingPx
-      )
+      // TODO: Allow to configure whether to use insets or not
+      layers.forEachIndexed { index, _ ->
+        it.setLayerInset(
+          index,
+          progressPaddingPx,
+          progressPaddingPx,
+          progressPaddingPx,
+          progressPaddingPx
+        )
+      }
     }
   }
 
@@ -240,7 +243,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   // TODO: Make abstract? Make template?
-  protected open fun updateInternalCurrentColorFrom(value: C) {
+  protected open fun updateInternalPickedColorFrom(value: C) {
     if (DEBUG) {
       Log.d(
         TAG,
@@ -249,6 +252,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  // TODO: Make abstract? Make template?
   protected open fun refreshProperties() {
     if (DEBUG) {
       Log.d(
@@ -258,6 +262,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  // TODO: Make abstract? Make template?
   protected open fun refreshProgressFromCurrentColor() {
     if (DEBUG) {
       Log.d(
@@ -267,7 +272,8 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
-  protected open fun refreshInternalCurrentColorFromProgress() {
+  // TODO: Make abstract? Make template?
+  protected open fun refreshInternalPickedColorFromProgress() {
     if (DEBUG) {
       Log.d(
         TAG,
@@ -276,6 +282,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  // TODO: Make abstract? Make template?
   protected open fun refreshProgressDrawable() {
     if (DEBUG) {
       Log.d(
@@ -285,6 +292,11 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  /**
+   * CONTRACT: Should paint GradientDrawable and first layer of LayerDrawable
+   */
+  // TODO: Make abstract? Make template?
+  // TODO: Pass ready-to-paint drawables list?
   protected open fun refreshThumb() {
     if (DEBUG) {
       Log.d(
@@ -356,7 +368,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       return
     }
 
-    refreshInternalCurrentColorFromProgress()
+    refreshInternalPickedColorFromProgress()
     refreshProgressDrawable()
     refreshThumb()
     notifyListenersOnColorPicking(fromUser)

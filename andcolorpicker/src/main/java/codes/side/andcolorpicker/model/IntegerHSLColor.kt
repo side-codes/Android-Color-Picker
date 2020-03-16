@@ -104,7 +104,7 @@ class IntegerHSLColor :
         100
       )
     }
-  private var _a: Int = 0
+  private var _a: Int = 100
   var intA: Int
     get() {
       return _a

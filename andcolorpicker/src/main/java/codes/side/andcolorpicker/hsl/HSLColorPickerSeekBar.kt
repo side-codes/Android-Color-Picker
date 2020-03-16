@@ -13,6 +13,7 @@ import codes.side.andcolorpicker.model.factory.HSLColorFactory
 import codes.side.andcolorpicker.view.ColorSeekBar
 import codes.side.andcolorpicker.view.GradientColorSeekBar
 
+// TODO: Minimize resource reads
 // TODO: Add logger solution
 // TODO: Add call flow diagram
 // TODO: Add checks and reduce calls count
@@ -162,8 +163,8 @@ class HSLColorPickerSeekBar :
     super.setMax(max)
   }
 
-  override fun updateInternalCurrentColorFrom(value: IntegerHSLColor) {
-    super.updateInternalCurrentColorFrom(value)
+  override fun updateInternalPickedColorFrom(value: IntegerHSLColor) {
+    super.updateInternalPickedColorFrom(value)
     internalPickedColor.setFromHSLColor(value)
   }
 
@@ -245,18 +246,18 @@ class HSLColorPickerSeekBar :
     coloringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
-          paintDrawableStroke(it)
+          paintThumbStroke(it)
         }
         is LayerDrawable -> {
-          paintDrawableStroke(it.getDrawable(0) as GradientDrawable)
+          paintThumbStroke(it.getDrawable(0) as GradientDrawable)
         }
       }
     }
   }
 
   // Bypass color setter
-  override fun refreshInternalCurrentColorFromProgress() {
-    super.refreshInternalCurrentColorFromProgress()
+  override fun refreshInternalPickedColorFromProgress() {
+    super.refreshInternalPickedColorFromProgress()
 
     val currentProgress = progress
     // TODO: Use Atomic and compare/set?
@@ -311,7 +312,7 @@ class HSLColorPickerSeekBar :
     }
   }
 
-  private fun paintDrawableStroke(drawable: GradientDrawable) {
+  private fun paintThumbStroke(drawable: GradientDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
@@ -337,8 +338,8 @@ class HSLColorPickerSeekBar :
               colorConverter.convertToColorInt(
                 paintDrawableStrokeSaturationHSLCache.also {
                   it.setFromHSL(
-                    internalPickedColor.intH.toFloat(),
-                    progress / mode.maxProgress.toFloat(),
+                    internalPickedColor.floatH,
+                    internalPickedColor.floatS,
                     IntegerHSLColor.DEFAULT_L
                   )
                 }
