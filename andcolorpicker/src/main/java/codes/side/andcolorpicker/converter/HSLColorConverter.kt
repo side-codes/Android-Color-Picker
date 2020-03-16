@@ -1,13 +1,16 @@
 package codes.side.andcolorpicker.converter
 
 import androidx.core.graphics.ColorUtils
+import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.IntegerHSLColor
 
-class HSLColorConverter : ColorConverter<IntegerHSLColor> {
+class HSLColorConverter : ColorConverter {
   private val convertToColorIntIntValuesCache = IntArray(3)
   private val convertToColorIntHSLCache = FloatArray(3)
 
-  override fun convertToColorInt(color: IntegerHSLColor): Int {
+  override fun convertToColorInt(color: Color): Int {
+    require(color is IntegerHSLColor) { "Unsupported color type supplied" }
+
     color.copyValuesTo(convertToColorIntIntValuesCache)
     convertToColorIntHSLCache[IntegerHSLColor.H_INDEX] =
       convertToColorIntIntValuesCache[IntegerHSLColor.H_INDEX].toFloat()

@@ -4,8 +4,9 @@ import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.model.Color
 
 // TODO: Add foreach or smth like that
-open class PickerGroup<C : Color<C>> : Iterable<ColorSeekBar<C>>,
-  ColorSeekBar.OnColorPickListener<C> {
+open class PickerGroup<C : Color> :
+  ColorSeekBar.OnColorPickListener<ColorSeekBar<C>, C>,
+  Iterable<ColorSeekBar<C>> {
   // Kinda prioritized collection
   private val pickers = linkedSetOf<ColorSeekBar<C>>()
 

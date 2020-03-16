@@ -9,9 +9,9 @@ import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
+import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.ColoringMode
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.Mode
-import codes.side.andcolorpicker.listener.DefaultOnColorPickListener
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import kotlinx.android.synthetic.main.fragment_hsl_seekbar_github_sample.*
 
@@ -65,7 +65,7 @@ class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_gi
 
     // Listen for changes
     hueColorPickerSeekBar.addListener(
-      object : DefaultOnColorPickListener<IntegerHSLColor>() {
+      object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerHSLColor>,
           color: IntegerHSLColor,

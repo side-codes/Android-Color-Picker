@@ -9,11 +9,16 @@ import android.util.Log
 import android.util.StateSet
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
+import codes.side.andcolorpicker.converter.ColorConverter
+import codes.side.andcolorpicker.converter.ColorConverterHub
 import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.factory.ColorFactory
+import codes.side.andcolorpicker.util.marker
 
+// TODO: Make color not generic, but bridge component
 @Suppress("ConstantConditionIf")
-abstract class ColorSeekBar<C : Color<C>> : AppCompatSeekBar,
+abstract class ColorSeekBar<C : Color> :
+  AppCompatSeekBar,
   SeekBar.OnSeekBarChangeListener {
 
   companion object {
@@ -48,12 +53,18 @@ abstract class ColorSeekBar<C : Color<C>> : AppCompatSeekBar,
       return _pickedColor
     }
 
+  // TODO: Revisit cast
+  protected open val colorConverter: ColorConverter
+    get() {
+      return ColorConverterHub.getConverterByKey(internalPickedColor.colorKey)
+    }
+
   // Dirty hack to stop onProgressChanged while playing with min/max
-  //private var minUpdating = false
-  //private var maxUpdating = false
+  private var minUpdating = false
+  private var maxUpdating = false
 
   private val colorFactory: ColorFactory<C>
-  private val colorPickListeners = hashSetOf<OnColorPickListener<C>>()
+  private val colorPickListeners = hashSetOf<OnColorPickListener<ColorSeekBar<C>, C>>()
   private lateinit var thumbDrawableDefaultWrapper: LayerDrawable
   private lateinit var thumbDrawablePressed: GradientDrawable
 
@@ -246,6 +257,19 @@ abstract class ColorSeekBar<C : Color<C>> : AppCompatSeekBar,
     thumbOffset -= backgroundPaddingPx / 2
   }
 
+  override fun setMin(min: Int) {
+    ::minUpdating.marker {
+      super.setMin(min)
+    }
+  }
+
+  override fun setMax(max: Int) {
+    ::maxUpdating.marker {
+      super.setMax(max)
+    }
+  }
+
+  // TODO: Make abstract? Make template?
   protected open fun updateInternalCurrentColorFrom(value: C) {
     if (DEBUG) {
       Log.d(
@@ -300,11 +324,11 @@ abstract class ColorSeekBar<C : Color<C>> : AppCompatSeekBar,
     }
   }
 
-  fun addListener(listener: OnColorPickListener<C>) {
+  fun addListener(listener: OnColorPickListener<ColorSeekBar<C>, C>) {
     colorPickListeners.add(listener)
   }
 
-  fun removeListener(listener: OnColorPickListener<C>) {
+  fun removeListener(listener: OnColorPickListener<ColorSeekBar<C>, C>) {
     colorPickListeners.remove(listener)
   }
 
@@ -358,10 +382,9 @@ abstract class ColorSeekBar<C : Color<C>> : AppCompatSeekBar,
     progress: Int,
     fromUser: Boolean
   ) {
-    // TODO: Revisit
-    //if (minUpdating || maxUpdating) {
-    //  return
-    //}
+    if (minUpdating || maxUpdating) {
+      return
+    }
 
     refreshInternalCurrentColorFromProgress()
     refreshProgressDrawable()
@@ -381,25 +404,54 @@ abstract class ColorSeekBar<C : Color<C>> : AppCompatSeekBar,
   }
 
   // TODO: Rename
-  interface OnColorPickListener<C : Color<C>> {
+  interface OnColorPickListener<S : ColorSeekBar<C>, C : Color> {
     fun onColorPicking(
-      picker: ColorSeekBar<C>,
+      picker: S,
       color: C,
       value: Int,
       fromUser: Boolean
     )
 
     fun onColorPicked(
-      picker: ColorSeekBar<C>,
+      picker: S,
       color: C,
       value: Int,
       fromUser: Boolean
     )
 
     fun onColorChanged(
-      picker: ColorSeekBar<C>,
+      picker: S,
       color: C,
       value: Int
     )
+  }
+
+  open class DefaultOnColorPickListener<S : ColorSeekBar<C>, C : Color> :
+    OnColorPickListener<S, C> {
+    override fun onColorPicking(
+      picker: S,
+      color: C,
+      value: Int,
+      fromUser: Boolean
+    ) {
+
+    }
+
+    override fun onColorPicked(
+      picker: S,
+      color: C,
+      value: Int,
+      fromUser: Boolean
+    ) {
+
+    }
+
+    override fun onColorChanged(
+      picker: S,
+      color: C,
+      value: Int
+    ) {
+
+    }
   }
 }

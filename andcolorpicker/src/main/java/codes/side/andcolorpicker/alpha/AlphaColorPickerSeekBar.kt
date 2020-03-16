@@ -7,7 +7,9 @@ import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.factory.ColorFactory
 
 // TODO: Think on making that non-abstract
-abstract class AlphaColorPickerSeekBar<C : Color<C>> : ColorSeekBar<C> {
+// TODO: Think on adding AlphaColor layer
+abstract class AlphaColorPickerSeekBar<C : Color> :
+  ColorSeekBar<C> {
   constructor(colorFactory: ColorFactory<C>, context: Context) : super(
     colorFactory,
     context

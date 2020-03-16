@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import androidx.core.graphics.ColorUtils
 import codes.side.andcolorpicker.ColorSeekBar
 import codes.side.andcolorpicker.R
+import codes.side.andcolorpicker.converter.HSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
 
@@ -43,6 +44,9 @@ class HSLColorPickerSeekBar :
       )
     }
   }
+
+  override val colorConverter: HSLColorConverter
+    get() = super.colorConverter as HSLColorConverter
 
   private var modeInitialized = false
   var mode: Mode
@@ -207,7 +211,7 @@ class HSLColorPickerSeekBar :
             progressDrawableSaturationColorsCache.also {
               it[0] =
                 ZERO_SATURATION_COLOR_INT
-              it[1] = internalPickedColor.localConverter.convertToPureColorInt()
+              it[1] = colorConverter.convertToPureColorInt(internalPickedColor)
             }
           }
           ColoringMode.OUTPUT_COLOR -> {
@@ -216,7 +220,7 @@ class HSLColorPickerSeekBar :
             progressDrawableSaturationColorsCache.also {
               it[0] =
                 ColorUtils.HSLToColor(zeroSaturationOutputColorHSLCache)
-              it[1] = internalPickedColor.localConverter.convertToColorInt()
+              it[1] = colorConverter.convertToColorInt(internalPickedColor)
             }
           }
         }
@@ -225,7 +229,7 @@ class HSLColorPickerSeekBar :
         progressDrawableLightnessColorsCache.also {
           it[0] = Color.BLACK
           it[1] = when (coloringMode) {
-            ColoringMode.PURE_COLOR -> internalPickedColor.localConverter.convertToPureColorInt()
+            ColoringMode.PURE_COLOR -> colorConverter.convertToPureColorInt(internalPickedColor)
             ColoringMode.OUTPUT_COLOR -> internalPickedColor.hsColorInt
           }
           it[2] = Color.WHITE
@@ -319,48 +323,54 @@ class HSLColorPickerSeekBar :
         Mode.MODE_HUE -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
-              internalPickedColor.localConverter.convertToPureColorInt()
+              colorConverter.convertToPureColorInt(internalPickedColor)
             }
             ColoringMode.OUTPUT_COLOR -> {
-              internalPickedColor.localConverter.convertToColorInt()
+              colorConverter.convertToColorInt(internalPickedColor)
             }
           }
         }
         Mode.MODE_SATURATION -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
-              paintDrawableStrokeSaturationHSLCache.also {
-                it.setFromHSL(
-                  internalPickedColor.intH.toFloat(),
-                  progress / mode.maxProgress.toFloat(),
-                  IntegerHSLColor.DEFAULT_L
-                )
-              }.localConverter.convertToColorInt()
+              colorConverter.convertToColorInt(
+                paintDrawableStrokeSaturationHSLCache.also {
+                  it.setFromHSL(
+                    internalPickedColor.intH.toFloat(),
+                    progress / mode.maxProgress.toFloat(),
+                    IntegerHSLColor.DEFAULT_L
+                  )
+                }
+              )
             }
             ColoringMode.OUTPUT_COLOR -> {
-              internalPickedColor.localConverter.convertToColorInt()
+              colorConverter.convertToColorInt(internalPickedColor)
             }
           }
         }
         Mode.MODE_LIGHTNESS -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
-              paintDrawableStrokeLightnessHSLCache.also {
-                it.setFromHSL(
-                  internalPickedColor.floatH,
-                  IntegerHSLColor.DEFAULT_S,
-                  internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
-                )
-              }.localConverter.convertToColorInt()
+              colorConverter.convertToColorInt(
+                paintDrawableStrokeLightnessHSLCache.also {
+                  it.setFromHSL(
+                    internalPickedColor.floatH,
+                    IntegerHSLColor.DEFAULT_S,
+                    internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                  )
+                }
+              )
             }
             ColoringMode.OUTPUT_COLOR -> {
-              paintDrawableStrokeLightnessHSLCache.also {
-                it.setFromHSL(
-                  internalPickedColor.floatH,
-                  internalPickedColor.floatS,
-                  internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
-                )
-              }.localConverter.convertToColorInt()
+              colorConverter.convertToColorInt(
+                paintDrawableStrokeLightnessHSLCache.also {
+                  it.setFromHSL(
+                    internalPickedColor.floatH,
+                    internalPickedColor.floatS,
+                    internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                  )
+                }
+              )
             }
           }
         }
@@ -398,5 +408,36 @@ class HSLColorPickerSeekBar :
       0,
       100
     )
+  }
+
+  interface OnColorPickListener :
+    ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor>
+
+  open class DefaultOnColorPickListener : OnColorPickListener {
+    override fun onColorPicking(
+      picker: ColorSeekBar<IntegerHSLColor>,
+      color: IntegerHSLColor,
+      value: Int,
+      fromUser: Boolean
+    ) {
+
+    }
+
+    override fun onColorPicked(
+      picker: ColorSeekBar<IntegerHSLColor>,
+      color: IntegerHSLColor,
+      value: Int,
+      fromUser: Boolean
+    ) {
+
+    }
+
+    override fun onColorChanged(
+      picker: ColorSeekBar<IntegerHSLColor>,
+      color: IntegerHSLColor,
+      value: Int
+    ) {
+
+    }
   }
 }

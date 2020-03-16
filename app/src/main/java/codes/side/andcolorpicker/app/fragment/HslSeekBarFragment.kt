@@ -16,7 +16,6 @@ import codes.side.andcolorpicker.converter.*
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
-import codes.side.andcolorpicker.listener.DefaultOnColorPickListener
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
@@ -57,7 +56,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(colorTextView)
 
     hueColorPickerSeekBar.addListener(
-      object : DefaultOnColorPickListener<IntegerHSLColor>() {
+      object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerHSLColor>,
           color: IntegerHSLColor,
@@ -68,10 +67,15 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       }
     )
 
+    pickerGroup.registerPicker(
+      hueColorPickerSeekBar
+    )
+
     pickerGroup.registerPickers(
       hueColorPickerSeekBar,
       saturationColorPickerSeekBar,
       lightnessColorPickerSeekBar,
+      alphaColorPickerSeekBar,
       dynamicColorPickerSeekBar
     )
 

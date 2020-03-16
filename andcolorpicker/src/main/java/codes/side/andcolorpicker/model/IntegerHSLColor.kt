@@ -2,14 +2,14 @@ package codes.side.andcolorpicker.model
 
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
-import codes.side.andcolorpicker.converter.BoundHSLColorConverter
 import codes.side.andcolorpicker.converter.HSLColorConverter
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 // TODO: Invent hierarchy
 // TODO: Provide precision options
-class IntegerHSLColor : Color<IntegerHSLColor> {
+class IntegerHSLColor :
+  Color {
   companion object {
     const val H_INDEX = 0
     const val S_INDEX = 1
@@ -44,9 +44,7 @@ class IntegerHSLColor : Color<IntegerHSLColor> {
     }
   }
 
-  override val converter = CONVERTER
-
-  override val localConverter = BoundHSLColorConverter(this)
+  override val colorKey = ColorKey.HSL
 
   override val alpha: Float
     get() {
