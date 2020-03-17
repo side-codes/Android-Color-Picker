@@ -6,14 +6,12 @@ import android.graphics.Shader
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.factory.ColorFactory
 import codes.side.andcolorpicker.view.ColorSeekBar
 
-// TODO: Add modes support
 // TODO: Minimize resource reads
 // TODO: Make bg_transparency_pattern programmatic
 // TODO: Think on making that non-abstract
@@ -90,29 +88,5 @@ abstract class AlphaColorPickerSeekBar<C : Color> @JvmOverloads constructor(
     super.refreshProperties()
     // TODO: Pull to constants
     max = 100
-  }
-
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
-      when (it) {
-        is GradientDrawable -> {
-          paintThumbStroke(it)
-        }
-        is LayerDrawable -> {
-          paintThumbStroke(it.getDrawable(0) as GradientDrawable)
-        }
-      }
-    }
-  }
-
-  private fun paintThumbStroke(drawable: GradientDrawable) {
-    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
-
-    drawable.setStroke(
-      thumbStrokeWidthPx,
-      colorConverter.convertToColorInt(internalPickedColor)
-    )
   }
 }

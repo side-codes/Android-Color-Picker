@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
+import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.HSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
 import codes.side.andcolorpicker.view.ColorSeekBar
 
+// TODO: Add modes support
 class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
@@ -47,6 +49,30 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
   override fun refreshProgressFromCurrentColor() {
     super.refreshProgressFromCurrentColor()
     progress = internalPickedColor.intA
+  }
+
+  override fun refreshThumb() {
+    super.refreshThumb()
+
+    coloringDrawables.forEach {
+      when (it) {
+        is GradientDrawable -> {
+          paintThumbStroke(it)
+        }
+        is LayerDrawable -> {
+          paintThumbStroke(it.getDrawable(0) as GradientDrawable)
+        }
+      }
+    }
+  }
+
+  private fun paintThumbStroke(drawable: GradientDrawable) {
+    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
+
+    drawable.setStroke(
+      thumbStrokeWidthPx,
+      colorConverter.convertToPureColorInt(internalPickedColor)
+    )
   }
 
   interface OnColorPickListener :
