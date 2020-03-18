@@ -139,7 +139,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
 
   @SuppressLint("SetTextI18n")
   private fun colorize(color: IntegerHSLColor) {
-    val contrastColor = color.getContrastColor()
+    val contrastColor = color.toContrastColor()
     colorizeHSLColorCache.setFromHSLColor(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
@@ -147,16 +147,16 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       when (it) {
         is MaterialButton -> {
           it.setTextColor(contrastColor)
-          it.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.convertToColorInt())
+          it.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
           it.iconTint = ColorStateList.valueOf(contrastColor)
         }
         is RadioButton -> {
-          it.buttonTintList = ColorStateList.valueOf(colorizeHSLColorCache.convertToColorInt())
+          it.buttonTintList = ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
         }
-        // Any other TextView is considered as true color holder
+        // Any other TextView is considered as raw color holder
         is TextView -> {
           it.setTextColor(contrastColor)
-          it.setBackgroundColor(color.convertToColorInt())
+          it.setBackgroundColor(color.toColorInt())
           it.compoundDrawables.first().setTintList(ColorStateList.valueOf(contrastColor))
         }
       }
@@ -166,9 +166,13 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       "RGB: [${color.getRInt()} ${color.getGInt()} ${color.getBInt()}]\n" +
           "HEX: ${String.format(
             "#%06X",
-            0xFFFFFF and color.convertToColorInt()
+            0xFFFFFF and color.toColorInt()
           )}\n" +
-          "HSL: $color"
+          "HSL: [${color.intH} ${color.intS} ${color.intL}]\n" +
+          "Alpha: ${String.format(
+            "%.2f",
+            color.alpha
+          )}"
 
     colorizationConsumer?.colorize(color)
   }

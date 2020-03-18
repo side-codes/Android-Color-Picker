@@ -7,7 +7,7 @@ import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import androidx.core.graphics.ColorUtils
 import codes.side.andcolorpicker.R
-import codes.side.andcolorpicker.converter.HSLColorConverter
+import codes.side.andcolorpicker.converter.IntegerHSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
 import codes.side.andcolorpicker.view.ColorSeekBar
@@ -18,10 +18,22 @@ import codes.side.andcolorpicker.view.GradientColorSeekBar
 // TODO: Add call flow diagram
 // TODO: Add checks and reduce calls count
 // TODO: Limit used SDK properties usage
-class HSLColorPickerSeekBar :
-  GradientColorSeekBar<IntegerHSLColor> {
+class HSLColorPickerSeekBar @JvmOverloads constructor(
+  context: Context,
+  attrs: AttributeSet? = null,
+  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+) :
+  GradientColorSeekBar<IntegerHSLColor>(
+    HSLColorFactory(),
+    context,
+    attrs,
+    defStyle
+  ) {
   companion object {
     private const val TAG = "AndColorPickerSeekBar"
+
+    private val DEFAULT_MODE = Mode.MODE_HUE
+    private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
 
     // TODO: Make configurable
     private const val COERCE_AT_MOST_LIGHTNING = 0.9f
@@ -47,17 +59,21 @@ class HSLColorPickerSeekBar :
     }
   }
 
-  override val colorConverter: HSLColorConverter
-    get() = super.colorConverter as HSLColorConverter
+  override val colorConverter: IntegerHSLColorConverter
+    get() = super.colorConverter as IntegerHSLColorConverter
 
   private var modeInitialized = false
+  private var _mode: Mode? = null
   var mode: Mode
+    get() {
+      return requireNotNull(_mode) { "Mode is not initialized yet" }
+    }
     set(value) {
       modeInitialized = true
-      if (field == value) {
+      if (_mode == value) {
         return
       }
-      field = value
+      _mode = value
       refreshProperties()
       refreshProgressFromCurrentColor()
       refreshProgressDrawable()
@@ -65,13 +81,17 @@ class HSLColorPickerSeekBar :
     }
 
   private var coloringModeInitialized = false
+  private var _coloringMode: ColoringMode? = null
   var coloringMode: ColoringMode
+    get() {
+      return requireNotNull(_coloringMode) { "Coloring mode is not initialized yet" }
+    }
     set(value) {
       coloringModeInitialized = true
-      if (field == value) {
+      if (_coloringMode == value) {
         return
       }
-      field = value
+      _coloringMode = value
       refreshProgressDrawable()
       refreshThumb()
     }
@@ -88,65 +108,32 @@ class HSLColorPickerSeekBar :
     FloatArray(3)
   }
 
+  private val thumbStrokeWidthPx by lazy {
+    resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
+  }
+
   init {
-    mode = Mode.MODE_HUE
-    coloringMode = ColoringMode.PURE_COLOR
-  }
-
-  // TODO: Make use of JvmOverloads
-  constructor(context: Context) : super(
-    HSLColorFactory(),
-    context
-  ) {
-    init()
-  }
-
-  constructor(
-    context: Context,
-    attrs: AttributeSet?
-  ) : super(
-    HSLColorFactory(),
-    context,
-    attrs
-  ) {
-    init(attrs)
-  }
-
-  constructor(
-    context: Context,
-    attrs: AttributeSet?,
-    defStyleAttr: Int
-  ) : super(
-    HSLColorFactory(),
-    context,
-    attrs,
-    defStyleAttr
-  ) {
     init(attrs)
   }
 
   private fun init(attrs: AttributeSet? = null) {
-    if (attrs != null) {
-      val typedArray = context.theme.obtainStyledAttributes(
-        attrs,
-        R.styleable.HSLColorPickerSeekBar,
-        0,
-        0
-      )
+    val typedArray = context.theme.obtainStyledAttributes(
+      attrs,
+      R.styleable.HSLColorPickerSeekBar,
+      0,
+      0
+    )
 
-      try {
-        mode = Mode.values()[typedArray.getInteger(
-          R.styleable.HSLColorPickerSeekBar_mode,
-          0
-        )]
-        coloringMode = ColoringMode.values()[typedArray.getInteger(
-          R.styleable.HSLColorPickerSeekBar_coloring,
-          0
-        )]
-      } finally {
-        typedArray.recycle()
-      }
-    }
+    mode = Mode.values()[typedArray.getInteger(
+      R.styleable.HSLColorPickerSeekBar_mode,
+      DEFAULT_MODE.ordinal
+    )]
+    coloringMode = ColoringMode.values()[typedArray.getInteger(
+      R.styleable.HSLColorPickerSeekBar_coloring,
+      DEFAULT_COLORING_MODE.ordinal
+    )]
+
+    typedArray.recycle()
   }
 
   override fun setMin(min: Int) {
@@ -170,6 +157,9 @@ class HSLColorPickerSeekBar :
 
   override fun refreshProperties() {
     super.refreshProperties()
+    if (!modeInitialized) {
+      return
+    }
     max = mode.maxProgress
   }
 
@@ -213,7 +203,7 @@ class HSLColorPickerSeekBar :
             progressDrawableSaturationColorsCache.also {
               it[0] =
                 ZERO_SATURATION_COLOR_INT
-              it[1] = colorConverter.convertToPureColorInt(internalPickedColor)
+              it[1] = colorConverter.convertToPureHueColorInt(internalPickedColor)
             }
           }
           ColoringMode.OUTPUT_COLOR -> {
@@ -231,7 +221,7 @@ class HSLColorPickerSeekBar :
         progressDrawableLightnessColorsCache.also {
           it[0] = Color.BLACK
           it[1] = when (coloringMode) {
-            ColoringMode.PURE_COLOR -> colorConverter.convertToPureColorInt(internalPickedColor)
+            ColoringMode.PURE_COLOR -> colorConverter.convertToPureHueColorInt(internalPickedColor)
             ColoringMode.OUTPUT_COLOR -> internalPickedColor.hsColorInt
           }
           it[2] = Color.WHITE
@@ -258,6 +248,10 @@ class HSLColorPickerSeekBar :
   // Bypass color setter
   override fun refreshInternalPickedColorFromProgress() {
     super.refreshInternalPickedColorFromProgress()
+
+    if (!modeInitialized) {
+      return
+    }
 
     val currentProgress = progress
     // TODO: Use Atomic and compare/set?
@@ -299,6 +293,10 @@ class HSLColorPickerSeekBar :
   override fun refreshProgressFromCurrentColor() {
     super.refreshProgressFromCurrentColor()
 
+    if (!modeInitialized) {
+      return
+    }
+
     progress = when (mode) {
       Mode.MODE_HUE -> {
         internalPickedColor.intH
@@ -317,15 +315,13 @@ class HSLColorPickerSeekBar :
       return
     }
 
-    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
-
     drawable.setStroke(
       thumbStrokeWidthPx,
       when (mode) {
         Mode.MODE_HUE -> {
           when (coloringMode) {
             ColoringMode.PURE_COLOR -> {
-              colorConverter.convertToPureColorInt(internalPickedColor)
+              colorConverter.convertToPureHueColorInt(internalPickedColor)
             }
             ColoringMode.OUTPUT_COLOR -> {
               colorConverter.convertToColorInt(internalPickedColor)

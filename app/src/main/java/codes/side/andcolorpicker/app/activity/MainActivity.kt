@@ -15,8 +15,8 @@ import codes.side.andcolorpicker.app.fragment.HslSeekBarFragment
 import codes.side.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
 import codes.side.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
 import codes.side.andcolorpicker.app.fragment.WipFragment
-import codes.side.andcolorpicker.converter.convertToColorInt
-import codes.side.andcolorpicker.converter.getContrastColor
+import codes.side.andcolorpicker.converter.toContrastColor
+import codes.side.andcolorpicker.converter.toOpaqueColorInt
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mikepenz.iconics.IconicsColor
@@ -161,19 +161,19 @@ class MainActivity : AppCompatActivity(),
   }
 
   override fun colorize(color: IntegerHSLColor) {
-    val contrastColor = color.getContrastColor()
+    val contrastColor = color.toContrastColor()
 
     // Overwrite cache for AppBar
     colorizeHSLColorCache.setFromHSLColor(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
     appBarLayout.backgroundTintList =
-      ColorStateList.valueOf(colorizeHSLColorCache.convertToColorInt())
+      ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
 
     // Overwrite cache for StatusBar
     colorizeHSLColorCache.floatL -= 0.1f
 
-    window.statusBarColor = colorizeHSLColorCache.convertToColorInt()
+    window.statusBarColor = colorizeHSLColorCache.toOpaqueColorInt()
 
     toolbar.setTitleTextColor(contrastColor)
     toolbar.setSubtitleTextColor(contrastColor)

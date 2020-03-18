@@ -2,12 +2,14 @@ package codes.side.andcolorpicker.model
 
 import androidx.annotation.ColorInt
 
+// TODO: Add Integer-based color layer/bridge?
 // TODO: Make serializable / parcelable?
 // TODO: Leave as a marker?
 // TODO: Pull everything to factories/converters
 interface Color : Cloneable {
   val colorKey: ColorKey
 
+  // [0, 1]
   val alpha: Float
 
   @Deprecated("Will be moved to converter layer")

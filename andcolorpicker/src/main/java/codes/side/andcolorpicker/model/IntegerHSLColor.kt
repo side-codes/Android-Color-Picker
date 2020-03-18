@@ -2,15 +2,16 @@ package codes.side.andcolorpicker.model
 
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
-import codes.side.andcolorpicker.converter.HSLColorConverter
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+// TODO: Include alpha in array
 // TODO: Invent hierarchy
 // TODO: Provide precision options
-class IntegerHSLColor :
-  Color {
+class IntegerHSLColor : IntegerColor(COMPONENTS_COUNT) {
   companion object {
+    private const val TAG = "IntegerHSLColor"
+    private const val COMPONENTS_COUNT = 3
     const val H_INDEX = 0
     const val S_INDEX = 1
     const val L_INDEX = 2
@@ -23,13 +24,6 @@ class IntegerHSLColor :
       DEFAULT_S,
       DEFAULT_L
     )
-
-    // TODO: Inject
-    private val CONVERTER = HSLColorConverter()
-
-    fun getDefaultHSLValueByIndex(index: Int): Float {
-      return DEFAULT_HSL_VALUES[index]
-    }
 
     fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
       return IntegerHSLColor().also {
@@ -48,17 +42,27 @@ class IntegerHSLColor :
 
   override val alpha: Float
     get() {
-      return intA / 100f
+      return intA / 255f
     }
 
-  private val intValues = IntArray(3)
+  private var _a: Int = 255
+  var intA: Int
+    get() {
+      return _a
+    }
+    set(value) {
+      _a = value.coerceIn(
+        0,
+        255
+      )
+    }
 
   var floatH: Float
     get() {
       return intH.toFloat()
     }
     set(value) {
-      intS = value.toInt()
+      intH = value.toInt()
     }
   var intH: Int
     get() {
@@ -100,17 +104,6 @@ class IntegerHSLColor :
     }
     set(value) {
       intValues[L_INDEX] = value.coerceIn(
-        0,
-        100
-      )
-    }
-  private var _a: Int = 100
-  var intA: Int
-    get() {
-      return _a
-    }
-    set(value) {
-      _a = value.coerceIn(
         0,
         100
       )
@@ -164,6 +157,7 @@ class IntegerHSLColor :
 
   fun setFromHSLColor(hslColor: IntegerHSLColor) {
     hslColor.copyValuesTo(intValues)
+    intA = hslColor.intA
   }
 
   // FIXME: Unsafe, provide checks
@@ -180,10 +174,6 @@ class IntegerHSLColor :
     return IntegerHSLColor().also {
       it.setFromHSLColor(this)
     }
-  }
-
-  override fun toString(): String {
-    return "HSLColor(a=$intA, values=${intValues.contentToString()})"
   }
 
   override fun equals(other: Any?): Boolean {

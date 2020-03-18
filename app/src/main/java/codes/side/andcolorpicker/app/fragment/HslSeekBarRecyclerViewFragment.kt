@@ -6,7 +6,7 @@ import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.converter.convertToColorInt
+import codes.side.andcolorpicker.converter.toColorInt
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.view.ColorSeekBar
@@ -32,7 +32,7 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
     repeat(100) {
       items.add(
         HSLItem(
-          IntegerHSLColor.createRandomColor(true).convertToColorInt()
+          IntegerHSLColor.createRandomColor(true).toColorInt()
         )
       )
     }
@@ -79,7 +79,7 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
           it.floatL += 0.45f
         }
         itemView.cardView.setCardBackgroundColor(
-          hslColor.convertToColorInt()
+          hslColor.toColorInt()
         )
       }
     }

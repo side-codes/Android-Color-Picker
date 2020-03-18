@@ -20,6 +20,7 @@ import codes.side.andcolorpicker.util.marker
 // TODO: Minimize resource reads
 // TODO: Split on gradient-based and custom inheritance tree
 // TODO: Make color not generic, but bridge component
+// CONTRACT: Make sure to place all needed state checks on virtual methods and refresh in init if needed
 @Suppress(
   "ConstantConditionIf",
   "LeakingThis"
@@ -69,7 +70,6 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       return _pickedColor
     }
 
-  // TODO: Revisit cast
   protected open val colorConverter: ColorConverter
     get() {
       return ColorConverterHub.getConverterByKey(internalPickedColor.colorKey)
@@ -94,6 +94,11 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     setupBackground()
     setupProgressDrawable()
     setupThumb()
+
+    refreshProperties()
+    refreshProgressFromCurrentColor()
+    refreshProgressDrawable()
+    refreshThumb()
   }
 
   private fun setupBackground() {

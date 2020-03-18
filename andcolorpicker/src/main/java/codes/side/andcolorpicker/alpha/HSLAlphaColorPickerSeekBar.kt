@@ -5,7 +5,7 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import codes.side.andcolorpicker.R
-import codes.side.andcolorpicker.converter.HSLColorConverter
+import codes.side.andcolorpicker.converter.IntegerHSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
 import codes.side.andcolorpicker.view.ColorSeekBar
@@ -23,8 +23,25 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
     defStyle
   ) {
 
-  override val colorConverter: HSLColorConverter
-    get() = super.colorConverter as HSLColorConverter
+  private var isInitialized = false
+
+  private val thumbStrokeWidthPx by lazy {
+    resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
+  }
+
+  override val colorConverter: IntegerHSLColorConverter
+    get() = super.colorConverter as IntegerHSLColorConverter
+
+  init {
+    isInitialized = true
+    refreshProperties()
+  }
+
+  override fun refreshProperties() {
+    super.refreshProperties()
+    // TODO: Pull to constants
+    max = 255
+  }
 
   override fun refreshProgressDrawable() {
     super.refreshProgressDrawable()
@@ -32,7 +49,7 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
     ((progressDrawable as LayerDrawable).getDrawable(1) as GradientDrawable).colors =
       intArrayOf(
         android.graphics.Color.TRANSPARENT,
-        colorConverter.convertToPureColorInt(internalPickedColor)
+        colorConverter.convertToOpaqueColorInt(internalPickedColor)
       )
   }
 
@@ -67,11 +84,13 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
   }
 
   private fun paintThumbStroke(drawable: GradientDrawable) {
-    val thumbStrokeWidthPx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
+    if (!isInitialized) {
+      return
+    }
 
     drawable.setStroke(
       thumbStrokeWidthPx,
-      colorConverter.convertToPureColorInt(internalPickedColor)
+      colorConverter.convertToColorInt(internalPickedColor)
     )
   }
 

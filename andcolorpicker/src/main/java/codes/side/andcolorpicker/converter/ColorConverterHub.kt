@@ -8,7 +8,7 @@ object ColorConverterHub {
   init {
     registerConverter(
       ColorKey.HSL,
-      HSLColorConverter()
+      IntegerHSLColorConverter()
     )
   }
 

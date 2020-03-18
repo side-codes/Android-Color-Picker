@@ -83,10 +83,4 @@ abstract class AlphaColorPickerSeekBar<C : Color> @JvmOverloads constructor(
 
     return layerList.toTypedArray()
   }
-
-  override fun refreshProperties() {
-    super.refreshProperties()
-    // TODO: Pull to constants
-    max = 100
-  }
 }
