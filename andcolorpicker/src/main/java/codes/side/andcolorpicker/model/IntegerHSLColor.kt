@@ -6,7 +6,6 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 // TODO: Include alpha in array
-// TODO: Invent hierarchy
 // TODO: Provide precision options
 class IntegerHSLColor : IntegerColor(COMPONENTS_COUNT) {
   companion object {

@@ -2,7 +2,6 @@ package codes.side.andcolorpicker.model
 
 import androidx.annotation.ColorInt
 
-// TODO: Add Integer-based color layer/bridge?
 // TODO: Make serializable / parcelable?
 // TODO: Leave as a marker?
 // TODO: Pull everything to factories/converters

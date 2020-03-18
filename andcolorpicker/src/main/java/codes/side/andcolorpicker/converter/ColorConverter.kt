@@ -3,7 +3,6 @@ package codes.side.andcolorpicker.converter
 import androidx.annotation.ColorInt
 import codes.side.andcolorpicker.model.Color
 
-// TODO: Provide alpha support
 interface ColorConverter {
   @ColorInt
   fun convertToOpaqueColorInt(color: Color): Int
