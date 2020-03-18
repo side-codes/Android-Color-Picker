@@ -14,5 +14,5 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:listitem="@layout/layout_item_hsl_seekbar" />
+    tools:listitem="@layout/layout_item_hsl_seek_bar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

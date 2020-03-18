@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.app.fragment.HslSeekBarFragment
-import codes.side.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
-import codes.side.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
+import codes.side.andcolorpicker.app.fragment.HSLSeekBarFragment
+import codes.side.andcolorpicker.app.fragment.HSLSeekBarGithubSampleFragment
+import codes.side.andcolorpicker.app.fragment.HSLSeekBarRecyclerViewFragment
 import codes.side.andcolorpicker.app.fragment.WipFragment
 import codes.side.andcolorpicker.converter.toContrastColor
 import codes.side.andcolorpicker.converter.toOpaqueColorInt
@@ -189,21 +189,26 @@ class MainActivity : AppCompatActivity(),
     HLS_SEEK_BAR(
       "HSL SeekBar",
       MaterialDesignDx.Icon.gmf_space_bar,
-      { HslSeekBarFragment() }
+      { HSLSeekBarFragment() }
     ),
     HLS_SEEK_BAR_RV(
       "HSL SeekBar RecyclerView",
       MaterialDesignDx.Icon.gmf_list,
-      { HslSeekBarRecyclerViewFragment() }
+      { HSLSeekBarRecyclerViewFragment() }
     ),
     HLS_SEEK_BAR_GITHUB(
       "HSL SeekBar GitHub",
       FontAwesome.Icon.faw_github,
-      { HslSeekBarGithubSampleFragment() }
+      { HSLSeekBarGithubSampleFragment() }
     ),
     HLS_PLANE(
       "HSL Plane",
       MaterialDesignDx.Icon.gmf_fullscreen,
+      { WipFragment() }
+    ),
+    CMYK_SEEK_BAR(
+      "CMYK SeekBar",
+      MaterialDesignDx.Icon.gmf_print,
       { WipFragment() }
     ),
     RGB_SEEK_BAR(

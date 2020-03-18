@@ -13,10 +13,10 @@ import codes.side.andcolorpicker.view.ColorSeekBar
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import kotlinx.android.synthetic.main.fragment_hsl_seekbar_recyclerview.*
-import kotlinx.android.synthetic.main.layout_item_hsl_seekbar.view.*
+import kotlinx.android.synthetic.main.fragment_hsl_seek_bar_recyclerview.*
+import kotlinx.android.synthetic.main.layout_item_hsl_seek_bar.view.*
 
-class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_recyclerview) {
+class HSLSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seek_bar_recyclerview) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
       view,
@@ -85,7 +85,7 @@ class HslSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seekbar_re
     }
 
     override val layoutRes: Int
-      get() = R.layout.layout_item_hsl_seekbar
+      get() = R.layout.layout_item_hsl_seek_bar
     override val type: Int
       get() = 0
 

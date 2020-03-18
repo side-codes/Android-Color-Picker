@@ -24,11 +24,11 @@ import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
 import com.mikepenz.iconics.utils.icon
 import com.mikepenz.iconics.utils.padding
 import com.mikepenz.iconics.utils.size
-import kotlinx.android.synthetic.main.fragment_hsl_seekbar.*
+import kotlinx.android.synthetic.main.fragment_hsl_seek_bar.*
 
-class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
+class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
   companion object {
-    private const val TAG = "HslSeekBarFragment"
+    private const val TAG = "HSLSeekBarFragment"
     private const val colorTextViewIconSizeDp = 24
     private const val colorTextViewIconPaddingDp = 6
   }

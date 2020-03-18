@@ -6,12 +6,12 @@
 ## Roadmap
 
 - [ ] Add more picker types
-    - [x] HLS seekbars
-    - [ ] RGB seekbars
+    - [x] HLS SeekBars
+    - [ ] RGB SeekBars
     - [ ] RGB circle
     - [ ] RGB plane
-    - [ ] CMYK seekbars
-    - [ ] Alpha seekbar
+    - [ ] CMYK SeekBars
+    - [ ] Alpha SeekBars
     - [ ] HSL (S+L) plane
     - [ ] Swatches
 - [x] Sample buttons -> radios

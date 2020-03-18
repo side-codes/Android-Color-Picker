@@ -13,11 +13,11 @@ import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.ColoringMode
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.Mode
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.view.ColorSeekBar
-import kotlinx.android.synthetic.main.fragment_hsl_seekbar_github_sample.*
+import kotlinx.android.synthetic.main.fragment_hsl_seek_bar_github_sample.*
 
-class HslSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seekbar_github_sample) {
+class HSLSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seek_bar_github_sample) {
   companion object {
-    private const val TAG = "HslSeekBarGithubSampleFragment"
+    private const val TAG = "HSLSeekBarGithubSampleFragment"
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
