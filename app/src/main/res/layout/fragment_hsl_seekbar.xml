@@ -23,13 +23,21 @@
       app:cardUseCompatPadding="true"
       app:layout_constraintTop_toTopOf="parent">
 
-      <TextView
-        android:id="@+id/colorTextView"
+      <FrameLayout
+        android:id="@+id/colorContainerFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp"
-        tools:background="@color/colorPrimary"
-        tools:text="#FFFFFF" />
+        android:background="@drawable/bg_transparency_pattern"
+        android:backgroundTint="@color/colorTransparencyTileTint">
+
+        <TextView
+          android:id="@+id/colorTextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="4dp"
+          tools:background="@color/colorPrimary"
+          tools:text="#FFFFFF" />
+      </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <TextView

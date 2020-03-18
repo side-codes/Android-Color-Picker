@@ -31,10 +31,36 @@ fun Color.getBInt(): Int {
 }
 
 @ColorInt
-fun Color.toContrastColor(): Int {
-  return if (alpha < 0.5f || (getRInt() * 0.299f + getGInt() * 0.587f + getBInt() * 0.114f > 186)) {
+fun Color.toContrastColor(mode: ContrastColorAlphaMode = ContrastColorAlphaMode.NONE): Int {
+  val black = (getRInt() * 0.299f + getGInt() * 0.587f + getBInt() * 0.114f > 186)
+  val highAlphaContrastColor = if (black) {
     android.graphics.Color.BLACK
   } else {
     android.graphics.Color.WHITE
   }
+  return when (mode) {
+    ContrastColorAlphaMode.NONE -> {
+      highAlphaContrastColor
+    }
+    ContrastColorAlphaMode.LIGHT_BACKGROUND -> {
+      if (alpha < 0.5f) {
+        android.graphics.Color.BLACK
+      } else {
+        highAlphaContrastColor
+      }
+    }
+    ContrastColorAlphaMode.DARK_BACKGROUND -> {
+      if (alpha < 0.5f) {
+        android.graphics.Color.WHITE
+      } else {
+        highAlphaContrastColor
+      }
+    }
+  }
+}
+
+enum class ContrastColorAlphaMode {
+  NONE,
+  LIGHT_BACKGROUND,
+  DARK_BACKGROUND
 }

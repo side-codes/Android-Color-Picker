@@ -53,6 +53,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(pureRadioButton)
     colorfulViews.add(outputRadioButton)
     colorfulViews.add(setRandomColorButton)
+    colorfulViews.add(colorContainerFrameLayout)
     colorfulViews.add(colorTextView)
 
     hueColorPickerSeekBar.addListener(
@@ -140,24 +141,26 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
   @SuppressLint("SetTextI18n")
   private fun colorize(color: IntegerHSLColor) {
     val contrastColor = color.toContrastColor()
+    val alphaContrastColor = color.toContrastColor(ContrastColorAlphaMode.LIGHT_BACKGROUND)
     colorizeHSLColorCache.setFromHSLColor(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
+    val opaqueColorInt = colorizeHSLColorCache.toOpaqueColorInt()
     colorfulViews.forEach {
       when (it) {
         is MaterialButton -> {
           it.setTextColor(contrastColor)
-          it.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
+          it.backgroundTintList = ColorStateList.valueOf(opaqueColorInt)
           it.iconTint = ColorStateList.valueOf(contrastColor)
         }
         is RadioButton -> {
-          it.buttonTintList = ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
+          it.buttonTintList = ColorStateList.valueOf(opaqueColorInt)
         }
         // Any other TextView is considered as raw color holder
         is TextView -> {
-          it.setTextColor(contrastColor)
+          it.setTextColor(alphaContrastColor)
           it.setBackgroundColor(color.toColorInt())
-          it.compoundDrawables.first().setTintList(ColorStateList.valueOf(contrastColor))
+          it.compoundDrawables.first().setTintList(ColorStateList.valueOf(alphaContrastColor))
         }
       }
     }
