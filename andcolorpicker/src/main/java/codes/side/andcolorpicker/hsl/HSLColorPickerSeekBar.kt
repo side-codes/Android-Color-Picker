@@ -125,11 +125,11 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     )
 
     mode = Mode.values()[typedArray.getInteger(
-      R.styleable.HSLColorPickerSeekBar_mode,
+      R.styleable.HSLColorPickerSeekBar_hslMode,
       DEFAULT_MODE.ordinal
     )]
     coloringMode = ColoringMode.values()[typedArray.getInteger(
-      R.styleable.HSLColorPickerSeekBar_coloring,
+      R.styleable.HSLColorPickerSeekBar_hslColoringMode,
       DEFAULT_COLORING_MODE.ordinal
     )]
 
@@ -186,7 +186,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
   override fun refreshProgressDrawable() {
     super.refreshProgressDrawable()
 
-    if (!coloringModeInitialized) {
+    if (!coloringModeInitialized || !modeInitialized) {
       return
     }
 

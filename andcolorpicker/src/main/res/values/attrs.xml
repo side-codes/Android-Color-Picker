@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <declare-styleable name="HSLColorPickerSeekBar">
-    <attr name="mode" format="enum">
+    <attr name="hslMode" format="enum">
       <enum name="hue" value="0" />
       <enum name="saturation" value="1" />
       <enum name="lightness" value="2" />
-      <enum name="value" value="3" />
-      <enum name="alpha" value="3" />
     </attr>
-    <attr name="coloring" format="enum">
+    <attr name="hslColoringMode" format="enum">
+      <enum name="pure" value="0" />
+      <enum name="output" value="1" />
+    </attr>
+  </declare-styleable>
+  <declare-styleable name="CMYKColorPickerSeekBar">
+    <attr name="cmykMode" format="enum">
+      <enum name="cyan" value="0" />
+      <enum name="magenta" value="1" />
+      <enum name="yellow" value="2" />
+      <enum name="black" value="3" />
+    </attr>
+    <attr name="cmykColoringMode" format="enum">
       <enum name="pure" value="0" />
       <enum name="output" value="1" />
     </attr>

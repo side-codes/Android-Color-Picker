@@ -1,7 +1,11 @@
 package codes.side.andcolorpicker.cmyk
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
+import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerCMYKColorConverter
 import codes.side.andcolorpicker.model.IntegerCMYKColor
 import codes.side.andcolorpicker.model.factory.CMYKColorFactory
@@ -66,9 +70,25 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     init(attrs)
   }
 
+  // TODO: Attrs
   private fun init(attrs: AttributeSet? = null) {
-    mode = DEFAULT_MODE
-    coloringMode = DEFAULT_COLORING_MODE
+    val typedArray = context.theme.obtainStyledAttributes(
+      attrs,
+      R.styleable.CMYKColorPickerSeekBar,
+      0,
+      0
+    )
+
+    mode = Mode.values()[typedArray.getInteger(
+      R.styleable.CMYKColorPickerSeekBar_cmykMode,
+      DEFAULT_MODE.ordinal
+    )]
+    coloringMode = ColoringMode.values()[typedArray.getInteger(
+      R.styleable.CMYKColorPickerSeekBar_cmykColoringMode,
+      DEFAULT_COLORING_MODE.ordinal
+    )]
+
+    typedArray.recycle()
   }
 
   override fun setMin(min: Int) {
@@ -87,8 +107,50 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
 
   override fun updateInternalPickedColorFrom(value: IntegerCMYKColor) {
     super.updateInternalPickedColorFrom(value)
-    TODO()
-    //internalPickedColor.setFromCMYKColor(value)
+    internalPickedColor.setFrom(value)
+  }
+
+  override fun refreshProperties() {
+    super.refreshProperties()
+    if (!modeInitialized) {
+      return
+    }
+    max = mode.maxProgress
+  }
+
+  override fun refreshProgressDrawable() {
+    super.refreshProgressDrawable()
+
+    if (!coloringModeInitialized || !modeInitialized) {
+      return
+    }
+
+    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
+      Mode.MODE_C -> {
+        when (coloringMode) {
+          ColoringMode.PURE_COLOR -> Mode.MODE_C.checkpoints
+          ColoringMode.OUTPUT_COLOR -> TODO()
+        }
+      }
+      Mode.MODE_M -> {
+        when (coloringMode) {
+          ColoringMode.PURE_COLOR -> Mode.MODE_M.checkpoints
+          ColoringMode.OUTPUT_COLOR -> TODO()
+        }
+      }
+      Mode.MODE_Y -> {
+        when (coloringMode) {
+          ColoringMode.PURE_COLOR -> Mode.MODE_Y.checkpoints
+          ColoringMode.OUTPUT_COLOR -> TODO()
+        }
+      }
+      Mode.MODE_K -> {
+        when (coloringMode) {
+          ColoringMode.PURE_COLOR -> Mode.MODE_K.checkpoints
+          ColoringMode.OUTPUT_COLOR -> TODO()
+        }
+      }
+    }
   }
 
   enum class ColoringMode {
@@ -96,10 +158,42 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     OUTPUT_COLOR
   }
 
-  enum class Mode {
-    MODE_C,
-    MODE_M,
-    MODE_Y,
-    MODE_K,
+  enum class Mode(
+    val minProgress: Int,
+    val maxProgress: Int,
+    val checkpoints: IntArray
+  ) {
+    MODE_C(
+      IntegerCMYKColor.Component.C.minValue,
+      IntegerCMYKColor.Component.C.maxValue,
+      intArrayOf(
+        Color.WHITE,
+        Color.CYAN
+      )
+    ),
+    MODE_M(
+      IntegerCMYKColor.Component.M.minValue,
+      IntegerCMYKColor.Component.M.maxValue,
+      intArrayOf(
+        Color.WHITE,
+        Color.MAGENTA
+      )
+    ),
+    MODE_Y(
+      IntegerCMYKColor.Component.Y.minValue,
+      IntegerCMYKColor.Component.Y.maxValue,
+      intArrayOf(
+        Color.WHITE,
+        Color.YELLOW
+      )
+    ),
+    MODE_K(
+      IntegerCMYKColor.Component.K.minValue,
+      IntegerCMYKColor.Component.K.maxValue,
+      intArrayOf(
+        Color.WHITE,
+        Color.BLACK
+      )
+    ),
   }
 }

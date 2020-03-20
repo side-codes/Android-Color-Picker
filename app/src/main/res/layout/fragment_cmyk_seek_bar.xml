@@ -6,10 +6,38 @@
   android:layout_height="match_parent">
 
   <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
-    android:id="@+id/cCMYKColorPickerSeekBar"
+    android:id="@+id/cyanCMYKColorPickerSeekBar"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+    app:cmykMode="cyan"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
+
+  <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+    android:id="@+id/magentaCMYKColorPickerSeekBar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:cmykMode="magenta"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cyanCMYKColorPickerSeekBar" />
+
+  <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+    android:id="@+id/yellowCMYKColorPickerSeekBar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:cmykMode="yellow"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/magentaCMYKColorPickerSeekBar" />
+
+  <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+    android:id="@+id/blackCMYKColorPickerSeekBar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:cmykMode="black"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/yellowCMYKColorPickerSeekBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,11 +57,11 @@
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="hue"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView"
-      app:mode="hue" />
+      app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView" />
 
     <TextView
       android:id="@+id/saturationTitleTextView"
@@ -80,11 +80,11 @@
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="saturation"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView"
-      app:mode="saturation" />
+      app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView" />
 
     <TextView
       android:id="@+id/lightnessTitleTextView"
@@ -103,11 +103,11 @@
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="lightness"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView"
-      app:mode="lightness" />
+      app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView" />
 
     <TextView
       android:id="@+id/alphaTitleTextView"
@@ -147,11 +147,11 @@
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="hue"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView"
-      app:mode="hue" />
+      app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView" />
 
     <TextView
       android:id="@+id/modeTitleTextView"
