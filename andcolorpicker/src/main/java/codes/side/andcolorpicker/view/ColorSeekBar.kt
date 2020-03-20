@@ -75,6 +75,8 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       return ColorConverterHub.getConverterByKey(internalPickedColor.colorKey)
     }
 
+  var notifyListeners = true
+
   // Dirty hack to stop onProgressChanged while playing with min/max
   private var minUpdating = false
   private var maxUpdating = false
@@ -146,7 +148,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   // Immutable array to limit hacks
-  // Inherited layers may be not fully built by this method invocation moment
+  // Inherited layers may be not fully built by this method invocation time
   protected abstract fun onSetupProgressDrawableLayers(layers: Array<Drawable>): Array<Drawable>
 
   private fun setupThumb() {
@@ -332,6 +334,16 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   protected fun notifyListenersOnColorChanged() {
+    if (!notifyListeners) {
+      if (DEBUG) {
+        Log.d(
+          TAG,
+          "Listeners silenced, but notifyListenersOnColorChanged called"
+        )
+      }
+      return
+    }
+
     colorPickListeners.forEach {
       it.onColorChanged(
         this,
@@ -342,6 +354,16 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   private fun notifyListenersOnColorPicking(fromUser: Boolean) {
+    if (!notifyListeners) {
+      if (DEBUG) {
+        Log.d(
+          TAG,
+          "Listeners silenced, but notifyListenersOnColorPicking called"
+        )
+      }
+      return
+    }
+
     colorPickListeners.forEach {
       it.onColorPicking(
         this,
@@ -353,6 +375,16 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   private fun notifyListenersOnColorPicked(fromUser: Boolean) {
+    if (!notifyListeners) {
+      if (DEBUG) {
+        Log.d(
+          TAG,
+          "Listeners silenced, but notifyListenersOnColorPicked called"
+        )
+      }
+      return
+    }
+
     colorPickListeners.forEach {
       it.onColorPicked(
         this,

@@ -8,6 +8,19 @@ open class PickerGroup<C : Color> :
   Iterable<ColorSeekBar<C>> {
   // Kinda prioritized collection
   private val pickers = linkedSetOf<ColorSeekBar<C>>()
+  private val colorPickListeners = hashSetOf<ColorSeekBar.OnColorPickListener<ColorSeekBar<C>, C>>()
+
+  fun addListener(listener: ColorSeekBar.OnColorPickListener<ColorSeekBar<C>, C>) {
+    colorPickListeners.add(listener)
+  }
+
+  fun removeListener(listener: ColorSeekBar.OnColorPickListener<ColorSeekBar<C>, C>) {
+    colorPickListeners.remove(listener)
+  }
+
+  fun clearListeners() {
+    colorPickListeners.clear()
+  }
 
   fun setColor(color: C) {
     pickers.firstOrNull()?.pickedColor = color
@@ -38,6 +51,14 @@ open class PickerGroup<C : Color> :
       picker,
       color
     )
+    colorPickListeners.forEach {
+      it.onColorPicking(
+        picker,
+        color,
+        value,
+        fromUser
+      )
+    }
   }
 
   override fun onColorPicked(
@@ -50,6 +71,14 @@ open class PickerGroup<C : Color> :
       picker,
       color
     )
+    colorPickListeners.forEach {
+      it.onColorPicked(
+        picker,
+        color,
+        value,
+        fromUser
+      )
+    }
   }
 
   override fun onColorChanged(
@@ -61,14 +90,37 @@ open class PickerGroup<C : Color> :
       picker,
       color
     )
+    colorPickListeners.forEach {
+      it.onColorChanged(
+        picker,
+        color,
+        value
+      )
+    }
   }
 
   private fun notifyGroupOnBroadcastFrom(
     picker: ColorSeekBar<C>,
     color: C
   ) {
+    disableListeners()
     pickers.filter { it != picker }.forEach {
       it.pickedColor = color
+    }
+    enableListeners()
+  }
+
+  private fun disableListeners() {
+    setListenerEnabled(false)
+  }
+
+  private fun enableListeners() {
+    setListenerEnabled(true)
+  }
+
+  private fun setListenerEnabled(isEnabled: Boolean) {
+    pickers.forEach {
+      it.notifyListeners = isEnabled
     }
   }
 

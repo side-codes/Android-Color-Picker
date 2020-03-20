@@ -56,7 +56,7 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
     colorfulViews.add(colorContainerFrameLayout)
     colorfulViews.add(colorTextView)
 
-    hueColorPickerSeekBar.addListener(
+    pickerGroup.addListener(
       object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerHSLColor>,

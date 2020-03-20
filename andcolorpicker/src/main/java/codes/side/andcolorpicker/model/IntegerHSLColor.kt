@@ -3,8 +3,8 @@ package codes.side.andcolorpicker.model
 import androidx.core.graphics.ColorUtils
 import kotlin.random.Random
 
-// TODO: Include alpha in array
 // TODO: Provide precision options
+// TODO: Remove float properties? Move to converters?
 class IntegerHSLColor : IntegerColor(
   COMPONENTS_COUNT,
   DEFAULT_HSL_VALUES
@@ -116,6 +116,7 @@ class IntegerHSLColor : IntegerColor(
       )
     }
 
+  // TODO: Move to converter?
   private val hsColorIntHSLCache = FloatArray(3)
   val hsColorInt: Int
     get() {
@@ -154,7 +155,11 @@ class IntegerHSLColor : IntegerColor(
   // TODO: Make Component top-level?
   // TODO: Make tree?
   // TODO: Use range?
-  enum class Component(val defaultValue: Int, val minValue: Int, val maxValue: Int) {
+  enum class Component(
+    val defaultValue: Int,
+    val minValue: Int,
+    val maxValue: Int
+  ) {
     H(
       0,
       0,

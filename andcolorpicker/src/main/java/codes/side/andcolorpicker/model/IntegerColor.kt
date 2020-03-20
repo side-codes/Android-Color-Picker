@@ -2,7 +2,10 @@ package codes.side.andcolorpicker.model
 
 import android.util.Log
 
-abstract class IntegerColor(componentsCount: Int, defaultValues: IntArray? = null) : Color {
+abstract class IntegerColor(
+  componentsCount: Int,
+  defaultValues: IntArray? = null
+) : Color {
   companion object {
     private const val TAG = "IntegerColor"
   }

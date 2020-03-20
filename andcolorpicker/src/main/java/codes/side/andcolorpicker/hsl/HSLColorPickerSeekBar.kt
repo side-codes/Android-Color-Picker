@@ -255,7 +255,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
 
     val currentProgress = progress
     // TODO: Use Atomic and compare/set?
-    val changed: Boolean = when (mode) {
+    val changed = when (mode) {
       Mode.MODE_HUE -> {
         val currentH = internalPickedColor.intH
         if (currentH != currentProgress) {
@@ -383,7 +383,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
   }
 
   override fun toString(): String {
-    return "HSLColorPickerSeekBar(tag = $tag, _mode=$mode, _currentColor=$internalPickedColor)"
+    return "HSLColorPickerSeekBar(tag = $tag, _mode=${if (modeInitialized) mode else null}, _currentColor=$internalPickedColor)"
   }
 
   enum class ColoringMode {

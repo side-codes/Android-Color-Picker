@@ -1,116 +1,115 @@
 package codes.side.andcolorpicker.model
 
-class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
+// TODO: Remove float properties? Move to converters?
+class IntegerCMYKColor : IntegerColor(
+  COMPONENTS_COUNT,
+  DEFAULT_CMYK_VALUES
+) {
   companion object {
     private const val TAG = "IntegerCMYKColor"
-    private const val COMPONENTS_COUNT = 5
-    private const val MAX_VALUE = 100
+    private val COMPONENTS_COUNT = Component.values().size
 
-    // TODO: To enum?
-    const val C_INDEX = 0
-    const val M_INDEX = 1
-    const val Y_INDEX = 2
-    const val K_INDEX = 3
-    const val A_INDEX = 4
+    private val DEFAULT_CMYK_VALUES = Component
+      .values().map { it.defaultValue }.toIntArray()
   }
 
   override val colorKey = ColorKey.CMYK
 
   override val alpha: Float
     get() {
-      return intA / MAX_VALUE.toFloat()
+      return intA / Component.A.maxValue.toFloat()
     }
 
   var intA: Int
     get() {
-      return intValues[A_INDEX]
+      return intValues[Component.A.index]
     }
     set(value) {
       setValue(
-        A_INDEX,
+        Component.A.index,
         value,
-        0,
-        MAX_VALUE
+        Component.A.minValue,
+        Component.A.maxValue
       )
     }
 
   var floatC: Float
     get() {
-      return intC.toFloat()
+      return intC / Component.C.maxValue.toFloat()
     }
     set(value) {
-      intC = value.toInt()
+      intC = (value * Component.C.maxValue).toInt()
     }
   var intC: Int
     get() {
-      return intValues[C_INDEX]
+      return intValues[Component.C.index]
     }
     set(value) {
       setValue(
-        C_INDEX,
+        Component.C.index,
         value,
-        0,
-        MAX_VALUE
+        Component.C.minValue,
+        Component.C.maxValue
       )
     }
 
   var floatM: Float
     get() {
-      return intM / MAX_VALUE.toFloat()
+      return intM / Component.M.maxValue.toFloat()
     }
     set(value) {
-      intM = (value * MAX_VALUE).toInt()
+      intM = (value * Component.M.maxValue).toInt()
     }
   var intM: Int
     get() {
-      return intValues[M_INDEX]
+      return intValues[Component.M.index]
     }
     set(value) {
       setValue(
-        M_INDEX,
+        Component.M.index,
         value,
-        0,
-        MAX_VALUE
+        Component.M.minValue,
+        Component.M.maxValue
       )
     }
 
   var floatY: Float
     get() {
-      return intY / MAX_VALUE.toFloat()
+      return intY / Component.Y.maxValue.toFloat()
     }
     set(value) {
-      intY = (value * MAX_VALUE).toInt()
+      intY = (value * Component.Y.maxValue).toInt()
     }
   var intY: Int
     get() {
-      return intValues[Y_INDEX]
+      return intValues[Component.Y.index]
     }
     set(value) {
       setValue(
-        Y_INDEX,
+        Component.Y.index,
         value,
-        0,
-        MAX_VALUE
+        Component.Y.minValue,
+        Component.Y.maxValue
       )
     }
 
   var floatK: Float
     get() {
-      return intK / MAX_VALUE.toFloat()
+      return intK / Component.K.maxValue.toFloat()
     }
     set(value) {
-      intK = (value * MAX_VALUE).toInt()
+      intK = (value * Component.K.maxValue).toInt()
     }
   var intK: Int
     get() {
-      return intValues[K_INDEX]
+      return intValues[Component.K.index]
     }
     set(value) {
       setValue(
-        K_INDEX,
+        Component.K.index,
         value,
-        0,
-        MAX_VALUE
+        Component.K.minValue,
+        Component.K.maxValue
       )
     }
 
@@ -121,6 +120,7 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
+    if (!super.equals(other)) return false
 
     other as IntegerCMYKColor
 
@@ -130,6 +130,56 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
   }
 
   override fun hashCode(): Int {
-    return colorKey.hashCode()
+    var result = super.hashCode()
+    result = 31 * result + colorKey.hashCode()
+    return result
+  }
+
+
+  // TODO: Make Component top-level?
+  // TODO: Make tree?
+  // TODO: Use range?
+  enum class Component(
+    val defaultValue: Int,
+    val minValue: Int,
+    val maxValue: Int
+  ) {
+    C(
+      0,
+      0,
+      100
+    ),
+    M(
+      0,
+      0,
+      100
+    ),
+    Y(
+      0,
+      0,
+      100
+    ),
+    K(
+      0,
+      0,
+      100
+    ),
+    A(
+      255,
+      0,
+      255
+    );
+
+    // TODO: Review approach
+    val index: Int
+      get() {
+        return ordinal
+      }
+
+    // TODO: Adapt for non-zero min valies
+    val normalizedDefaultValue: Float
+      get() {
+        return defaultValue / maxValue.toFloat()
+      }
   }
 }
