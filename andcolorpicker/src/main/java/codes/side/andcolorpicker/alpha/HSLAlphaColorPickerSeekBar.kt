@@ -60,7 +60,18 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
 
   override fun refreshInternalPickedColorFromProgress() {
     super.refreshInternalPickedColorFromProgress()
-    internalPickedColor.intA = progress
+    val currentProgress = progress
+    val currentA = internalPickedColor.intA
+    val changed = if (currentA != currentProgress) {
+      internalPickedColor.intA = progress
+      true
+    } else {
+      false
+    }
+
+    if (changed) {
+      notifyListenersOnColorChanged()
+    }
   }
 
   override fun refreshProgressFromCurrentColor() {
