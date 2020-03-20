@@ -135,7 +135,6 @@ class IntegerCMYKColor : IntegerColor(
     return result
   }
 
-
   // TODO: Make Component top-level?
   // TODO: Make tree?
   // TODO: Use range?

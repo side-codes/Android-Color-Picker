@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
+import androidx.core.graphics.ColorUtils
 import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerCMYKColorConverter
 import codes.side.andcolorpicker.model.IntegerCMYKColor
@@ -27,6 +28,9 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
 
     private val DEFAULT_MODE = Mode.MODE_C
     private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
+
+    // TODO: Make configurable
+    private const val COERCE_AT_LEAST_COMPONENT = 15
   }
 
   override val colorConverter: IntegerCMYKColorConverter
@@ -65,6 +69,10 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
       refreshProgressDrawable()
       refreshThumb()
     }
+
+  private val thumbStrokeWidthPx by lazy {
+    resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
+  }
 
   init {
     init(attrs)
@@ -153,11 +161,157 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
+  override fun refreshThumb() {
+    super.refreshThumb()
+
+    coloringDrawables.forEach {
+      when (it) {
+        is GradientDrawable -> {
+          paintThumbStroke(it)
+        }
+        is LayerDrawable -> {
+          paintThumbStroke(it.getDrawable(0) as GradientDrawable)
+        }
+      }
+    }
+  }
+
+  override fun refreshInternalPickedColorFromProgress() {
+    super.refreshInternalPickedColorFromProgress()
+
+    if (!modeInitialized) {
+      return
+    }
+
+    val currentProgress = progress
+    // TODO: Use Atomic and compare/set?
+    val changed = when (mode) {
+      Mode.MODE_C -> {
+        val currentH = internalPickedColor.intC
+        if (currentH != currentProgress) {
+          internalPickedColor.intC = currentProgress
+          true
+        } else {
+          false
+        }
+      }
+      Mode.MODE_M -> {
+        val currentS = internalPickedColor.intM
+        if (currentS != currentProgress) {
+          internalPickedColor.intM = currentProgress
+          true
+        } else {
+          false
+        }
+      }
+      Mode.MODE_Y -> {
+        val currentL = internalPickedColor.intY
+        if (currentL != currentProgress) {
+          internalPickedColor.intY = currentProgress
+          true
+        } else {
+          false
+        }
+      }
+      Mode.MODE_K -> {
+        val currentL = internalPickedColor.intK
+        if (currentL != currentProgress) {
+          internalPickedColor.intK = currentProgress
+          true
+        } else {
+          false
+        }
+      }
+    }
+
+    if (changed) {
+      notifyListenersOnColorChanged()
+    }
+  }
+
+  override fun refreshProgressFromCurrentColor() {
+    super.refreshProgressFromCurrentColor()
+
+    if (!modeInitialized) {
+      return
+    }
+
+    progress = when (mode) {
+      Mode.MODE_C -> {
+        internalPickedColor.intC
+      }
+      Mode.MODE_M -> {
+        internalPickedColor.intM
+      }
+      Mode.MODE_Y -> {
+        internalPickedColor.intY
+      }
+      Mode.MODE_K -> {
+        internalPickedColor.intK
+      }
+    }
+  }
+
+  // TODO: Refactor
+  private fun paintThumbStroke(drawable: GradientDrawable) {
+    if (!coloringModeInitialized || !modeInitialized) {
+      return
+    }
+
+    val currentProgress = progress
+    drawable.setStroke(
+      thumbStrokeWidthPx,
+      when (mode) {
+        Mode.MODE_C -> {
+          when (coloringMode) {
+            ColoringMode.PURE_COLOR -> ColorUtils.blendARGB(
+              Color.WHITE,
+              Color.CYAN,
+              currentProgress.coerceAtLeast(COERCE_AT_LEAST_COMPONENT) / mode.maxProgress.toFloat()
+            )
+            ColoringMode.OUTPUT_COLOR -> TODO()
+          }
+        }
+        Mode.MODE_M -> {
+          when (coloringMode) {
+            ColoringMode.PURE_COLOR -> ColorUtils.blendARGB(
+              Color.WHITE,
+              Color.MAGENTA,
+              currentProgress.coerceAtLeast(COERCE_AT_LEAST_COMPONENT) / mode.maxProgress.toFloat()
+            )
+            ColoringMode.OUTPUT_COLOR -> TODO()
+          }
+        }
+        Mode.MODE_Y -> {
+          when (coloringMode) {
+            ColoringMode.PURE_COLOR -> ColorUtils.blendARGB(
+              Color.WHITE,
+              Color.YELLOW,
+              currentProgress.coerceAtLeast(COERCE_AT_LEAST_COMPONENT) / mode.maxProgress.toFloat()
+            )
+            ColoringMode.OUTPUT_COLOR -> TODO()
+          }
+        }
+        Mode.MODE_K -> {
+          when (coloringMode) {
+            ColoringMode.PURE_COLOR -> ColorUtils.blendARGB(
+              Color.WHITE,
+              Color.BLACK,
+              currentProgress.coerceAtLeast(COERCE_AT_LEAST_COMPONENT) / mode.maxProgress.toFloat()
+            )
+            ColoringMode.OUTPUT_COLOR -> TODO()
+          }
+        }
+      }
+    )
+  }
+
   enum class ColoringMode {
     PURE_COLOR,
     OUTPUT_COLOR
   }
 
+  // TODO: Link mode with value
   enum class Mode(
     val minProgress: Int,
     val maxProgress: Int,
