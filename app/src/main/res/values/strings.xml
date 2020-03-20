@@ -12,4 +12,8 @@
   <string name="title_coloring_mode_output">Output</string>
   <string name="action_set_random_color">Randomize</string>
   <string name="title_work_in_progress">Work In Progress :D</string>
+  <string name="title_cyan">Cyan</string>
+  <string name="title_magenta">Magenta</string>
+  <string name="title_yellow">Yellow</string>
+  <string name="title_key">Key</string>
 </resources>
