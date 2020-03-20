@@ -60,22 +60,35 @@ implementation "codes.side:andcolorpicker:0.1.0"
   android:id="@+id/hueColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:coloring="pure"
-  app:mode="hue" />
+  app:hslColoringMode="pure"
+  app:hslMode="hue" />
 
 <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/saturationColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:coloring="pure"
-  app:mode="saturation" />
+  app:hslColoringMode="pure"
+  app:hslMode="saturation" />
 
 <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/lightnessColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:coloring="pure"
-  app:mode="lightness" />
+  app:hslColoringMode="pure"
+  app:hslMode="lightness" />
+```
+
+### CMYK (cyan, magenta, yellow, key)
+
+![](github/type_cmyk.png)
+
+#### Layout XML Snippet
+```xml
+<codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+  android:id="@+id/cyanCMYKColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:cmykMode="cyan" />
 ```
 
 #### Kotlin Snippet
