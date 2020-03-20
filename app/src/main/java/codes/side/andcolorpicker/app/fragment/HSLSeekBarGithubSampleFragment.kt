@@ -58,14 +58,14 @@ class HSLSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seek_bar_g
     // Set color components programmatically
     hueColorPickerSeekBar.progress = 50
 
-    // Get current color immediatly
+    // Get current color immediately
     Log.d(
       TAG,
       "Current color is ${hueColorPickerSeekBar.pickedColor}"
     )
 
-    // Listen for changes
-    hueColorPickerSeekBar.addListener(
+    // Listen individual pickers or groups for changes
+    pickerGroup.addListener(
       object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerHSLColor>,

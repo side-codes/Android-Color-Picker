@@ -78,19 +78,6 @@ implementation "codes.side:andcolorpicker:0.1.0"
   app:hslMode="lightness" />
 ```
 
-### CMYK (cyan, magenta, yellow, key)
-
-![](github/type_cmyk.png)
-
-#### Layout XML Snippet
-```xml
-<codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
-  android:id="@+id/cyanCMYKColorPickerSeekBar"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  app:cmykMode="cyan" />
-```
-
 #### Kotlin Snippet
 ```kotlin
 // Configure picker color model programmatically
@@ -100,7 +87,7 @@ hueColorPickerSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LI
 hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
 
 // Group pickers with PickerGroup to automatically synchronize color across them
-val pickerGroup = PickerGroup<IntegerHSLColorModel>().also {
+val pickerGroup = PickerGroup<IntegerHSLColor>().also {
   it.registerPickers(
     hueColorPickerSeekBar,
     saturationColorPickerSeekBar,
@@ -110,8 +97,8 @@ val pickerGroup = PickerGroup<IntegerHSLColorModel>().also {
 
 // Set desired color programmatically
 pickerGroup.setColor(
-  IntegerHSLColorModel().also {
-    it.setFromColor(
+  IntegerHSLColor().also {
+    it.setFromColorInt(
       Color.rgb(
         28,
         84,
@@ -124,18 +111,18 @@ pickerGroup.setColor(
 // Set color components programmatically
 hueColorPickerSeekBar.progress = 50
 
-// Get current color immediatly
+// Get current color immediately
 Log.d(
   TAG,
-  "Current color is ${hueColorPickerSeekBar.currentColor}"
+  "Current color is ${hueColorPickerSeekBar.pickedColor}"
 )
 
-// Listen for changes
-hueColorPickerSeekBar.addListener(
-  object : DefaultOnColorPickListener<IntegerHSLColorModel>() {
+// Listen individual pickers or groups for changes
+pickerGroup.addListener(
+  object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
     override fun onColorChanged(
-      picker: ColorSeekBar<IntegerHSLColorModel>,
-      color: IntegerHSLColorModel,
+      picker: ColorSeekBar<IntegerHSLColor>,
+      color: IntegerHSLColor,
       value: Int
     ) {
       Log.d(
@@ -145,6 +132,19 @@ hueColorPickerSeekBar.addListener(
     }
   }
 )
+```
+
+### CMYK (cyan, magenta, yellow, key)
+
+![](github/type_cmyk.png)
+
+#### Layout XML Snippet
+```xml
+<codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+  android:id="@+id/cyanCMYKColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:cmykMode="cyan" />
 ```
 
 ## License
