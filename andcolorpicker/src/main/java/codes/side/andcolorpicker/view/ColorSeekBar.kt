@@ -103,6 +103,9 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     refreshThumb()
   }
 
+  /*
+   * Setups views's background drawable. Adjusts initial thumb ripple size.
+   */
   private fun setupBackground() {
     background = background.mutate()
       .also {
@@ -249,6 +252,9 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  /*
+   * Silently updates internal picked color from value provided.
+   */
   // TODO: Make abstract? Make template?
   protected open fun updateInternalPickedColorFrom(value: C) {
     if (DEBUG) {
@@ -259,6 +265,9 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  /*
+   * Refresh or set basic SeekBar properties like min/max.
+   */
   // TODO: Make abstract? Make template?
   protected open fun refreshProperties() {
     if (DEBUG) {
@@ -269,6 +278,10 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  /*
+   * Synchronizes progress from picked color.
+   */
+  // TODO: Provide color as a parameter?
   // TODO: Make abstract? Make template?
   protected open fun refreshProgressFromCurrentColor() {
     if (DEBUG) {
@@ -279,6 +292,13 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  /*
+   * Synchronizes internal picked color from progress while bypassing public API
+   * pickedColor setter and consequent calls.
+   * CONTRACT: Derived class is responsible for notifying listeners on color change
+   * if needed.
+   */
+  // TODO: Provide color as a parameter?
   // TODO: Make abstract? Make template?
   protected open fun refreshInternalPickedColorFromProgress() {
     if (DEBUG) {
@@ -289,6 +309,11 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
+  /*
+   * Refreshes SeekBar's progress drawable according to derived class details.
+   * CONTRACT: Derived class is responsible for progressDrawable changes if needed.
+   */
+  // TODO: Provide drawable as a parameter?
   // TODO: Make abstract? Make template?
   protected open fun refreshProgressDrawable() {
     if (DEBUG) {
@@ -300,6 +325,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   /**
+   * Refreshes SeekBar's thumb drawable according to derived class details.
    * CONTRACT: Should paint GradientDrawable and first layer of LayerDrawable
    */
   // TODO: Make abstract? Make template?

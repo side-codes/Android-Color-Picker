@@ -245,7 +245,6 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  // Bypass color setter
   override fun refreshInternalPickedColorFromProgress() {
     super.refreshInternalPickedColorFromProgress()
 
