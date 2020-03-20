@@ -10,20 +10,4 @@ class IntegerRGBColor : IntegerColor(COMPONENTS_COUNT) {
 
   override val alpha: Float
     get() = TODO("Not yet implemented")
-
-  override fun setFromHSL(h: Float, s: Float, l: Float) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setFromHSL(hsl: FloatArray) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setFromColor(color: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setFromRGB(r: Int, g: Int, b: Int) {
-    TODO("Not yet implemented")
-  }
 }

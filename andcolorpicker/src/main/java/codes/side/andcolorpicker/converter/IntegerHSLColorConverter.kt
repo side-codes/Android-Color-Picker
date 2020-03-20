@@ -4,14 +4,16 @@ import androidx.core.graphics.ColorUtils
 import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.IntegerHSLColor
 
+// Should it be generic?
 class IntegerHSLColorConverter : ColorConverter {
   private val convertToColorIntHSLCache = FloatArray(3)
   override fun convertToOpaqueColorInt(color: Color): Int {
     require(color is IntegerHSLColor) { "Unsupported color type supplied" }
 
-    convertToColorIntHSLCache[IntegerHSLColor.H_INDEX] = color.floatH
-    convertToColorIntHSLCache[IntegerHSLColor.S_INDEX] = color.floatS
-    convertToColorIntHSLCache[IntegerHSLColor.L_INDEX] = color.floatL
+    // TODO: Simplify
+    convertToColorIntHSLCache[IntegerHSLColor.Component.H.index] = color.floatH
+    convertToColorIntHSLCache[IntegerHSLColor.Component.S.index] = color.floatS
+    convertToColorIntHSLCache[IntegerHSLColor.Component.L.index] = color.floatL
 
     return ColorUtils.HSLToColor(convertToColorIntHSLCache)
   }
@@ -31,9 +33,31 @@ class IntegerHSLColorConverter : ColorConverter {
   override fun convertToPureHueColorInt(color: Color): Int {
     require(color is IntegerHSLColor) { "Unsupported color type supplied" }
 
-    convertToPureColorIntHSLCache[IntegerHSLColor.H_INDEX] = color.floatH
-    convertToPureColorIntHSLCache[IntegerHSLColor.S_INDEX] = IntegerHSLColor.DEFAULT_S
-    convertToPureColorIntHSLCache[IntegerHSLColor.L_INDEX] = IntegerHSLColor.DEFAULT_L
+    // TODO: Simplify
+    convertToPureColorIntHSLCache[IntegerHSLColor.Component.H.index] = color.floatH
+    convertToPureColorIntHSLCache[IntegerHSLColor.Component.S.index] =
+      IntegerHSLColor.Component.S.normalizedDefaultValue
+    convertToPureColorIntHSLCache[IntegerHSLColor.Component.L.index] =
+      IntegerHSLColor.Component.L.normalizedDefaultValue
     return ColorUtils.HSLToColor(convertToPureColorIntHSLCache)
+  }
+
+  override fun setFromColorInt(color: Color, value: Int) {
+    require(color is IntegerHSLColor) { "Unsupported color type supplied" }
+
+    // TODO: Cache
+    val hslOutput = FloatArray(3)
+    ColorUtils.colorToHSL(
+      value,
+      hslOutput
+    )
+
+    color.copyValuesFrom(
+      intArrayOf(
+        hslOutput[IntegerHSLColor.Component.H.index].toInt(),
+        (hslOutput[IntegerHSLColor.Component.S.index] * 100f).toInt(),
+        (hslOutput[IntegerHSLColor.Component.L.index] * 100f).toInt()
+      )
+    )
   }
 }

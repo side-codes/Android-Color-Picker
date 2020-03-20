@@ -68,10 +68,6 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
       }
     )
 
-    pickerGroup.registerPicker(
-      hueColorPickerSeekBar
-    )
-
     pickerGroup.registerPickers(
       hueColorPickerSeekBar,
       saturationColorPickerSeekBar,
@@ -142,7 +138,7 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
   private fun colorize(color: IntegerHSLColor) {
     val contrastColor = color.toContrastColor()
     val alphaContrastColor = color.toContrastColor(ContrastColorAlphaMode.LIGHT_BACKGROUND)
-    colorizeHSLColorCache.setFromHSLColor(color)
+    colorizeHSLColorCache.setFrom(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
     val opaqueColorInt = colorizeHSLColorCache.toOpaqueColorInt()

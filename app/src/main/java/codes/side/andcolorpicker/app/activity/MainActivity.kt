@@ -11,10 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.app.fragment.HSLSeekBarFragment
-import codes.side.andcolorpicker.app.fragment.HSLSeekBarGithubSampleFragment
-import codes.side.andcolorpicker.app.fragment.HSLSeekBarRecyclerViewFragment
-import codes.side.andcolorpicker.app.fragment.WipFragment
+import codes.side.andcolorpicker.app.fragment.*
 import codes.side.andcolorpicker.converter.toContrastColor
 import codes.side.andcolorpicker.converter.toOpaqueColorInt
 import codes.side.andcolorpicker.model.IntegerHSLColor
@@ -164,7 +161,7 @@ class MainActivity : AppCompatActivity(),
     val contrastColor = color.toContrastColor()
 
     // Overwrite cache for AppBar
-    colorizeHSLColorCache.setFromHSLColor(color)
+    colorizeHSLColorCache.setFrom(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
     appBarLayout.backgroundTintList =
@@ -209,7 +206,7 @@ class MainActivity : AppCompatActivity(),
     CMYK_SEEK_BAR(
       "CMYK SeekBar",
       MaterialDesignDx.Icon.gmf_print,
-      { WipFragment() }
+      { CMYKSeekBarFragment() }
     ),
     RGB_SEEK_BAR(
       "RGB SeekBar",

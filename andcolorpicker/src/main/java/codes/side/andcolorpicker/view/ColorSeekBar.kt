@@ -42,6 +42,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     private const val DEBUG = false
   }
 
+  // TODO: Revisit factory-based approach
   private val _pickedColor: C = colorFactory.create()
   var pickedColor: C
     get() {

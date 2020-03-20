@@ -59,6 +59,13 @@ fun Color.toContrastColor(mode: ContrastColorAlphaMode = ContrastColorAlphaMode.
   }
 }
 
+fun Color.setFromColorInt(@ColorInt value: Int) {
+  ColorConverterHub.getConverterByKey(colorKey).setFromColorInt(
+    this,
+    value
+  )
+}
+
 enum class ContrastColorAlphaMode {
   NONE,
   LIGHT_BACKGROUND,

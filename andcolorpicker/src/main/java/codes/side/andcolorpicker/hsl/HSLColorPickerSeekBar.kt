@@ -36,7 +36,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
 
     // TODO: Make configurable
-    private const val COERCE_AT_MOST_LIGHTNING = 0.9f
+    private const val COERCE_AT_MOST_LIGHTNING = 90
     private val HUE_COLOR_CHECKPOINTS = intArrayOf(
       Color.RED,
       Color.YELLOW,
@@ -152,7 +152,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
 
   override fun updateInternalPickedColorFrom(value: IntegerHSLColor) {
     super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFromHSLColor(value)
+    internalPickedColor.setFrom(value)
   }
 
   override fun refreshProperties() {
@@ -171,9 +171,9 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
           it,
           createHueOutputColorCheckpointsHSLCache
         )
-        createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.S_INDEX] =
+        createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.Component.S.index] =
           internalPickedColor.floatS
-        createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.L_INDEX] =
+        createHueOutputColorCheckpointsHSLCache[IntegerHSLColor.Component.L.index] =
           internalPickedColor.floatL
         ColorUtils.HSLToColor(createHueOutputColorCheckpointsHSLCache)
       }.toIntArray()
@@ -333,10 +333,12 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
             ColoringMode.PURE_COLOR -> {
               colorConverter.convertToColorInt(
                 paintDrawableStrokeSaturationHSLCache.also {
-                  it.setFromHSL(
-                    internalPickedColor.floatH,
-                    internalPickedColor.floatS,
-                    IntegerHSLColor.DEFAULT_L
+                  it.copyValuesFrom(
+                    intArrayOf(
+                      internalPickedColor.intH,
+                      internalPickedColor.intS,
+                      IntegerHSLColor.Component.L.defaultValue
+                    )
                   )
                 }
               )
@@ -351,10 +353,12 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
             ColoringMode.PURE_COLOR -> {
               colorConverter.convertToColorInt(
                 paintDrawableStrokeLightnessHSLCache.also {
-                  it.setFromHSL(
-                    internalPickedColor.floatH,
-                    IntegerHSLColor.DEFAULT_S,
-                    internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                  it.copyValuesFrom(
+                    intArrayOf(
+                      internalPickedColor.intH,
+                      IntegerHSLColor.Component.S.defaultValue,
+                      internalPickedColor.intL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                    )
                   )
                 }
               )
@@ -362,10 +366,12 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
             ColoringMode.OUTPUT_COLOR -> {
               colorConverter.convertToColorInt(
                 paintDrawableStrokeLightnessHSLCache.also {
-                  it.setFromHSL(
-                    internalPickedColor.floatH,
-                    internalPickedColor.floatS,
-                    internalPickedColor.floatL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                  it.copyValuesFrom(
+                    intArrayOf(
+                      internalPickedColor.intH,
+                      internalPickedColor.intS,
+                      internalPickedColor.intL.coerceAtMost(COERCE_AT_MOST_LIGHTNING)
+                    )
                   )
                 }
               )
@@ -391,20 +397,20 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
   ) {
     // H from HSV/HSL/HSI/HSB
     MODE_HUE(
-      0,
-      360
+      IntegerHSLColor.Component.H.minValue,
+      IntegerHSLColor.Component.H.maxValue
     ),
 
     // S from HSV/HSL/HSI/HSB
     MODE_SATURATION(
-      0,
-      100
+      IntegerHSLColor.Component.S.minValue,
+      IntegerHSLColor.Component.S.maxValue
     ),
 
     // INTENSITY, L/I from HSL/HSI
     MODE_LIGHTNESS(
-      0,
-      100
+      IntegerHSLColor.Component.L.minValue,
+      IntegerHSLColor.Component.L.maxValue
     )
   }
 

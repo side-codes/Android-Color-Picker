@@ -5,6 +5,8 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
     private const val TAG = "IntegerCMYKColor"
     private const val COMPONENTS_COUNT = 5
     private const val MAX_VALUE = 100
+
+    // TODO: To enum?
     const val C_INDEX = 0
     const val M_INDEX = 1
     const val Y_INDEX = 2
@@ -26,7 +28,9 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
     set(value) {
       setValue(
         A_INDEX,
-        value
+        value,
+        0,
+        MAX_VALUE
       )
     }
 
@@ -44,7 +48,9 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
     set(value) {
       setValue(
         C_INDEX,
-        value
+        value,
+        0,
+        MAX_VALUE
       )
     }
 
@@ -62,7 +68,9 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
     set(value) {
       setValue(
         M_INDEX,
-        value
+        value,
+        0,
+        MAX_VALUE
       )
     }
 
@@ -80,7 +88,9 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
     set(value) {
       setValue(
         Y_INDEX,
-        value
+        value,
+        0,
+        MAX_VALUE
       )
     }
 
@@ -98,30 +108,28 @@ class IntegerCMYKColor : IntegerColor(COMPONENTS_COUNT) {
     set(value) {
       setValue(
         K_INDEX,
-        value
+        value,
+        0,
+        MAX_VALUE
       )
     }
 
-  private fun setValue(index: Int, value: Int) {
-    intValues[index] = value.coerceIn(
-      0,
-      MAX_VALUE
-    )
+  override fun clone(): IntegerCMYKColor {
+    return super.clone() as IntegerCMYKColor
   }
 
-  override fun setFromHSL(h: Float, s: Float, l: Float) {
-    TODO("Not yet implemented")
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as IntegerCMYKColor
+
+    if (colorKey != other.colorKey) return false
+
+    return true
   }
 
-  override fun setFromHSL(hsl: FloatArray) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setFromColor(color: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setFromRGB(r: Int, g: Int, b: Int) {
-    TODO("Not yet implemented")
+  override fun hashCode(): Int {
+    return colorKey.hashCode()
   }
 }

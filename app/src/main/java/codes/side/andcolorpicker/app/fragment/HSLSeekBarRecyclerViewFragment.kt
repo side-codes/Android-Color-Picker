@@ -6,6 +6,7 @@ import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import codes.side.andcolorpicker.app.R
+import codes.side.andcolorpicker.converter.setFromColorInt
 import codes.side.andcolorpicker.converter.toColorInt
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.model.IntegerHSLColor
@@ -43,7 +44,7 @@ class HSLSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seek_bar_r
 
   class HSLItem(@ColorInt initialColor: Int) : AbstractItem<HSLItem.ViewHolder>() {
     private val hslColor = IntegerHSLColor().also {
-      it.setFromColor(initialColor)
+      it.setFromColorInt(initialColor)
     }
 
     class ViewHolder(itemView: View) : FastAdapter.ViewHolder<HSLItem>(itemView) {
@@ -57,7 +58,7 @@ class HSLSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seek_bar_r
               color: IntegerHSLColor,
               value: Int
             ) {
-              lastBoundItem?.hslColor?.setFromHSLColor(color)
+              lastBoundItem?.hslColor?.setFrom(color)
               colorize()
             }
           }

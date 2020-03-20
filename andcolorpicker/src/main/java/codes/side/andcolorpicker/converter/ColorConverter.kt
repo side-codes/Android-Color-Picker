@@ -12,4 +12,6 @@ interface ColorConverter {
 
   @ColorInt
   fun convertToPureHueColorInt(color: Color): Int
+
+  fun setFromColorInt(color: Color, @ColorInt value: Int)
 }

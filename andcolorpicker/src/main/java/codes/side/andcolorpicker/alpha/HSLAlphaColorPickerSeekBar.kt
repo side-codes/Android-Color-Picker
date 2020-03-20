@@ -55,7 +55,7 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
 
   override fun updateInternalPickedColorFrom(value: IntegerHSLColor) {
     super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFromHSLColor(value)
+    internalPickedColor.setFrom(value)
   }
 
   override fun refreshInternalPickedColorFromProgress() {

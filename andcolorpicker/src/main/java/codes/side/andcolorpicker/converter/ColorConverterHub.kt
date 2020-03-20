@@ -10,6 +10,10 @@ object ColorConverterHub {
       ColorKey.HSL,
       IntegerHSLColorConverter()
     )
+    registerConverter(
+      ColorKey.CMYK,
+      IntegerCMYKColorConverter()
+    )
   }
 
   fun getConverterByKey(key: ColorKey): ColorConverter {

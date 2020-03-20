@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.app.R
+import codes.side.andcolorpicker.converter.setFromColorInt
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
@@ -44,7 +45,7 @@ class HSLSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seek_bar_g
     // Set desired color programmatically
     pickerGroup.setColor(
       IntegerHSLColor().also {
-        it.setFromColor(
+        it.setFromColorInt(
           Color.rgb(
             28,
             84,
