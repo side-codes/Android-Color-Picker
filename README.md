@@ -10,20 +10,24 @@
     - [ ] RGB SeekBars
     - [ ] RGB circle
     - [ ] RGB plane
-    - [ ] CMYK SeekBars
-    - [ ] Alpha SeekBars
+    - [x] CMYK SeekBars
+    - [x] Alpha SeekBars
     - [ ] HSL (S+L) plane
-    - [ ] Swatches
+    - [x] Swatches
+- [ ] Extend picker types
+    - [ ] CMYK SeekBars coloring modes
+    - [ ] More awesome swatches
+    - [ ] More supported alpha color models
 - [x] Sample buttons -> radios
 - [x] Remove sample app child press delays
-- [ ] Enhance API
+- [x] Enhance API
 - [x] Add XML attributes
-- [ ] Provide *git-flow*
+- [x] Provide *git-flow*
 - [ ] Automate release/publish flow
-- [ ] Add thumb animation
+- [x] Add thumb animation
 - [x] Add *MaterialDrawer* & sample fragments
-- [ ] Add more *HSLColorPickerSeekBar* checks and reduce calls count
-- [ ] Add more encapsulation to limit picker modification capabilities
+- [x] Add more *HSLColorPickerSeekBar* checks and reduce calls count
+- [x] Add more encapsulation to limit picker modification capabilities
 - [x] Package repository publish *(Bintray)*
 - [ ] Add *Rx* support
 - [x] Add/Revisit *RecyclerView* support
