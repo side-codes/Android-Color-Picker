@@ -43,8 +43,8 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     private const val TAG = "ColorSeekBar"
     private const val DEBUG = false
 
-    private const val THUMB_START_ANIM_VALUE = 8000
-    private const val THUMB_END_ANIM_VALUE = 10000
+    private const val THUMB_DRAWABLE_LEVEL_DEFAULT = 8000
+    private const val THUMB_DRAWABLE_LEVEL_PRESSED = 10000
     private const val THUMB_ANIM_DURATION = 150L
   }
 
@@ -167,7 +167,6 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   private fun setupThumb() {
     val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_progress_padding)
     val thumbFullSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_full)
-    val thumbScaleValue = 1f
 
     thumbDrawable = GradientDrawable().also {
       it.color = ColorStateList.valueOf(android.graphics.Color.WHITE)
@@ -188,18 +187,20 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
         )
       },
       Gravity.CENTER,
-      thumbScaleValue,
-      thumbScaleValue
+      1f,
+      1f
     ).also {
-      it.level = THUMB_START_ANIM_VALUE
+      it.level = THUMB_DRAWABLE_LEVEL_DEFAULT
     }
 
     thumbObjectAnimator = ObjectAnimator.ofInt(
       thumb,
       "level",
-      THUMB_START_ANIM_VALUE,
-      THUMB_END_ANIM_VALUE
-    )
+      THUMB_DRAWABLE_LEVEL_DEFAULT,
+      THUMB_DRAWABLE_LEVEL_PRESSED
+    ).also {
+      it.duration = THUMB_ANIM_DURATION
+    }
 
     thumbOffset -= backgroundPaddingPx / 2
   }
@@ -408,18 +409,16 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   override fun onStartTrackingTouch(seekBar: SeekBar) {
     thumbObjectAnimator.setIntValues(
       thumb.level,
-      THUMB_END_ANIM_VALUE
+      THUMB_DRAWABLE_LEVEL_PRESSED
     )
-    thumbObjectAnimator.duration = THUMB_ANIM_DURATION
     thumbObjectAnimator.start()
   }
 
   override fun onStopTrackingTouch(seekBar: SeekBar) {
     thumbObjectAnimator.setIntValues(
       thumb.level,
-      THUMB_START_ANIM_VALUE
+      THUMB_DRAWABLE_LEVEL_DEFAULT
     )
-    thumbObjectAnimator.duration = THUMB_ANIM_DURATION
     thumbObjectAnimator.start()
     notifyListenersOnColorPicked(true)
   }
