@@ -42,6 +42,7 @@
 
     <TextView
       android:id="@+id/hueTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -65,6 +66,7 @@
 
     <TextView
       android:id="@+id/saturationTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -88,6 +90,7 @@
 
     <TextView
       android:id="@+id/lightnessTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -111,6 +114,7 @@
 
     <TextView
       android:id="@+id/alphaTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -132,6 +136,7 @@
 
     <TextView
       android:id="@+id/dynamicTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -155,6 +160,7 @@
 
     <TextView
       android:id="@+id/modeTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -199,6 +205,7 @@
 
     <TextView
       android:id="@+id/coloringModeTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"

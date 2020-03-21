@@ -76,6 +76,11 @@ implementation "codes.side:andcolorpicker:0.1.0"
   android:layout_height="wrap_content"
   app:hslColoringMode="pure"
   app:hslMode="lightness" />
+
+<codes.side.andcolorpicker.alpha.HSLAlphaColorPickerSeekBar
+  android:id="@+id/alphaColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" />
 ```
 
 #### Kotlin Snippet
@@ -91,25 +96,10 @@ val pickerGroup = PickerGroup<IntegerHSLColor>().also {
   it.registerPickers(
     hueColorPickerSeekBar,
     saturationColorPickerSeekBar,
-    lightnessColorPickerSeekBar
+    lightnessColorPickerSeekBar,
+    alphaColorPickerSeekBar
   )
 }
-
-// Set desired color programmatically
-pickerGroup.setColor(
-  IntegerHSLColor().also {
-    it.setFromColorInt(
-      Color.rgb(
-        28,
-        84,
-        187
-      )
-    )
-  }
-)
-
-// Set color components programmatically
-hueColorPickerSeekBar.progress = 50
 
 // Get current color immediately
 Log.d(
@@ -129,9 +119,28 @@ pickerGroup.addListener(
         TAG,
         "$color picked"
       )
+      swatchView.setSwatchColor(
+        color
+      )
     }
   }
 )
+
+// Set desired color programmatically
+pickerGroup.setColor(
+  IntegerHSLColor().also {
+    it.setFromColorInt(
+      Color.rgb(
+        28,
+        84,
+        187
+      )
+    )
+  }
+)
+
+// Set color components programmatically
+hueColorPickerSeekBar.progress = 50
 ```
 
 ### CMYK (cyan, magenta, yellow, key)

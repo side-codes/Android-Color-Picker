@@ -27,4 +27,14 @@
     android:layout_height="wrap_content"
     app:hslColoringMode="pure"
     app:hslMode="lightness" />
+
+  <codes.side.andcolorpicker.alpha.HSLAlphaColorPickerSeekBar
+    android:id="@+id/alphaColorPickerSeekBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <codes.side.andcolorpicker.view.swatch.SwatchView
+    android:id="@+id/swatchView"
+    android:layout_width="96dp"
+    android:layout_height="96dp" />
 </LinearLayout>

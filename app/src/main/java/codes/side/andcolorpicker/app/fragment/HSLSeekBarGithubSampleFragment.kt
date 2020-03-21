@@ -38,25 +38,10 @@ class HSLSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seek_bar_g
       it.registerPickers(
         hueColorPickerSeekBar,
         saturationColorPickerSeekBar,
-        lightnessColorPickerSeekBar
+        lightnessColorPickerSeekBar,
+        alphaColorPickerSeekBar
       )
     }
-
-    // Set desired color programmatically
-    pickerGroup.setColor(
-      IntegerHSLColor().also {
-        it.setFromColorInt(
-          Color.rgb(
-            28,
-            84,
-            187
-          )
-        )
-      }
-    )
-
-    // Set color components programmatically
-    hueColorPickerSeekBar.progress = 50
 
     // Get current color immediately
     Log.d(
@@ -76,8 +61,27 @@ class HSLSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seek_bar_g
             TAG,
             "$color picked"
           )
+          swatchView.setSwatchColor(
+            color
+          )
         }
       }
     )
+
+    // Set desired color programmatically
+    pickerGroup.setColor(
+      IntegerHSLColor().also {
+        it.setFromColorInt(
+          Color.rgb(
+            28,
+            84,
+            187
+          )
+        )
+      }
+    )
+
+    // Set color components programmatically
+    hueColorPickerSeekBar.progress = 50
   }
 }
