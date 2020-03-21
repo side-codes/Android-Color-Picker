@@ -1,5 +1,6 @@
 package codes.side.andcolorpicker.view.picker
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.*
@@ -7,6 +8,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.util.StateSet
+import android.view.Gravity
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
 import codes.side.andcolorpicker.R
@@ -40,6 +42,10 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   companion object {
     private const val TAG = "ColorSeekBar"
     private const val DEBUG = false
+
+    private const val THUMB_DRAWABLE_LEVEL_DEFAULT = 8000
+    private const val THUMB_DRAWABLE_LEVEL_PRESSED = 10000
+    private const val THUMB_ANIM_DURATION = 150L
   }
 
   // TODO: Revisit factory-based approach
@@ -82,8 +88,8 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   private var maxUpdating = false
 
   private val colorPickListeners = hashSetOf<OnColorPickListener<ColorSeekBar<C>, C>>()
-  private lateinit var thumbDrawableDefaultWrapper: LayerDrawable
-  private lateinit var thumbDrawablePressed: GradientDrawable
+  private lateinit var thumbDrawable: GradientDrawable
+  private lateinit var thumbObjectAnimator: ObjectAnimator
 
   // TODO: Rename
   protected val coloringDrawables = hashSetOf<Drawable>()
@@ -161,35 +167,8 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   private fun setupThumb() {
     val backgroundPaddingPx = resources.getDimensionPixelOffset(R.dimen.acp_seek_progress_padding)
     val thumbFullSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_full)
-    val thumbDefaultSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_default)
 
-    val sizeD = thumbFullSizePx - thumbDefaultSizePx
-    val sizeDHalf = sizeD / 2
-
-    thumbDrawableDefaultWrapper = LayerDrawable(
-      arrayOf(
-        GradientDrawable().also {
-          it.color = ColorStateList.valueOf(android.graphics.Color.WHITE)
-          it.shape = GradientDrawable.OVAL
-          it.setSize(
-            thumbDefaultSizePx,
-            thumbDefaultSizePx
-          )
-        }
-      )
-    ).also {
-      // We're limited to insets on API 21
-      // Migrate to layer height / padding on API 23+
-      it.setLayerInset(
-        0,
-        sizeDHalf,
-        sizeDHalf,
-        sizeDHalf,
-        sizeDHalf
-      )
-    }
-
-    thumbDrawablePressed = GradientDrawable().also {
+    thumbDrawable = GradientDrawable().also {
       it.color = ColorStateList.valueOf(android.graphics.Color.WHITE)
       it.shape = GradientDrawable.OVAL
       it.setSize(
@@ -198,47 +177,29 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       )
     }
 
-    coloringDrawables.add(thumbDrawableDefaultWrapper)
-    coloringDrawables.add(thumbDrawablePressed)
+    coloringDrawables.add(thumbDrawable)
 
-    thumb = AnimatedStateListDrawable().also { animatedStateListDrawable ->
-      animatedStateListDrawable.addState(
-        intArrayOf(android.R.attr.state_pressed),
-        thumbDrawablePressed,
-        1
-      )
-      animatedStateListDrawable.addState(
-        StateSet.WILD_CARD,
-        thumbDrawableDefaultWrapper,
-        0
-      )
-      //animatedStateListDrawable.addTransition(
-      //    0,
-      //    1,
-      //    AnimationDrawable().also {
-      //      it.addFrame(
-      //          GradientDrawable().also {
-      //            it.setSize(
-      //                160,
-      //                160
-      //            )
-      //            it.color = ColorStateList.valueOf(Color.BLACK)
-      //          },
-      //          1500
-      //      )
-      //      it.addFrame(
-      //          GradientDrawable().also {
-      //            it.setSize(
-      //                160,
-      //                160
-      //            )
-      //            it.color = ColorStateList.valueOf(Color.BLUE)
-      //          },
-      //          1500
-      //      )
-      //    },
-      //    true
-      //)
+    thumb = ScaleDrawable(
+      StateListDrawable().also {
+        it.addState(
+          StateSet.WILD_CARD,
+          thumbDrawable
+        )
+      },
+      Gravity.CENTER,
+      1f,
+      1f
+    ).also {
+      it.level = THUMB_DRAWABLE_LEVEL_DEFAULT
+    }
+
+    thumbObjectAnimator = ObjectAnimator.ofInt(
+      thumb,
+      "level",
+      THUMB_DRAWABLE_LEVEL_DEFAULT,
+      THUMB_DRAWABLE_LEVEL_PRESSED
+    ).also {
+      it.duration = THUMB_ANIM_DURATION
     }
 
     thumbOffset -= backgroundPaddingPx / 2
@@ -446,9 +407,19 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   override fun onStartTrackingTouch(seekBar: SeekBar) {
+    thumbObjectAnimator.setIntValues(
+      thumb.level,
+      THUMB_DRAWABLE_LEVEL_PRESSED
+    )
+    thumbObjectAnimator.start()
   }
 
   override fun onStopTrackingTouch(seekBar: SeekBar) {
+    thumbObjectAnimator.setIntValues(
+      thumb.level,
+      THUMB_DRAWABLE_LEVEL_DEFAULT
+    )
+    thumbObjectAnimator.start()
     notifyListenersOnColorPicked(true)
   }
 
