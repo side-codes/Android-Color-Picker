@@ -70,10 +70,6 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
       refreshThumb()
     }
 
-  private val thumbStrokeWidthPx by lazy {
-    resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
-  }
-
   init {
     init(attrs)
   }

@@ -88,6 +88,10 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   // TODO: Rename
   protected val coloringDrawables = hashSetOf<Drawable>()
 
+  protected val thumbStrokeWidthPx by lazy {
+    resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
+  }
+
   init {
     splitTrack = false
 

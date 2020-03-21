@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
-import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerHSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
@@ -24,10 +23,6 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
   ) {
 
   private var isInitialized = false
-
-  private val thumbStrokeWidthPx by lazy {
-    resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
-  }
 
   override val colorConverter: IntegerHSLColorConverter
     get() = super.colorConverter as IntegerHSLColorConverter
@@ -95,10 +90,6 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
   }
 
   private fun paintThumbStroke(drawable: GradientDrawable) {
-    if (!isInitialized) {
-      return
-    }
-
     drawable.setStroke(
       thumbStrokeWidthPx,
       colorConverter.convertToColorInt(internalPickedColor)

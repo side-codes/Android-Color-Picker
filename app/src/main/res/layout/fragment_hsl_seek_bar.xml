@@ -243,5 +243,15 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/coloringModeRadioGroup" />
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/showDialogButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:text="@string/action_show_dialog"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/setRandomColorButton" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </codes.side.andcolorpicker.app.view.DelayFreeScrollView>

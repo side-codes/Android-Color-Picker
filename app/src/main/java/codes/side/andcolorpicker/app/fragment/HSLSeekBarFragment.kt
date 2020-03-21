@@ -12,6 +12,7 @@ import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.app.util.firstIsInstanceOrNull
 import codes.side.andcolorpicker.converter.*
+import codes.side.andcolorpicker.dialogs.ColorPickerDialogFragment
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
@@ -52,9 +53,10 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
     colorfulViews.add(lightnessRadioButton)
     colorfulViews.add(pureRadioButton)
     colorfulViews.add(outputRadioButton)
-    colorfulViews.add(setRandomColorButton)
     colorfulViews.add(colorContainerFrameLayout)
     colorfulViews.add(colorTextView)
+    colorfulViews.add(setRandomColorButton)
+    colorfulViews.add(showDialogButton)
 
     pickerGroup.addListener(
       object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
@@ -101,6 +103,13 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
     setRandomColorButton.setOnClickListener {
       randomizePickedColor()
     }
+
+    showDialogButton.setOnClickListener {
+      ColorPickerDialogFragment().show(
+        childFragmentManager,
+        null
+      )
+    }
   }
 
   private fun setupIcons() {
@@ -115,6 +124,8 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
       )
     setRandomColorButton.icon =
       IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_invert_colors)
+    showDialogButton.icon =
+      IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_dynamic_feed)
   }
 
   override fun onAttach(context: Context) {
