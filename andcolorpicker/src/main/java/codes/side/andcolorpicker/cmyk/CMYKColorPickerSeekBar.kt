@@ -10,7 +10,7 @@ import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerCMYKColorConverter
 import codes.side.andcolorpicker.model.IntegerCMYKColor
 import codes.side.andcolorpicker.model.factory.CMYKColorFactory
-import codes.side.andcolorpicker.view.GradientColorSeekBar
+import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 
 class CMYKColorPickerSeekBar @JvmOverloads constructor(
   context: Context,

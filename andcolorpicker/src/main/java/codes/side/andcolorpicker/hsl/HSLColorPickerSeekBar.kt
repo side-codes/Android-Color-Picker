@@ -10,8 +10,8 @@ import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerHSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
-import codes.side.andcolorpicker.view.ColorSeekBar
-import codes.side.andcolorpicker.view.GradientColorSeekBar
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 
 // TODO: Minimize resource reads
 // TODO: Add logger solution
@@ -305,6 +305,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
+  // TODO: Deal with int arrays
   private fun paintThumbStroke(drawable: GradientDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return

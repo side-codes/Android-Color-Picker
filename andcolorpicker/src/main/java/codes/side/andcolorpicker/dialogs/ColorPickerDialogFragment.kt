@@ -6,21 +6,26 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import codes.side.andcolorpicker.R
 
+// TODO: Accept initial color value
+// TODO: Accept resources
+// TODO: Propagate picked value
+// TODO: Support out-of-box color model selection
 class ColorPickerDialogFragment : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     return AlertDialog.Builder(requireActivity())
-      .setMessage("Pick a color")
+      .setTitle(R.string.title_dialog_pick)
+      .setMessage(R.string.title_dialog_pick_message)
       .setView(
-        R.layout.layout_hsla_dialog
+        R.layout.layout_dialog_hsla
       )
       .setPositiveButton(
-        "Pick"
-      ) { dialog, id ->
+        R.string.action_dialog_pick_positive
+      ) { _, _ ->
 
       }
       .setNegativeButton(
-        "Cancel"
-      ) { dialog, id ->
+        R.string.action_dialog_pick_negative
+      ) { _, _ ->
 
       }
       .create()

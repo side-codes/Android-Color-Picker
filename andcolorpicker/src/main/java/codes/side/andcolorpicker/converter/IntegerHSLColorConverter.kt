@@ -52,11 +52,13 @@ class IntegerHSLColorConverter : ColorConverter {
       hslOutput
     )
 
+    // TODO: Cache
     color.copyValuesFrom(
       intArrayOf(
         hslOutput[IntegerHSLColor.Component.H.index].toInt(),
         (hslOutput[IntegerHSLColor.Component.S.index] * 100f).toInt(),
-        (hslOutput[IntegerHSLColor.Component.L.index] * 100f).toInt()
+        (hslOutput[IntegerHSLColor.Component.L.index] * 100f).toInt(),
+        android.graphics.Color.alpha(value)
       )
     )
   }

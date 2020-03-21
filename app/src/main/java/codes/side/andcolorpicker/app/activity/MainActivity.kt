@@ -226,7 +226,7 @@ class MainActivity : AppCompatActivity(),
     SWATCHES(
       "Swatches",
       MaterialDesignDx.Icon.gmf_view_comfy,
-      { WipFragment() }
+      { SwatchFragment() }
     ),
     GITHUB(
       "GitHub",

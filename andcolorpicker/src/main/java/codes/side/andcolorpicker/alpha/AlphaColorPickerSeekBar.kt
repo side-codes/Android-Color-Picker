@@ -6,11 +6,12 @@ import android.graphics.Shader
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.factory.ColorFactory
-import codes.side.andcolorpicker.view.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 
 // TODO: Minimize resource reads
 // TODO: Make bg_transparency_pattern programmatic
@@ -82,5 +83,37 @@ abstract class AlphaColorPickerSeekBar<C : Color> @JvmOverloads constructor(
     )
 
     return layerList.toTypedArray()
+  }
+
+  override fun refreshProgressDrawable() {
+    super.refreshProgressDrawable()
+
+    ((progressDrawable as LayerDrawable).getDrawable(1) as GradientDrawable).colors =
+      intArrayOf(
+        android.graphics.Color.TRANSPARENT,
+        colorConverter.convertToOpaqueColorInt(internalPickedColor)
+      )
+  }
+
+  override fun refreshThumb() {
+    super.refreshThumb()
+
+    coloringDrawables.forEach {
+      when (it) {
+        is GradientDrawable -> {
+          paintThumbStroke(it)
+        }
+        is LayerDrawable -> {
+          paintThumbStroke(it.getDrawable(0) as GradientDrawable)
+        }
+      }
+    }
+  }
+
+  private fun paintThumbStroke(drawable: GradientDrawable) {
+    drawable.setStroke(
+      thumbStrokeWidthPx,
+      colorConverter.convertToColorInt(internalPickedColor)
+    )
   }
 }

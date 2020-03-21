@@ -1,4 +1,4 @@
-package codes.side.andcolorpicker.view
+package codes.side.andcolorpicker.view.picker
 
 import android.content.Context
 import android.graphics.drawable.Drawable

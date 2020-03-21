@@ -32,6 +32,12 @@ abstract class IntegerColor(
   }
 
   fun copyValuesFrom(array: IntArray) {
+    if (array.size != intValues.size) {
+      Log.d(
+        TAG,
+        "Copying values from array with different size"
+      )
+    }
     array.copyInto(intValues)
   }
 

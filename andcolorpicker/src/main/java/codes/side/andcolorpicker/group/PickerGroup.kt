@@ -1,7 +1,7 @@
 package codes.side.andcolorpicker.group
 
 import codes.side.andcolorpicker.model.Color
-import codes.side.andcolorpicker.view.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 
 open class PickerGroup<C : Color> :
   ColorSeekBar.OnColorPickListener<ColorSeekBar<C>, C>,

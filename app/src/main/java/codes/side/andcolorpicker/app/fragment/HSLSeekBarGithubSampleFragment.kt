@@ -13,7 +13,7 @@ import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.ColoringMode
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar.Mode
 import codes.side.andcolorpicker.model.IntegerHSLColor
-import codes.side.andcolorpicker.view.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import kotlinx.android.synthetic.main.fragment_hsl_seek_bar_github_sample.*
 
 class HSLSeekBarGithubSampleFragment : Fragment(R.layout.fragment_hsl_seek_bar_github_sample) {

@@ -1,13 +1,11 @@
 package codes.side.andcolorpicker.alpha
 
 import android.content.Context
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import codes.side.andcolorpicker.converter.IntegerHSLColorConverter
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.model.factory.HSLColorFactory
-import codes.side.andcolorpicker.view.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 
 // TODO: Add modes support
 class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
@@ -22,30 +20,16 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
     defStyle
   ) {
 
-  private var isInitialized = false
-
   override val colorConverter: IntegerHSLColorConverter
     get() = super.colorConverter as IntegerHSLColorConverter
 
   init {
-    isInitialized = true
     refreshProperties()
   }
 
   override fun refreshProperties() {
     super.refreshProperties()
-    // TODO: Pull to constants
-    max = 255
-  }
-
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
-
-    ((progressDrawable as LayerDrawable).getDrawable(1) as GradientDrawable).colors =
-      intArrayOf(
-        android.graphics.Color.TRANSPARENT,
-        colorConverter.convertToOpaqueColorInt(internalPickedColor)
-      )
+    max = IntegerHSLColor.Component.A.maxValue
   }
 
   override fun updateInternalPickedColorFrom(value: IntegerHSLColor) {
@@ -72,28 +56,6 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
   override fun refreshProgressFromCurrentColor() {
     super.refreshProgressFromCurrentColor()
     progress = internalPickedColor.intA
-  }
-
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
-      when (it) {
-        is GradientDrawable -> {
-          paintThumbStroke(it)
-        }
-        is LayerDrawable -> {
-          paintThumbStroke(it.getDrawable(0) as GradientDrawable)
-        }
-      }
-    }
-  }
-
-  private fun paintThumbStroke(drawable: GradientDrawable) {
-    drawable.setStroke(
-      thumbStrokeWidthPx,
-      colorConverter.convertToColorInt(internalPickedColor)
-    )
   }
 
   interface OnColorPickListener :
