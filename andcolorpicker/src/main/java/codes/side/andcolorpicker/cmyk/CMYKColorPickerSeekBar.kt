@@ -74,7 +74,6 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     init(attrs)
   }
 
-  // TODO: Attrs
   private fun init(attrs: AttributeSet? = null) {
     val typedArray = context.theme.obtainStyledAttributes(
       attrs,
@@ -307,7 +306,6 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     OUTPUT_COLOR
   }
 
-  // TODO: Link mode with value
   enum class Mode(
     val minProgress: Int,
     val maxProgress: Int,

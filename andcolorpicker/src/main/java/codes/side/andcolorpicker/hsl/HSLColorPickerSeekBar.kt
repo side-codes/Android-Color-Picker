@@ -218,7 +218,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
           it[0] = Color.BLACK
           it[1] = when (coloringMode) {
             ColoringMode.PURE_COLOR -> colorConverter.convertToPureHueColorInt(internalPickedColor)
-            ColoringMode.OUTPUT_COLOR -> internalPickedColor.hsColorInt
+            ColoringMode.OUTPUT_COLOR -> colorConverter.convertToDefaultLightness(internalPickedColor)
           }
           it[2] = Color.WHITE
         }

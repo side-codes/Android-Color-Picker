@@ -136,7 +136,6 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
     ).firstIsInstanceOrNull<ColorizationConsumer>()
   }
 
-  // TODO: Delegate to group?
   private fun randomizePickedColor() {
     pickerGroup.setColor(
       IntegerHSLColor.createRandomColor().also {

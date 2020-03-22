@@ -1,5 +1,6 @@
 package codes.side.andcolorpicker.converter
 
+import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.IntegerHSLColor
@@ -61,5 +62,18 @@ class IntegerHSLColorConverter : ColorConverter {
         android.graphics.Color.alpha(value)
       )
     )
+  }
+
+  private val hsColorIntHSLCache = FloatArray(3)
+
+  @ColorInt
+  fun convertToDefaultLightness(color: Color): Int {
+    require(color is IntegerHSLColor) { "Unsupported color type supplied" }
+
+    hsColorIntHSLCache[IntegerHSLColor.Component.H.index] = color.floatH
+    hsColorIntHSLCache[IntegerHSLColor.Component.S.index] = color.floatS
+    hsColorIntHSLCache[IntegerHSLColor.Component.L.index] =
+      IntegerHSLColor.Component.L.normalizedDefaultValue
+    return ColorUtils.HSLToColor(hsColorIntHSLCache)
   }
 }

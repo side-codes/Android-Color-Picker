@@ -1,6 +1,5 @@
 package codes.side.andcolorpicker.model
 
-import androidx.core.graphics.ColorUtils
 import kotlin.random.Random
 
 // TODO: Provide precision options
@@ -116,16 +115,6 @@ class IntegerHSLColor : IntegerColor(
       )
     }
 
-  // TODO: Move to converter?
-  private val hsColorIntHSLCache = FloatArray(3)
-  val hsColorInt: Int
-    get() {
-      hsColorIntHSLCache[Component.H.index] = floatH
-      hsColorIntHSLCache[Component.S.index] = floatS
-      hsColorIntHSLCache[Component.L.index] = Component.L.defaultValue / 100f
-      return ColorUtils.HSLToColor(hsColorIntHSLCache)
-    }
-
   override fun clone(): IntegerHSLColor {
     return IntegerHSLColor().also {
       it.setFrom(this)
@@ -140,7 +129,6 @@ class IntegerHSLColor : IntegerColor(
     other as IntegerHSLColor
 
     if (colorKey != other.colorKey) return false
-    if (!hsColorIntHSLCache.contentEquals(other.hsColorIntHSLCache)) return false
 
     return true
   }
@@ -148,7 +136,6 @@ class IntegerHSLColor : IntegerColor(
   override fun hashCode(): Int {
     var result = super.hashCode()
     result = 31 * result + colorKey.hashCode()
-    result = 31 * result + hsColorIntHSLCache.contentHashCode()
     return result
   }
 
