@@ -19,7 +19,6 @@ import codes.side.andcolorpicker.model.factory.ColorFactory
 import codes.side.andcolorpicker.util.marker
 
 // TODO: Support alpha on that level?
-// TODO: Split on gradient-based and custom inheritance tree
 // TODO: Make color not generic, but bridge component
 // CONTRACT: Make sure to place all needed state checks on virtual methods and refresh in init if needed
 @Suppress(

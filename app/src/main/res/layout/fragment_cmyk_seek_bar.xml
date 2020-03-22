@@ -92,4 +92,13 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/blackTitleTextView" />
+
+  <codes.side.andcolorpicker.view.swatch.SwatchView
+    android:id="@+id/swatchView"
+    android:layout_width="96dp"
+    android:layout_height="96dp"
+    android:layout_marginTop="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/blackCMYKColorPickerSeekBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
