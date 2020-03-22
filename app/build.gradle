@@ -42,9 +42,7 @@ android {
 
 dependencies {
   implementation fileTree(dir: "libs", include: ["*.jar"])
-  // TODO: Wait for https://github.com/google/play-services-plugins/pull/128 released
-  debugImplementation project(":andcolorpicker")
-  releaseImplementation project(":andcolorpicker")
+  implementation project(":andcolorpicker")
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   implementation "androidx.appcompat:appcompat:1.2.0-alpha03"
