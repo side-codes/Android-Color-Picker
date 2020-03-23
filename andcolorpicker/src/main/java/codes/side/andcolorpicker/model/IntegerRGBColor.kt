@@ -10,4 +10,10 @@ class IntegerRGBColor : IntegerColor(COMPONENTS_COUNT) {
 
   override val alpha: Float
     get() = TODO("Not yet implemented")
+
+  override fun clone(): IntegerRGBColor {
+    return IntegerRGBColor().also {
+      it.setFrom(this)
+    }
+  }
 }
