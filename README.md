@@ -10,9 +10,13 @@
     - [ ] RGB SeekBars
     - [ ] RGB circle
     - [ ] RGB plane
+    - [ ] HSV/HSB seekbars
     - [x] CMYK SeekBars
     - [x] Alpha SeekBars
     - [ ] HSL (S+L) plane
+    - [ ] LAB
+    - [ ] XYZ
+    - [ ] YPbPr
     - [x] Swatches
 - [ ] Extend picker types
     - [ ] CMYK SeekBars coloring modes
