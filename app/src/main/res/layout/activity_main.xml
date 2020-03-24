@@ -23,7 +23,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:subtitle="Color picking made easy"
+        app:subtitle="@string/title_toolbar_subtitle"
         app:title="@string/app_name" />
     </com.google.android.material.appbar.AppBarLayout>
 

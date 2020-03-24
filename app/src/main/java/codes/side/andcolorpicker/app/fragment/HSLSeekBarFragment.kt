@@ -8,14 +8,16 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import codes.side.andcolorpicker.HSLColorPickerSeekBar
-import codes.side.andcolorpicker.PickerGroup
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.app.util.createContrastColor
 import codes.side.andcolorpicker.app.util.firstIsInstanceOrNull
+import codes.side.andcolorpicker.converter.*
+import codes.side.andcolorpicker.dialogs.ColorPickerDialogFragment
+import codes.side.andcolorpicker.group.PickerGroup
+import codes.side.andcolorpicker.group.registerPickers
+import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.model.IntegerHSLColor
-import codes.side.andcolorpicker.registerPickers
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.IconicsSize
@@ -23,17 +25,18 @@ import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
 import com.mikepenz.iconics.utils.icon
 import com.mikepenz.iconics.utils.padding
 import com.mikepenz.iconics.utils.size
-import kotlinx.android.synthetic.main.fragment_hsl_seekbar.*
+import kotlinx.android.synthetic.main.fragment_hsl_seek_bar.*
 
-class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
+class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
   companion object {
-    private const val TAG = "HslSeekBarFragment"
+    private const val TAG = "HSLSeekBarFragment"
     private const val colorTextViewIconSizeDp = 24
     private const val colorTextViewIconPaddingDp = 6
   }
 
   private val colorfulViews = hashSetOf<View>()
-  private val pickerGroup = PickerGroup()
+  private val pickerGroup =
+    PickerGroup<IntegerHSLColor>()
   private var colorizationConsumer: ColorizationConsumer? = null
   private val colorizeHSLColorCache = IntegerHSLColor()
 
@@ -50,15 +53,16 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     colorfulViews.add(lightnessRadioButton)
     colorfulViews.add(pureRadioButton)
     colorfulViews.add(outputRadioButton)
-    colorfulViews.add(setRandomColorButton)
+    colorfulViews.add(colorContainerFrameLayout)
     colorfulViews.add(colorTextView)
+    colorfulViews.add(setRandomColorButton)
+    colorfulViews.add(showDialogButton)
 
-    hueColorPickerSeekBar.addListener(
+    pickerGroup.addListener(
       object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
         override fun onColorChanged(
-          picker: HSLColorPickerSeekBar,
+          picker: ColorSeekBar<IntegerHSLColor>,
           color: IntegerHSLColor,
-          mode: HSLColorPickerSeekBar.Mode,
           value: Int
         ) {
           colorize(color)
@@ -70,6 +74,7 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       hueColorPickerSeekBar,
       saturationColorPickerSeekBar,
       lightnessColorPickerSeekBar,
+      alphaColorPickerSeekBar,
       dynamicColorPickerSeekBar
     )
 
@@ -89,11 +94,21 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       R.id.outputRadioButton to HSLColorPickerSeekBar.ColoringMode.OUTPUT_COLOR
     )
     coloringModeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-      pickerGroup.setColoringMode(requireNotNull(radioColoringModesMap[checkedId]))
+      pickerGroup.forEach {
+        (it as? HSLColorPickerSeekBar)?.coloringMode =
+          requireNotNull(radioColoringModesMap[checkedId])
+      }
     }
 
     setRandomColorButton.setOnClickListener {
       randomizePickedColor()
+    }
+
+    showDialogButton.setOnClickListener {
+      ColorPickerDialogFragment().show(
+        childFragmentManager,
+        null
+      )
     }
   }
 
@@ -109,6 +124,8 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
       )
     setRandomColorButton.icon =
       IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_invert_colors)
+    showDialogButton.icon =
+      IconicsDrawable(requireContext()).icon(MaterialDesignDx.Icon.gmf_dynamic_feed)
   }
 
   override fun onAttach(context: Context) {
@@ -119,7 +136,6 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
     ).firstIsInstanceOrNull<ColorizationConsumer>()
   }
 
-  // TODO: Delegate to group?
   private fun randomizePickedColor() {
     pickerGroup.setColor(
       IntegerHSLColor.createRandomColor().also {
@@ -130,36 +146,42 @@ class HslSeekBarFragment : Fragment(R.layout.fragment_hsl_seekbar) {
 
   @SuppressLint("SetTextI18n")
   private fun colorize(color: IntegerHSLColor) {
-    val contrastColor = color.createContrastColor()
-    colorizeHSLColorCache.setFromHSLColor(color)
+    val contrastColor = color.toContrastColor()
+    val alphaContrastColor = color.toContrastColor(ContrastColorAlphaMode.LIGHT_BACKGROUND)
+    colorizeHSLColorCache.setFrom(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
+    val opaqueColorInt = colorizeHSLColorCache.toOpaqueColorInt()
     colorfulViews.forEach {
       when (it) {
         is MaterialButton -> {
           it.setTextColor(contrastColor)
-          it.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.colorInt)
+          it.backgroundTintList = ColorStateList.valueOf(opaqueColorInt)
           it.iconTint = ColorStateList.valueOf(contrastColor)
         }
         is RadioButton -> {
-          it.buttonTintList = ColorStateList.valueOf(colorizeHSLColorCache.colorInt)
+          it.buttonTintList = ColorStateList.valueOf(opaqueColorInt)
         }
-        // Any other TextView is considered as true color holder
+        // Any other TextView is considered as raw color holder
         is TextView -> {
-          it.setTextColor(contrastColor)
-          it.setBackgroundColor(color.colorInt)
-          it.compoundDrawables.first().setTintList(ColorStateList.valueOf(contrastColor))
+          it.setTextColor(alphaContrastColor)
+          it.setBackgroundColor(color.toColorInt())
+          it.compoundDrawables.first().setTintList(ColorStateList.valueOf(alphaContrastColor))
         }
       }
     }
 
     colorTextView.text =
-      "RGB: [${color.rInt} ${color.gInt} ${color.bInt}]\n" +
+      "RGB: [${color.getRInt()} ${color.getGInt()} ${color.getBInt()}]\n" +
           "HEX: ${String.format(
             "#%06X",
-            0xFFFFFF and color.colorInt
+            0xFFFFFF and color.toColorInt()
           )}\n" +
-          "HSL: $color"
+          "HSL: [${color.intH} ${color.intS} ${color.intL}]\n" +
+          "Alpha: ${String.format(
+            "%.2f",
+            color.alpha
+          )}"
 
     colorizationConsumer?.colorize(color)
   }

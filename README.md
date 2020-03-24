@@ -6,28 +6,32 @@
 ## Roadmap
 
 - [ ] Add more picker types
-    - [x] HLS seekbars
-    - [ ] RGB seekbars
+    - [x] HLS SeekBars
+    - [ ] RGB SeekBars
     - [ ] RGB circle
     - [ ] RGB plane
     - [ ] HSV/HSB seekbars
-    - [ ] CMYK seekbars
-    - [ ] Alpha seekbar
+    - [x] CMYK SeekBars
+    - [x] Alpha SeekBars
     - [ ] HSL (S+L) plane
-    - [ ] Swatches
     - [ ] LAB
     - [ ] XYZ
     - [ ] YPbPr
+    - [x] Swatches
+- [ ] Extend picker types
+    - [ ] CMYK SeekBars coloring modes
+    - [ ] More awesome swatches
+    - [ ] More supported alpha color models
 - [x] Sample buttons -> radios
 - [x] Remove sample app child press delays
-- [ ] Enhance API
+- [x] Enhance API
 - [x] Add XML attributes
-- [ ] Provide *git-flow*
+- [x] Provide *git-flow*
 - [ ] Automate release/publish flow
-- [ ] Add thumb animation
+- [x] Add thumb animation
 - [x] Add *MaterialDrawer* & sample fragments
-- [ ] Add more *HSLColorPickerSeekBar* checks and reduce calls count
-- [ ] Add more encapsulation to limit picker modification capabilities
+- [x] Add more *HSLColorPickerSeekBar* checks and reduce calls count
+- [x] Add more encapsulation to limit picker modification capabilities
 - [x] Package repository publish *(Bintray)*
 - [ ] Add *Rx* support
 - [x] Add/Revisit *RecyclerView* support
@@ -47,7 +51,7 @@
 Gradle dependency:
 
 ```gradle
-implementation "codes.side:andcolorpicker:0.1.0"
+implementation "codes.side:andcolorpicker:0.2.0"
 ```
 
 ## Picker types
@@ -56,30 +60,35 @@ implementation "codes.side:andcolorpicker:0.1.0"
 
 - *Add color model description*
 
-![](github/picker_hsl.png)
+![](github/type_hsl.png)
 
 #### Layout XML Snippet
 ```xml
-<codes.side.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/hueColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:coloring="pure"
-  app:mode="hue" />
+  app:hslColoringMode="pure"
+  app:hslMode="hue" />
 
-<codes.side.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/saturationColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:coloring="pure"
-  app:mode="saturation" />
+  app:hslColoringMode="pure"
+  app:hslMode="saturation" />
 
-<codes.side.andcolorpicker.HSLColorPickerSeekBar
+<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/lightnessColorPickerSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:coloring="pure"
-  app:mode="lightness" />
+  app:hslColoringMode="pure"
+  app:hslMode="lightness" />
+
+<codes.side.andcolorpicker.alpha.HSLAlphaColorPickerSeekBar
+  android:id="@+id/alphaColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" />
 ```
 
 #### Kotlin Snippet
@@ -91,50 +100,68 @@ hueColorPickerSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LI
 hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
 
 // Group pickers with PickerGroup to automatically synchronize color across them
-val pickerGroup = PickerGroup().also {
+val pickerGroup = PickerGroup<IntegerHSLColor>().also {
   it.registerPickers(
     hueColorPickerSeekBar,
     saturationColorPickerSeekBar,
-    lightnessColorPickerSeekBar
+    lightnessColorPickerSeekBar,
+    alphaColorPickerSeekBar
   )
 }
 
-// Set desired color programmatically
-pickerGroup.setColor(
-  IntegerHSLColor().setFromColor(
-    Color.rgb(
-      28,
-      84,
-      187
-    )
-  )
-)
-
-// Set color components programmatically
-hueColorPickerSeekBar.progress = 50
-
-// Get current color immediatly
+// Get current color immediately
 Log.d(
   TAG,
-  "Current color is ${hueColorPickerSeekBar.currentColor}"
+  "Current color is ${hueColorPickerSeekBar.pickedColor}"
 )
 
-// Listen for changes
-hueColorPickerSeekBar.addListener(
+// Listen individual pickers or groups for changes
+pickerGroup.addListener(
   object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
     override fun onColorChanged(
-      picker: HSLColorPickerSeekBar,
+      picker: ColorSeekBar<IntegerHSLColor>,
       color: IntegerHSLColor,
-      mode: Mode,
       value: Int
     ) {
       Log.d(
         TAG,
         "$color picked"
       )
+      swatchView.setSwatchColor(
+        color
+      )
     }
   }
 )
+
+// Set desired color programmatically
+pickerGroup.setColor(
+  IntegerHSLColor().also {
+    it.setFromColorInt(
+      Color.rgb(
+        28,
+        84,
+        187
+      )
+    )
+  }
+)
+
+// Set color components programmatically
+hueColorPickerSeekBar.progress = 50
+```
+
+### CMYK (cyan, magenta, yellow, key)
+
+![](github/type_cmyk.png)
+
+#### Layout XML Snippet
+```xml
+<codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+  android:id="@+id/cyanCMYKColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:cmykMode="cyan" />
 ```
 
 ## License

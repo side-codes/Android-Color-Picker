@@ -8,7 +8,7 @@
   app:cardElevation="4dp"
   app:cardUseCompatPadding="true">
 
-  <codes.side.andcolorpicker.HSLColorPickerSeekBar
+  <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
     android:id="@+id/hslSeekBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -11,11 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.app.fragment.HslSeekBarFragment
-import codes.side.andcolorpicker.app.fragment.HslSeekBarGithubSampleFragment
-import codes.side.andcolorpicker.app.fragment.HslSeekBarRecyclerViewFragment
-import codes.side.andcolorpicker.app.fragment.WipFragment
-import codes.side.andcolorpicker.app.util.createContrastColor
+import codes.side.andcolorpicker.app.fragment.*
+import codes.side.andcolorpicker.converter.toContrastColor
+import codes.side.andcolorpicker.converter.toOpaqueColorInt
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mikepenz.iconics.IconicsColor
@@ -95,7 +93,7 @@ class MainActivity : AppCompatActivity(),
         startActivity(
           Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("https://github.com/DummyCo/andColorPicker")
+            Uri.parse("https://github.com/side-codes/andColorPicker")
           )
         )
       }
@@ -160,18 +158,19 @@ class MainActivity : AppCompatActivity(),
   }
 
   override fun colorize(color: IntegerHSLColor) {
-    val contrastColor = color.createContrastColor()
+    val contrastColor = color.toContrastColor()
 
     // Overwrite cache for AppBar
-    colorizeHSLColorCache.setFromHSLColor(color)
+    colorizeHSLColorCache.setFrom(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
-    appBarLayout.backgroundTintList = ColorStateList.valueOf(colorizeHSLColorCache.colorInt)
+    appBarLayout.backgroundTintList =
+      ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
 
     // Overwrite cache for StatusBar
     colorizeHSLColorCache.floatL -= 0.1f
 
-    window.statusBarColor = colorizeHSLColorCache.colorInt
+    window.statusBarColor = colorizeHSLColorCache.toOpaqueColorInt()
 
     toolbar.setTitleTextColor(contrastColor)
     toolbar.setSubtitleTextColor(contrastColor)
@@ -187,22 +186,27 @@ class MainActivity : AppCompatActivity(),
     HLS_SEEK_BAR(
       "HSL SeekBar",
       MaterialDesignDx.Icon.gmf_space_bar,
-      { HslSeekBarFragment() }
+      { HSLSeekBarFragment() }
     ),
     HLS_SEEK_BAR_RV(
       "HSL SeekBar RecyclerView",
       MaterialDesignDx.Icon.gmf_list,
-      { HslSeekBarRecyclerViewFragment() }
+      { HSLSeekBarRecyclerViewFragment() }
     ),
     HLS_SEEK_BAR_GITHUB(
       "HSL SeekBar GitHub",
       FontAwesome.Icon.faw_github,
-      { HslSeekBarGithubSampleFragment() }
+      { HSLSeekBarGithubSampleFragment() }
     ),
     HLS_PLANE(
       "HSL Plane",
       MaterialDesignDx.Icon.gmf_fullscreen,
       { WipFragment() }
+    ),
+    CMYK_SEEK_BAR(
+      "CMYK SeekBar",
+      MaterialDesignDx.Icon.gmf_print,
+      { CMYKSeekBarFragment() }
     ),
     RGB_SEEK_BAR(
       "RGB SeekBar",
@@ -222,7 +226,7 @@ class MainActivity : AppCompatActivity(),
     SWATCHES(
       "Swatches",
       MaterialDesignDx.Icon.gmf_view_comfy,
-      { WipFragment() }
+      { SwatchFragment() }
     ),
     GITHUB(
       "GitHub",

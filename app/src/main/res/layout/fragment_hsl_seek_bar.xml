@@ -23,17 +23,26 @@
       app:cardUseCompatPadding="true"
       app:layout_constraintTop_toTopOf="parent">
 
-      <TextView
-        android:id="@+id/colorTextView"
+      <FrameLayout
+        android:id="@+id/colorContainerFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp"
-        tools:background="@color/colorPrimary"
-        tools:text="#FFFFFF" />
+        android:background="@drawable/bg_transparency_pattern"
+        android:backgroundTint="@color/colorTransparencyTileTint">
+
+        <TextView
+          android:id="@+id/colorTextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="4dp"
+          tools:background="@color/colorPrimary"
+          tools:text="#FFFFFF" />
+      </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
       android:id="@+id/hueTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -43,20 +52,21 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/colorCardView" />
 
-    <codes.side.andcolorpicker.HSLColorPickerSeekBar
+    <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
       android:id="@+id/hueColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="hue"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView"
-      app:mode="hue" />
+      app:layout_constraintTop_toBottomOf="@+id/hueTitleTextView" />
 
     <TextView
       android:id="@+id/saturationTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -66,20 +76,21 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/hueColorPickerSeekBar" />
 
-    <codes.side.andcolorpicker.HSLColorPickerSeekBar
+    <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
       android:id="@+id/saturationColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="saturation"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView"
-      app:mode="saturation" />
+      app:layout_constraintTop_toBottomOf="@id/saturationTitleTextView" />
 
     <TextView
       android:id="@+id/lightnessTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -89,20 +100,43 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/saturationColorPickerSeekBar" />
 
-    <codes.side.andcolorpicker.HSLColorPickerSeekBar
+    <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
       android:id="@+id/lightnessColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="lightness"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView"
-      app:mode="lightness" />
+      app:layout_constraintTop_toBottomOf="@id/lightnessTitleTextView" />
+
+    <TextView
+      android:id="@+id/alphaTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="4dp"
+      android:text="@string/title_alpha"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lightnessColorPickerSeekBar" />
+
+    <codes.side.andcolorpicker.alpha.HSLAlphaColorPickerSeekBar
+      android:id="@+id/alphaColorPickerSeekBar"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:layout_marginTop="4dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/alphaTitleTextView" />
 
     <TextView
       android:id="@+id/dynamicTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -110,27 +144,28 @@
       android:text="@string/title_dynamic"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/lightnessColorPickerSeekBar" />
+      app:layout_constraintTop_toBottomOf="@+id/alphaColorPickerSeekBar" />
 
-    <codes.side.andcolorpicker.HSLColorPickerSeekBar
+    <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
       android:id="@+id/dynamicColorPickerSeekBar"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      app:coloring="pure"
+      app:hslColoringMode="pure"
+      app:hslMode="hue"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView"
-      app:mode="hue" />
+      app:layout_constraintTop_toBottomOf="@id/dynamicTitleTextView" />
 
     <TextView
       android:id="@+id/modeTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
       android:layout_marginTop="4dp"
-      android:text="@string/title_dynamic_color_model"
+      android:text="@string/title_dynamic_color_component"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/dynamicColorPickerSeekBar" />
@@ -170,6 +205,7 @@
 
     <TextView
       android:id="@+id/coloringModeTitleTextView"
+      style="@style/TextAppearance.MaterialComponents.Caption"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
@@ -214,5 +250,15 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/coloringModeRadioGroup" />
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/showDialogButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="8dp"
+      android:text="@string/action_show_dialog"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/setRandomColorButton" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </codes.side.andcolorpicker.app.view.DelayFreeScrollView>

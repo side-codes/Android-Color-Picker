@@ -1,221 +1,183 @@
 package codes.side.andcolorpicker.model
 
-import android.graphics.Color
-import androidx.annotation.ColorInt
-import androidx.core.graphics.ColorUtils
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
-// TODO: Invent hierarchy
 // TODO: Provide precision options
-class IntegerHSLColor {
+// TODO: Remove float properties? Move to converters?
+class IntegerHSLColor : IntegerColor(
+  COMPONENTS_COUNT,
+  DEFAULT_HSL_VALUES
+) {
   companion object {
-    const val H_INDEX = 0
-    const val S_INDEX = 1
-    const val L_INDEX = 2
-    const val DEFAULT_H = 0f
-    const val DEFAULT_S = 1f
-    const val DEFAULT_L = 0.5f
+    private const val TAG = "IntegerHSLColor"
+    private val COMPONENTS_COUNT = Component.values().size
 
-    private val DEFAULT_HSL_VALUES = floatArrayOf(
-      DEFAULT_H,
-      DEFAULT_S,
-      DEFAULT_L
-    )
-
-    fun getDefaultHSLValueByIndex(index: Int): Float {
-      return DEFAULT_HSL_VALUES[index]
-    }
+    private val DEFAULT_HSL_VALUES = Component
+      .values().map { it.defaultValue }.toIntArray()
 
     fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
-      return IntegerHSLColor().setFromHSL(
-        floatArrayOf(
-          Random.Default.nextFloat() * 360f,
-          if (pure) DEFAULT_S else Random.Default.nextFloat(),
-          if (pure) DEFAULT_L else Random.Default.nextFloat()
+      return IntegerHSLColor().also {
+        it.copyValuesFrom(
+          intArrayOf(
+            Random.Default.nextInt(
+              Component.H.minValue,
+              Component.H.maxValue
+            ),
+            if (pure) Component.S.defaultValue else Random.Default.nextInt(
+              Component.S.minValue,
+              Component.S.maxValue
+            ),
+            if (pure) Component.L.defaultValue else Random.Default.nextInt(
+              Component.L.minValue,
+              Component.L.maxValue
+            )
+          )
         )
-      )
+      }
     }
   }
+
+  override val colorKey = ColorKey.HSL
+
+  override val alpha: Float
+    get() {
+      return intA / Component.A.maxValue.toFloat()
+    }
+
+  var intA: Int
+    get() {
+      return intValues[Component.A.index]
+    }
+    set(value) {
+      setValue(
+        Component.A.index,
+        value,
+        Component.A.minValue,
+        Component.A.maxValue
+      )
+    }
 
   var floatH: Float
     get() {
       return intH.toFloat()
     }
     set(value) {
-      intS = value.toInt()
+      intH = value.toInt()
     }
   var intH: Int
     get() {
-      return intValues[H_INDEX]
+      return intValues[Component.H.index]
     }
     set(value) {
-      intValues[H_INDEX] = value.coerceIn(
-        0,
-        360
+      setValue(
+        Component.H.index,
+        value,
+        Component.H.minValue,
+        Component.H.maxValue
       )
     }
   var floatS: Float
     get() {
-      return intS / 100f
+      return intS / Component.S.maxValue.toFloat()
     }
     set(value) {
-      intS = (value * 100f).toInt()
+      intS = (value * Component.S.maxValue).toInt()
     }
   var intS: Int
     get() {
-      return intValues[S_INDEX]
+      return intValues[Component.S.index]
     }
     set(value) {
-      intValues[S_INDEX] = value.coerceIn(
-        0,
-        100
+      setValue(
+        Component.S.index,
+        value,
+        Component.S.minValue,
+        Component.S.maxValue
       )
     }
   var floatL: Float
     get() {
-      return intL / 100f
+      return intL / Component.L.maxValue.toFloat()
     }
     set(value) {
-      intL = (value * 100f).toInt()
+      intL = (value * Component.L.maxValue).toInt()
     }
   var intL: Int
     get() {
-      return intValues[L_INDEX]
+      return intValues[Component.L.index]
     }
     set(value) {
-      intValues[L_INDEX] = value.coerceIn(
-        0,
-        100
+      setValue(
+        Component.L.index,
+        value,
+        Component.L.minValue,
+        Component.L.maxValue
       )
     }
-  private var _a: Int = 0
-  var intA: Int
-    get() {
-      return _a
+
+  override fun clone(): IntegerHSLColor {
+    return IntegerHSLColor().also {
+      it.setFrom(this)
     }
-    set(value) {
-      _a = value.coerceIn(
-        0,
-        100
-      )
-    }
-  val rInt: Int
-    get() {
-      return Color.red(colorInt)
-    }
-  val gInt: Int
-    get() {
-      return Color.green(colorInt)
-    }
-  val bInt: Int
-    get() {
-      return Color.blue(colorInt)
-    }
-
-  private val hsColorIntHSLCache = FloatArray(3)
-  val hsColorInt: Int
-    get() {
-      hsColorIntHSLCache[H_INDEX] = intValues[H_INDEX].toFloat()
-      hsColorIntHSLCache[S_INDEX] = intValues[S_INDEX] / 100f
-      hsColorIntHSLCache[L_INDEX] = DEFAULT_L
-      return ColorUtils.HSLToColor(hsColorIntHSLCache)
-    }
-  private val colorIntHSLCache = FloatArray(3)
-  val colorInt: Int
-    get() {
-      colorIntHSLCache[H_INDEX] = intValues[H_INDEX].toFloat()
-      colorIntHSLCache[S_INDEX] = intValues[S_INDEX] / 100f
-      colorIntHSLCache[L_INDEX] = intValues[L_INDEX] / 100f
-      return ColorUtils.HSLToColor(colorIntHSLCache)
-    }
-  private val pureColorIntHSLCache = FloatArray(3)
-  val pureColorInt: Int
-    get() {
-      pureColorIntHSLCache[H_INDEX] = intH.toFloat()
-      pureColorIntHSLCache[S_INDEX] = DEFAULT_S
-      pureColorIntHSLCache[L_INDEX] = DEFAULT_L
-      return ColorUtils.HSLToColor(pureColorIntHSLCache)
-    }
-
-  private val intValues = IntArray(3)
-
-  fun setFromHSL(h: Float, s: Float, l: Float): IntegerHSLColor {
-    this.intH = h.roundToInt()
-    this.intS = (s * 100f).roundToInt()
-    this.intL = (l * 100f).roundToInt()
-    return this
-  }
-
-  fun setFromHSL(hsl: FloatArray): IntegerHSLColor {
-    return setFromHSL(
-      hsl[H_INDEX],
-      hsl[S_INDEX],
-      hsl[L_INDEX]
-    )
-  }
-
-  fun setFromColor(@ColorInt color: Int): IntegerHSLColor {
-    val hslOutput = FloatArray(3)
-    ColorUtils.colorToHSL(
-      color,
-      hslOutput
-    )
-    return setFromHSL(hslOutput)
-  }
-
-  // TODO: Cache output?
-  fun setFromRGB(r: Int, g: Int, b: Int): IntegerHSLColor {
-    val output = FloatArray(3)
-    ColorUtils.RGBToHSL(
-      r,
-      g,
-      b,
-      output
-    )
-    return setFromHSL(
-      output
-    )
-  }
-
-  fun setFromHSLColor(hslColor: IntegerHSLColor): IntegerHSLColor {
-    hslColor.copyValuesTo(intValues)
-    return this
-  }
-
-  // FIXME: Unsafe, provide checks
-  fun copyValuesFrom(inValues: IntArray): IntegerHSLColor {
-    inValues.copyInto(intValues)
-    return this
-  }
-
-  fun copyValuesTo(outValues: IntArray) {
-    intValues.copyInto(outValues)
-  }
-
-  fun copy(): IntegerHSLColor {
-    return IntegerHSLColor().setFromHSLColor(this)
-  }
-
-  override fun toString(): String {
-    return "HSLColor(a=$intA, values=${intValues.contentToString()})"
   }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
+    if (!super.equals(other)) return false
 
     other as IntegerHSLColor
 
-    if (_a != other._a) return false
-    if (!intValues.contentEquals(other.intValues)) return false
+    if (colorKey != other.colorKey) return false
 
     return true
   }
 
   override fun hashCode(): Int {
-    var result = _a.hashCode()
-    result = 31 * result + intValues.contentHashCode()
+    var result = super.hashCode()
+    result = 31 * result + colorKey.hashCode()
     return result
+  }
+
+  // TODO: Make Component top-level?
+  // TODO: Make tree?
+  // TODO: Use range?
+  enum class Component(
+    val defaultValue: Int,
+    val minValue: Int,
+    val maxValue: Int
+  ) {
+    H(
+      0,
+      0,
+      360
+    ),
+    S(
+      100,
+      0,
+      100
+    ),
+    L(
+      50,
+      0,
+      100
+    ),
+    A(
+      255,
+      0,
+      255
+    );
+
+    // TODO: Review approach
+    val index: Int
+      get() {
+        return ordinal
+      }
+
+    // TODO: Adapt for non-zero min valies
+    val normalizedDefaultValue: Float
+      get() {
+        return defaultValue / maxValue.toFloat()
+      }
   }
 }
