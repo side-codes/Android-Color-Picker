@@ -20,11 +20,11 @@ class IntegerRGBColor : IntegerColor(
     }
   var intA: Int
     get() {
-      return intValues[Component.A.ordinal]
+      return intValues[Component.A.index]
     }
     set(value) {
       setValue(
-        Component.A.ordinal,
+        Component.A.index,
         value,
         Component.A.minValue,
         Component.A.maxValue
@@ -40,11 +40,11 @@ class IntegerRGBColor : IntegerColor(
     }
   var intR: Int
     get() {
-      return intValues[Component.R.ordinal]
+      return intValues[Component.R.index]
     }
     set(value) {
       setValue(
-        Component.R.ordinal,
+        Component.R.index,
         value,
         Component.R.minValue,
         Component.R.maxValue
@@ -60,11 +60,11 @@ class IntegerRGBColor : IntegerColor(
     }
   var intG: Int
     get() {
-      return intValues[Component.G.ordinal]
+      return intValues[Component.G.index]
     }
     set(value) {
       setValue(
-        Component.G.ordinal,
+        Component.G.index,
         value,
         Component.G.minValue,
         Component.G.maxValue
@@ -80,11 +80,11 @@ class IntegerRGBColor : IntegerColor(
     }
   var intB: Int
     get() {
-      return intValues[Component.B.ordinal]
+      return intValues[Component.B.index]
     }
     set(value) {
       setValue(
-        Component.B.ordinal,
+        Component.B.index,
         value,
         Component.B.minValue,
         Component.B.maxValue
@@ -141,6 +141,12 @@ class IntegerRGBColor : IntegerColor(
       0,
       255
     );
+
+    // TODO: Review approach
+    val index: Int
+      get() {
+        return ordinal
+      }
 
     // TODO: Adapt for non-zero min values
     val normalizedDefaultValue: Float
