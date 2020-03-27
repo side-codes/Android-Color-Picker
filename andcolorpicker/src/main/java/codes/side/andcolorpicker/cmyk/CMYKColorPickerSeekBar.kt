@@ -95,15 +95,15 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
   }
 
   override fun setMin(min: Int) {
-    if (min != 0) {
-      throw IllegalArgumentException("Current mode supports 0 min value only")
+    if (modeInitialized && min != mode.minProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.minProgress} min value only")
     }
     super.setMin(min)
   }
 
   override fun setMax(max: Int) {
-    if (max != 100) {
-      throw IllegalArgumentException("Current mode supports 100 max value only")
+    if (modeInitialized && max != mode.maxProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.maxProgress} max value only")
     }
     super.setMax(max)
   }
