@@ -208,6 +208,11 @@ class MainActivity : AppCompatActivity(),
       MaterialDesignDx.Icon.gmf_print,
       { CMYKSeekBarFragment() }
     ),
+    CMYK_SEEK_BAR_GITHUB(
+      "CMYK SeekBar GitHub",
+      FontAwesome.Icon.faw_github,
+      { CMYKSeekBarGithubSampleFragment() }
+    ),
     RGB_SEEK_BAR(
       "RGB SeekBar",
       MaterialDesignDx.Icon.gmf_space_bar,

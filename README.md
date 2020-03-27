@@ -3,54 +3,28 @@
 *:avocado: Handy, :snake: flexible and :zap: lightning-fast material color picking UI component for Android*
 
 :speech_balloon: Work-In-Progress
-## Roadmap
 
-- [ ] Add more picker types
-    - [x] HLS SeekBars
-    - [ ] RGB SeekBars
-    - [ ] RGB circle
-    - [ ] RGB plane
-    - [x] CMYK SeekBars
-    - [x] Alpha SeekBars
-    - [ ] HSL (S+L) plane
-    - [x] Swatches
-- [ ] Extend picker types
-    - [ ] CMYK SeekBars coloring modes
-    - [ ] More awesome swatches
-    - [ ] More supported alpha color models
-- [x] Sample buttons -> radios
-- [x] Remove sample app child press delays
-- [x] Enhance API
-- [x] Add XML attributes
-- [x] Provide *git-flow*
-- [ ] Automate release/publish flow
-- [x] Add thumb animation
-- [x] Add *MaterialDrawer* & sample fragments
-- [x] Add more *HSLColorPickerSeekBar* checks and reduce calls count
-- [x] Add more encapsulation to limit picker modification capabilities
-- [x] Package repository publish *(Bintray)*
-- [ ] Add *Rx* support
-- [x] Add/Revisit *RecyclerView* support
-- [x] Add sample app icon
-- [ ] Add logger solution
-- [ ] Add sample app analytics
-- [ ] Add GIFs media
-- [ ] Add call flow diagram
-- [ ] Add tests
-- [ ] Add docs
-- [ ] Add contribution guidelines
-- [x] Add OSS licenses
-- [x] Add license
+## :pill: Features
 
-## Setup
+- Clean, easy-to-use components and API
+- High performance
+- Material styling in mind
+- Standard Android SDK view family
+- Wide color models support
+- Tooling and utilities
+- Alpha channel support
+- Cutting edge tech stack
+- Active development and support
+
+## :hammer: Setup
 
 Gradle dependency:
 
 ```gradle
-implementation "codes.side:andcolorpicker:0.1.0"
+implementation "codes.side:andcolorpicker:0.2.0"
 ```
 
-## Picker types
+## :art: Picker types
 
 ### HSL (hue, saturation, lightness)
 
@@ -59,6 +33,8 @@ implementation "codes.side:andcolorpicker:0.1.0"
 ![](github/type_hsl.png)
 
 #### Layout XML Snippet
+
+Basic HSL components:
 ```xml
 <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
   android:id="@+id/hueColorPickerSeekBar"
@@ -66,21 +42,19 @@ implementation "codes.side:andcolorpicker:0.1.0"
   android:layout_height="wrap_content"
   app:hslColoringMode="pure"
   app:hslMode="hue" />
+```
 
-<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
-  android:id="@+id/saturationColorPickerSeekBar"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  app:hslColoringMode="pure"
-  app:hslMode="saturation" />
+Supported `hslMode` values:
+- `hue` (default)
+- `saturation`
+- `lightness`
 
-<codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
-  android:id="@+id/lightnessColorPickerSeekBar"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  app:hslColoringMode="pure"
-  app:hslMode="lightness" />
+Supported `hslColoringMode` values:
+- `pure` (default)
+- `output`
 
+Alpha component:
+```xml
 <codes.side.andcolorpicker.alpha.HSLAlphaColorPickerSeekBar
   android:id="@+id/alphaColorPickerSeekBar"
   android:layout_width="match_parent"
@@ -152,6 +126,8 @@ hueColorPickerSeekBar.progress = 50
 ![](github/type_cmyk.png)
 
 #### Layout XML Snippet
+
+Basic CMYK components:
 ```xml
 <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
   android:id="@+id/cyanCMYKColorPickerSeekBar"
@@ -160,7 +136,88 @@ hueColorPickerSeekBar.progress = 50
   app:cmykMode="cyan" />
 ```
 
-## License
+Supported `cmykMode` values:
+- `cyan` (default)
+- `magenta`
+- `yellow`
+- `black`
+
+Supported `cmykColoringMode` values:
+- `pure` (default)
+- `output`
+
+### Swatches
+
+SwatchView component:
+```xml
+<codes.side.andcolorpicker.view.swatch.SwatchView
+  android:id="@+id/swatchView"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" />
+```
+
+#### Kotlin Snippet:
+```kotlin
+swatchView.setSwatchPatternTint(
+  Color.LTGRAY
+)
+
+swatchView.setSwatchColor(
+  IntegerHSLColor().also {
+    it.setFromColorInt(
+      ColorUtils.setAlphaComponent(
+        Color.MAGENTA,
+        128
+      )
+    )
+  }
+)
+```
+
+## :rocket: Roadmap
+
+- [ ] Add more picker types
+    - [x] HLS SeekBars
+    - [ ] RGB SeekBars
+    - [ ] RGB circle
+    - [ ] RGB plane
+    - [ ] HSV/HSB seekbars
+    - [x] CMYK SeekBars
+    - [x] Alpha SeekBars
+    - [ ] HSL (S+L) plane
+    - [ ] LAB
+    - [ ] XYZ
+    - [ ] YPbPr
+    - [x] Swatches
+- [ ] Extend picker types
+    - [ ] CMYK SeekBars coloring modes
+    - [ ] More awesome swatches
+    - [ ] More supported alpha color models
+- [x] Sample buttons -> radios
+- [x] Remove sample app child press delays
+- [x] Enhance API
+- [x] Add XML attributes
+- [x] Provide *git-flow*
+- [ ] Automate release/publish flow
+- [x] Add thumb animation
+- [x] Add *MaterialDrawer* & sample fragments
+- [x] Add more *HSLColorPickerSeekBar* checks and reduce calls count
+- [x] Add more encapsulation to limit picker modification capabilities
+- [x] Package repository publish *(Bintray)*
+- [ ] Add *Rx* support
+- [x] Add/Revisit *RecyclerView* support
+- [x] Add sample app icon
+- [ ] Add logger solution
+- [ ] Add sample app analytics
+- [ ] Add GIFs media
+- [ ] Add call flow diagram
+- [ ] Add tests
+- [ ] Add docs
+- [ ] Add contribution guidelines
+- [x] Add OSS licenses
+- [x] Add license
+
+## :memo: License
 
 ```
 Copyright 2020 Illia Achour
