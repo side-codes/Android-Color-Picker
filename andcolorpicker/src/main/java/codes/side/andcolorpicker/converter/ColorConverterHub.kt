@@ -14,6 +14,10 @@ object ColorConverterHub {
       ColorKey.CMYK,
       IntegerCMYKColorConverter()
     )
+    registerConverter(
+      ColorKey.RGB,
+      IntegerRGBColorConverter()
+    )
   }
 
   fun getConverterByKey(key: ColorKey): ColorConverter {

@@ -8,6 +8,9 @@
   <string name="title_magenta">Magenta</string>
   <string name="title_yellow">Yellow</string>
   <string name="title_key">Key</string>
+  <string name="title_red">Red</string>
+  <string name="title_green">Green</string>
+  <string name="title_blue">Blue</string>
   <string name="title_dialog_pick">[WIP] Pick a color</string>
   <string name="action_dialog_pick_positive">Pick</string>
   <string name="action_dialog_pick_negative">Cancel</string>
