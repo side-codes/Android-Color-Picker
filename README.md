@@ -146,6 +146,34 @@ Supported `cmykColoringMode` values:
 - `pure` (default)
 - `output`
 
+### Swatches
+
+SwatchView component:
+```xml
+<codes.side.andcolorpicker.view.swatch.SwatchView
+  android:id="@+id/swatchView"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" />
+```
+
+#### Kotlin Snippet:
+```kotlin
+swatchView.setSwatchPatternTint(
+  Color.LTGRAY
+)
+
+swatchView.setSwatchColor(
+  IntegerHSLColor().also {
+    it.setFromColorInt(
+      ColorUtils.setAlphaComponent(
+        Color.MAGENTA,
+        128
+      )
+    )
+  }
+)
+```
+
 ## :rocket: Roadmap
 
 - [ ] Add more picker types
