@@ -30,7 +30,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     defStyle
   ) {
   companion object {
-    private const val TAG = "AndColorPickerSeekBar"
+    private const val TAG = "HSLColorPickerSeekBar"
 
     private val DEFAULT_MODE = Mode.MODE_HUE
     private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR

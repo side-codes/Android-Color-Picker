@@ -14,7 +14,7 @@ class IntegerLABColor : IntegerColor(
       .values().map { it.defaultValue }.toIntArray()
   }
 
-  override val colorKey = ColorKey.HSL
+  override val colorKey = ColorKey.LAB
 
   override val alpha: Float
     get() {

@@ -203,16 +203,6 @@ class MainActivity : AppCompatActivity(),
       MaterialDesignDx.Icon.gmf_fullscreen,
       { WipFragment() }
     ),
-    CMYK_SEEK_BAR(
-      "CMYK SeekBar",
-      MaterialDesignDx.Icon.gmf_print,
-      { CMYKSeekBarFragment() }
-    ),
-    CMYK_SEEK_BAR_GITHUB(
-      "CMYK SeekBar GitHub",
-      FontAwesome.Icon.faw_github,
-      { CMYKSeekBarGithubSampleFragment() }
-    ),
     RGB_SEEK_BAR(
       "RGB SeekBar",
       MaterialDesignDx.Icon.gmf_space_bar,
@@ -227,6 +217,21 @@ class MainActivity : AppCompatActivity(),
       "RGB Circle",
       MaterialDesignDx.Icon.gmf_lens,
       { WipFragment() }
+    ),
+    LAB_SEEK_BAR(
+      "LAB SeekBar",
+      FontAwesome.Icon.faw_flask,
+      { LABSeekBarFragment() }
+    ),
+    CMYK_SEEK_BAR(
+      "CMYK SeekBar",
+      MaterialDesignDx.Icon.gmf_print,
+      { CMYKSeekBarFragment() }
+    ),
+    CMYK_SEEK_BAR_GITHUB(
+      "CMYK SeekBar GitHub",
+      FontAwesome.Icon.faw_github,
+      { CMYKSeekBarGithubSampleFragment() }
     ),
     SWATCHES(
       "Swatches",
