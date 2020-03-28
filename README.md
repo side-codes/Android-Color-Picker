@@ -1,6 +1,6 @@
 ![](github/logo.png)
 
-*:avocado: Handy, :snake: flexible and :zap: lightning-fast material color picking UI component for Android*
+*:avocado: Handy, :snake: flexible and :zap: lightning-fast material color picker view components for Android*
 
 :speech_balloon: Work-In-Progress
 
