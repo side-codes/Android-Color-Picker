@@ -9,6 +9,7 @@ import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerLABColorConverter
 import codes.side.andcolorpicker.model.IntegerLABColor
 import codes.side.andcolorpicker.model.factory.LABColorFactory
+import codes.side.andcolorpicker.util.mapToIntArray
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 
@@ -74,6 +75,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       refreshThumb()
     }
 
+  private val tempSampledRangeCheckpointsIntArray = IntArray(3)
+
   init {
     init(attrs)
   }
@@ -136,39 +139,39 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       Mode.MODE_L -> {
         when (coloringMode) {
           ColoringMode.OUTPUT_COLOR -> {
-            (mode.minProgress..mode.maxProgress).step(PROGRESS_SAMPLING_PERIOD).map {
+            mode.sampledRange.mapToIntArray(tempSampledRangeCheckpointsIntArray) {
               ColorUtils.LABToColor(
                 it.toDouble(),
                 internalPickedColor.intA.toDouble(),
                 internalPickedColor.intB.toDouble()
               )
-            }.toIntArray()
+            }
           }
         }
       }
       Mode.MODE_A -> {
         when (coloringMode) {
           ColoringMode.OUTPUT_COLOR -> {
-            (mode.minProgress..mode.maxProgress).step(PROGRESS_SAMPLING_PERIOD).map {
+            mode.sampledRange.mapToIntArray(tempSampledRangeCheckpointsIntArray) {
               ColorUtils.LABToColor(
                 internalPickedColor.intL.toDouble(),
                 it.toDouble(),
                 internalPickedColor.intB.toDouble()
               )
-            }.toIntArray()
+            }
           }
         }
       }
       Mode.MODE_B -> {
         when (coloringMode) {
           ColoringMode.OUTPUT_COLOR -> {
-            (mode.minProgress..mode.maxProgress).step(PROGRESS_SAMPLING_PERIOD).map {
+            mode.sampledRange.mapToIntArray(tempSampledRangeCheckpointsIntArray) {
               ColorUtils.LABToColor(
                 internalPickedColor.intL.toDouble(),
                 internalPickedColor.intA.toDouble(),
                 it.toDouble()
               )
-            }.toIntArray()
+            }
           }
         }
       }
@@ -317,6 +320,9 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       get() {
         return maxProgress - minProgress
       }
+
+    val range by lazy { minProgress..maxProgress }
+    val sampledRange by lazy { range.step(PROGRESS_SAMPLING_PERIOD) }
   }
 
   interface OnColorPickListener :
