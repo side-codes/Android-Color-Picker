@@ -47,9 +47,9 @@ class LABSeekBarFragment : Fragment(R.layout.fragment_lab_seek_bar) {
 
     pickerGroup.setColor(
       IntegerLABColor().also {
-        it.intL = 50
-        it.intA = 0
-        it.intB = 0
+        it.intL = 60
+        it.intA = 50
+        it.intB = 90
       }
     )
   }

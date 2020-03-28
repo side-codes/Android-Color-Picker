@@ -75,8 +75,6 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       refreshThumb()
     }
 
-  private val tempSampledRangeCheckpointsIntArray = IntArray(3)
-
   init {
     init(attrs)
   }
@@ -135,11 +133,14 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       return
     }
 
+    val sampledRangeIntArray = mode.sampledRangeIntArray
+    val outputIntArray = IntArray(sampledRangeIntArray.size)
+
     ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
       Mode.MODE_L -> {
         when (coloringMode) {
           ColoringMode.OUTPUT_COLOR -> {
-            mode.sampledRange.mapToIntArray(tempSampledRangeCheckpointsIntArray) {
+            sampledRangeIntArray.mapToIntArray(outputIntArray) {
               ColorUtils.LABToColor(
                 it.toDouble(),
                 internalPickedColor.intA.toDouble(),
@@ -152,7 +153,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       Mode.MODE_A -> {
         when (coloringMode) {
           ColoringMode.OUTPUT_COLOR -> {
-            mode.sampledRange.mapToIntArray(tempSampledRangeCheckpointsIntArray) {
+            sampledRangeIntArray.mapToIntArray(outputIntArray) {
               ColorUtils.LABToColor(
                 internalPickedColor.intL.toDouble(),
                 it.toDouble(),
@@ -165,7 +166,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       Mode.MODE_B -> {
         when (coloringMode) {
           ColoringMode.OUTPUT_COLOR -> {
-            mode.sampledRange.mapToIntArray(tempSampledRangeCheckpointsIntArray) {
+            sampledRangeIntArray.mapToIntArray(outputIntArray) {
               ColorUtils.LABToColor(
                 internalPickedColor.intL.toDouble(),
                 internalPickedColor.intA.toDouble(),
@@ -323,6 +324,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
 
     val range by lazy { minProgress..maxProgress }
     val sampledRange by lazy { range.step(PROGRESS_SAMPLING_PERIOD) }
+    val sampledRangeIntArray by lazy { sampledRange.map { it }.toIntArray() }
   }
 
   interface OnColorPickListener :

@@ -1,8 +1,8 @@
 package codes.side.andcolorpicker.util
 
-public inline fun <T> Iterable<T>.mapToIntArray(
+inline fun IntArray.mapToIntArray(
   destination: IntArray,
-  transform: (T) -> Int
+  transform: (Int) -> Int
 ): IntArray {
   forEachIndexed { index, t ->
     destination[index] = transform(t)
