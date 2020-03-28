@@ -22,6 +22,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
+    app:labMode="l"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/lTitleTextView" />
@@ -44,6 +45,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     app:cmykMode="magenta"
+    app:labMode="a"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/aTitleTextView" />
@@ -66,6 +68,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     app:cmykMode="yellow"
+    app:labMode="b"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/bTitleTextView" />

@@ -1,10 +1,11 @@
 package codes.side.andcolorpicker.lab
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
+import androidx.core.graphics.ColorUtils
+import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerLABColorConverter
 import codes.side.andcolorpicker.model.IntegerLABColor
 import codes.side.andcolorpicker.model.factory.LABColorFactory
@@ -32,6 +33,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
 
     private val DEFAULT_MODE = Mode.MODE_L
     private val DEFAULT_COLORING_MODE = ColoringMode.OUTPUT_COLOR
+
+    private const val PROGRESS_SAMPLING_PERIOD = 10
   }
 
   override val colorConverter: IntegerLABColorConverter
@@ -76,20 +79,35 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
   }
 
   private fun init(attrs: AttributeSet? = null) {
-    mode = DEFAULT_MODE
-    coloringMode = DEFAULT_COLORING_MODE
+    val typedArray = context.theme.obtainStyledAttributes(
+      attrs,
+      R.styleable.LABColorPickerSeekBar,
+      0,
+      0
+    )
+
+    mode = Mode.values()[typedArray.getInteger(
+      R.styleable.LABColorPickerSeekBar_labMode,
+      DEFAULT_MODE.ordinal
+    )]
+    coloringMode = ColoringMode.values()[typedArray.getInteger(
+      R.styleable.LABColorPickerSeekBar_labColoringMode,
+      DEFAULT_COLORING_MODE.ordinal
+    )]
+
+    typedArray.recycle()
   }
 
   override fun setMin(min: Int) {
-    if (modeInitialized && min != mode.minProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.minProgress} min value only")
+    if (modeInitialized && min != 0) {
+      throw IllegalArgumentException("Current mode supports 0 min value only, but given $min")
     }
     super.setMin(min)
   }
 
   override fun setMax(max: Int) {
-    if (modeInitialized && max != mode.maxProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.maxProgress} max value only")
+    if (modeInitialized && max != mode.absoluteProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, but given $max")
     }
     super.setMax(max)
   }
@@ -117,26 +135,41 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
       Mode.MODE_L -> {
         when (coloringMode) {
-          ColoringMode.OUTPUT_COLOR -> intArrayOf(
-            Color.MAGENTA,
-            Color.MAGENTA
-          )
+          ColoringMode.OUTPUT_COLOR -> {
+            (mode.minProgress..mode.maxProgress).step(PROGRESS_SAMPLING_PERIOD).map {
+              ColorUtils.LABToColor(
+                it.toDouble(),
+                internalPickedColor.intA.toDouble(),
+                internalPickedColor.intB.toDouble()
+              )
+            }.toIntArray()
+          }
         }
       }
       Mode.MODE_A -> {
         when (coloringMode) {
-          ColoringMode.OUTPUT_COLOR -> intArrayOf(
-            Color.MAGENTA,
-            Color.MAGENTA
-          )
+          ColoringMode.OUTPUT_COLOR -> {
+            (mode.minProgress..mode.maxProgress).step(PROGRESS_SAMPLING_PERIOD).map {
+              ColorUtils.LABToColor(
+                internalPickedColor.intL.toDouble(),
+                it.toDouble(),
+                internalPickedColor.intB.toDouble()
+              )
+            }.toIntArray()
+          }
         }
       }
       Mode.MODE_B -> {
         when (coloringMode) {
-          ColoringMode.OUTPUT_COLOR -> intArrayOf(
-            Color.MAGENTA,
-            Color.MAGENTA
-          )
+          ColoringMode.OUTPUT_COLOR -> {
+            (mode.minProgress..mode.maxProgress).step(PROGRESS_SAMPLING_PERIOD).map {
+              ColorUtils.LABToColor(
+                internalPickedColor.intL.toDouble(),
+                internalPickedColor.intA.toDouble(),
+                it.toDouble()
+              )
+            }.toIntArray()
+          }
         }
       }
     }
@@ -168,8 +201,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     // TODO: Use Atomic and compare/set?
     val changed = when (mode) {
       Mode.MODE_L -> {
-        val currentH = internalPickedColor.intL
-        if (currentH != currentProgress) {
+        val currentValue = internalPickedColor.intL
+        if (currentValue != currentProgress) {
           internalPickedColor.intL = currentProgress
           true
         } else {
@@ -177,8 +210,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
         }
       }
       Mode.MODE_A -> {
-        val currentS = internalPickedColor.intA
-        if (currentS != currentProgress) {
+        val currentValue = internalPickedColor.intA
+        if (currentValue != currentProgress) {
           internalPickedColor.intA = currentProgress
           true
         } else {
@@ -186,8 +219,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
         }
       }
       Mode.MODE_B -> {
-        val currentL = internalPickedColor.intB
-        if (currentL != currentProgress) {
+        val currentValue = internalPickedColor.intB
+        if (currentValue != currentProgress) {
           internalPickedColor.intB = currentProgress
           true
         } else {
@@ -208,7 +241,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       return
     }
 
-    progress = when (mode) {
+    progress = -mode.minProgress + when (mode) {
       Mode.MODE_L -> {
         internalPickedColor.intL
       }
@@ -278,7 +311,12 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     MODE_B(
       IntegerLABColor.Component.B.minValue,
       IntegerLABColor.Component.B.maxValue
-    )
+    );
+
+    val absoluteProgress: Int
+      get() {
+        return maxProgress - minProgress
+      }
   }
 
   interface OnColorPickListener :
