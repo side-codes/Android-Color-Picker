@@ -99,13 +99,6 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     typedArray.recycle()
   }
 
-  override fun setMin(min: Int) {
-    if (modeInitialized && min != 0) {
-      throw IllegalArgumentException("Current mode supports 0 min value only, but given $min")
-    }
-    super.setMin(min)
-  }
-
   override fun setMax(max: Int) {
     if (modeInitialized && max != mode.absoluteProgress) {
       throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, but given $max")
@@ -123,7 +116,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     if (!modeInitialized) {
       return
     }
-    max = mode.maxProgress - mode.minProgress
+    max = mode.absoluteProgress
   }
 
   override fun refreshProgressDrawable() {
@@ -301,9 +294,9 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
   }
 
   enum class Mode(
-    val minProgress: Int,
-    val maxProgress: Int
-  ) {
+    override val minProgress: Int,
+    override val maxProgress: Int
+  ) : ColorSeekBar.Mode {
     MODE_L(
       IntegerLABColor.Component.L.minValue,
       IntegerLABColor.Component.L.maxValue
@@ -316,11 +309,6 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       IntegerLABColor.Component.B.minValue,
       IntegerLABColor.Component.B.maxValue
     );
-
-    val absoluteProgress: Int
-      get() {
-        return maxProgress - minProgress
-      }
 
     val range by lazy { minProgress..maxProgress }
     val sampledRange by lazy { range.step(PROGRESS_SAMPLING_PERIOD) }

@@ -10,6 +10,7 @@ import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerCMYKColorConverter
 import codes.side.andcolorpicker.model.IntegerCMYKColor
 import codes.side.andcolorpicker.model.factory.CMYKColorFactory
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 
 class CMYKColorPickerSeekBar @JvmOverloads constructor(
@@ -94,16 +95,9 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     typedArray.recycle()
   }
 
-  override fun setMin(min: Int) {
-    if (min != 0) {
-      throw IllegalArgumentException("Current mode supports 0 min value only")
-    }
-    super.setMin(min)
-  }
-
   override fun setMax(max: Int) {
-    if (max != 100) {
-      throw IllegalArgumentException("Current mode supports 100 max value only")
+    if (modeInitialized && max != mode.absoluteProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, but given $max")
     }
     super.setMax(max)
   }
@@ -118,7 +112,7 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     if (!modeInitialized) {
       return
     }
-    max = mode.maxProgress
+    max = mode.absoluteProgress
   }
 
   override fun refreshProgressDrawable() {
@@ -307,10 +301,10 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
   }
 
   enum class Mode(
-    val minProgress: Int,
-    val maxProgress: Int,
+    override val minProgress: Int,
+    override val maxProgress: Int,
     val checkpoints: IntArray
-  ) {
+  ) : ColorSeekBar.Mode {
     MODE_C(
       IntegerCMYKColor.Component.C.minValue,
       IntegerCMYKColor.Component.C.maxValue,

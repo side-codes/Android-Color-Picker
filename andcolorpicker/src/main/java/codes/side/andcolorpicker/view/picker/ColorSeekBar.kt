@@ -205,6 +205,9 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   override fun setMin(min: Int) {
+    if (min != 0) {
+      throw IllegalArgumentException("Current mode supports 0 min value only, but given $min")
+    }
     ::minUpdating.marker {
       super.setMin(min)
     }
@@ -421,6 +424,16 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     thumbObjectAnimator.start()
     notifyListenersOnColorPicked(true)
   }
+
+  interface Mode {
+    val minProgress: Int
+    val maxProgress: Int
+  }
+
+  val Mode.absoluteProgress: Int
+    get() {
+      return maxProgress - minProgress
+    }
 
   // TODO: Rename
   interface OnColorPickListener<S : ColorSeekBar<C>, C : Color> {

@@ -20,11 +20,21 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
     defStyle
   ) {
 
+  private var isInitialized = false
+
   override val colorConverter: IntegerHSLColorConverter
     get() = super.colorConverter as IntegerHSLColorConverter
 
   init {
     refreshProperties()
+    isInitialized = true
+  }
+
+  override fun setMax(max: Int) {
+    if (isInitialized && max != IntegerHSLColor.Component.A.maxValue) {
+      throw IllegalArgumentException("Current mode supports ${IntegerHSLColor.Component.A.maxValue} max value only, but given $max")
+    }
+    super.setMax(max)
   }
 
   override fun refreshProperties() {

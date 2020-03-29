@@ -132,16 +132,9 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     typedArray.recycle()
   }
 
-  override fun setMin(min: Int) {
-    if (modeInitialized && min != mode.minProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.minProgress} min value only")
-    }
-    super.setMin(min)
-  }
-
   override fun setMax(max: Int) {
-    if (modeInitialized && max != mode.maxProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.maxProgress} max value only")
+    if (modeInitialized && max != mode.absoluteProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, but given $max")
     }
     super.setMax(max)
   }
@@ -156,7 +149,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     if (!modeInitialized) {
       return
     }
-    max = mode.maxProgress
+    max = mode.absoluteProgress
   }
 
   // TODO: Get rid of toIntArray allocations
@@ -388,9 +381,9 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
   }
 
   enum class Mode(
-    val minProgress: Int,
-    val maxProgress: Int
-  ) {
+    override val minProgress: Int,
+    override val maxProgress: Int
+  ) : ColorSeekBar.Mode {
     // H from HSV/HSL/HSI/HSB
     MODE_HUE(
       IntegerHSLColor.Component.H.minValue,
