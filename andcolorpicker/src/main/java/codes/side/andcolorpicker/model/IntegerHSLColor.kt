@@ -6,13 +6,13 @@ import kotlin.random.Random
 // TODO: Remove float properties? Move to converters?
 class IntegerHSLColor : IntegerColor(
   COMPONENTS_COUNT,
-  DEFAULT_HSL_VALUES
+  DEFAULT_VALUES
 ) {
   companion object {
     private const val TAG = "IntegerHSLColor"
     private val COMPONENTS_COUNT = Component.values().size
 
-    private val DEFAULT_HSL_VALUES = Component
+    private val DEFAULT_VALUES = Component
       .values().map { it.defaultValue }.toIntArray()
 
     fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
