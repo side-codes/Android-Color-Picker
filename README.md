@@ -125,6 +125,17 @@ hueColorPickerSeekBar.progress = 50
 
 ![](github/seek_bar_rgb_pure.png)
 
+#### Layout XML Snippet
+
+Basic RGB components:
+```xml
+<codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
+  android:id="@+id/redRGBColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:rgbMode="red" />
+```
+
 ### LAB
 
 ![](github/seek_bar_lab_output.png)
