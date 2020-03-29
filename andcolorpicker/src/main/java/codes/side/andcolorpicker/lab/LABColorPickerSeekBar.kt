@@ -245,27 +245,9 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
 
     drawable.setStroke(
       thumbStrokeWidthPx,
-      when (mode) {
-        Mode.MODE_L -> {
-          when (coloringMode) {
-            ColoringMode.OUTPUT_COLOR -> {
-              colorConverter.convertToColorInt(internalPickedColor)
-            }
-          }
-        }
-        Mode.MODE_A -> {
-          when (coloringMode) {
-            ColoringMode.OUTPUT_COLOR -> {
-              colorConverter.convertToColorInt(internalPickedColor)
-            }
-          }
-        }
-        Mode.MODE_B -> {
-          when (coloringMode) {
-            ColoringMode.OUTPUT_COLOR -> {
-              colorConverter.convertToColorInt(internalPickedColor)
-            }
-          }
+      when (coloringMode) {
+        ColoringMode.OUTPUT_COLOR -> {
+          colorConverter.convertToColorInt(internalPickedColor)
         }
       }
     )
