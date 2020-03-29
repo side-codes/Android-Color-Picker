@@ -2,6 +2,7 @@ package codes.side.andcolorpicker.rgb
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -10,6 +11,7 @@ import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerRGBColorConverter
 import codes.side.andcolorpicker.model.IntegerRGBColor
 import codes.side.andcolorpicker.model.factory.RGBColorFactory
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 
 class RGBColorPickerSeekBar @JvmOverloads constructor(
@@ -91,41 +93,30 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
     typedArray.recycle()
   }
 
-  override fun setMin(min: Int) {
-    if (modeInitialized && min != mode.minProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.minProgress} min value only")
-    }
-    super.setMin(min)
-  }
-
   override fun setMax(max: Int) {
-    if (modeInitialized && max != mode.maxProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.maxProgress} max value only")
+    if (modeInitialized && max != mode.absoluteProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, was $max")
     }
     super.setMax(max)
   }
 
-  override fun updateInternalPickedColorFrom(value: IntegerRGBColor) {
-    super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFrom(value)
+  override fun onUpdateColorFrom(color: IntegerRGBColor, value: IntegerRGBColor) {
+    color.setFrom(value)
   }
 
-  override fun refreshProperties() {
-    super.refreshProperties()
+  override fun onRefreshProperties() {
     if (!modeInitialized) {
       return
     }
     max = mode.maxProgress
   }
 
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
-
+  override fun onRefreshProgressDrawable(progressDrawable: LayerDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
 
-    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors =
+    (progressDrawable.getDrawable(0) as GradientDrawable).colors =
       when (coloringMode) {
         ColoringMode.PURE_COLOR, ColoringMode.PLAIN_COLOR -> mode.coloringModeCheckpointsMap[coloringMode]
         ColoringMode.OUTPUT_COLOR -> when (mode) {
@@ -136,10 +127,8 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
       }
   }
 
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
+  override fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>) {
+    thumbColoringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
           paintThumbStroke(it)
@@ -151,66 +140,56 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshInternalPickedColorFromProgress() {
-    super.refreshInternalPickedColorFromProgress()
-
+  override fun onRefreshColorFromProgress(color: IntegerRGBColor, progress: Int): Boolean {
     if (!modeInitialized) {
-      return
+      return false
     }
 
-    val currentProgress = progress
-    // TODO: Use Atomic and compare/set?
-    val changed = when (mode) {
+    return when (mode) {
       Mode.MODE_R -> {
-        val currentH = internalPickedColor.intR
-        if (currentH != currentProgress) {
-          internalPickedColor.intR = currentProgress
+        val currentH = color.intR
+        if (currentH != progress) {
+          color.intR = progress
           true
         } else {
           false
         }
       }
       Mode.MODE_G -> {
-        val currentS = internalPickedColor.intG
-        if (currentS != currentProgress) {
-          internalPickedColor.intG = currentProgress
+        val currentS = color.intG
+        if (currentS != progress) {
+          color.intG = progress
           true
         } else {
           false
         }
       }
       Mode.MODE_B -> {
-        val currentL = internalPickedColor.intB
-        if (currentL != currentProgress) {
-          internalPickedColor.intB = currentProgress
+        val currentL = color.intB
+        if (currentL != progress) {
+          color.intB = progress
           true
         } else {
           false
         }
       }
-    }
-
-    if (changed) {
-      notifyListenersOnColorChanged()
     }
   }
 
-  override fun refreshProgressFromCurrentColor() {
-    super.refreshProgressFromCurrentColor()
-
+  override fun onRefreshProgressFromColor(color: IntegerRGBColor): Int? {
     if (!modeInitialized) {
-      return
+      return null
     }
 
-    progress = when (mode) {
+    return when (mode) {
       Mode.MODE_R -> {
-        internalPickedColor.intR
+        color.intR
       }
       Mode.MODE_G -> {
-        internalPickedColor.intG
+        color.intG
       }
       Mode.MODE_B -> {
-        internalPickedColor.intB
+        color.intB
       }
     }
   }
@@ -248,10 +227,10 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
   }
 
   enum class Mode(
-    val minProgress: Int,
-    val maxProgress: Int,
+    override val minProgress: Int,
+    override val maxProgress: Int,
     val coloringModeCheckpointsMap: HashMap<ColoringMode, IntArray>
-  ) {
+  ) : ColorSeekBar.Mode {
     MODE_R(
       IntegerRGBColor.Component.R.minValue,
       IntegerRGBColor.Component.R.maxValue,
@@ -293,6 +272,6 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
           Color.BLUE
         )
       )
-    );
+    )
   }
 }
