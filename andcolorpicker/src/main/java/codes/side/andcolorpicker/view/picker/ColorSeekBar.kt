@@ -222,7 +222,6 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   /*
    * Silently updates internal picked color from provided value.
    */
-  // TODO: Make abstract? Make template?
   private fun updateInternalPickedColorFrom(value: C) {
     if (DEBUG) {
       Log.d(
@@ -241,46 +240,59 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   /*
    * Refresh or set basic SeekBar properties like min/max.
    */
-  // TODO: Make abstract? Make template?
-  protected open fun refreshProperties() {
+  protected fun refreshProperties() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshProperties() called on $this"
       )
     }
+    onRefreshProperties()
   }
+
+  abstract fun onRefreshProperties()
 
   /*
    * Synchronizes progress from picked color.
    */
-  // TODO: Provide color as a parameter?
-  // TODO: Make abstract? Make template?
-  protected open fun refreshProgressFromCurrentColor() {
+  protected fun refreshProgressFromCurrentColor() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshProgressFromCurrentColor() called on $this"
       )
     }
+
+    val result = calculateProgressFromColor(internalPickedColor)
+    result?.let {
+      progress = it
+    }
   }
+
+  abstract fun calculateProgressFromColor(color: C): Int?
 
   /*
    * Synchronizes internal picked color from progress while bypassing public API
    * pickedColor setter and consequent calls.
-   * CONTRACT: Derived class is responsible for notifying listeners on color change
-   * if needed.
    */
-  // TODO: Provide color as a parameter?
-  // TODO: Make abstract? Make template?
-  protected open fun refreshInternalPickedColorFromProgress() {
+  private fun refreshInternalPickedColorFromProgress() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshInternalCurrentColorFromProgress() called on $this"
       )
     }
+    val changed = refreshColorFromProgress(
+      internalPickedColor,
+      progress
+    )
+
+    if (changed) {
+      notifyListenersOnColorChanged()
+    }
   }
+
+  abstract fun refreshColorFromProgress(color: C, progress: Int): Boolean
 
   /*
    * Refreshes SeekBar's progress drawable according to derived class details.
@@ -332,7 +344,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     super.setOnSeekBarChangeListener(l)
   }
 
-  protected fun notifyListenersOnColorChanged() {
+  private fun notifyListenersOnColorChanged() {
     if (!notifyListeners) {
       if (DEBUG) {
         Log.d(

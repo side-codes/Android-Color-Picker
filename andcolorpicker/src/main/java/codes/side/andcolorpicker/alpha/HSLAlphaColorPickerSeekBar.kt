@@ -37,34 +37,26 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
     super.setMax(max)
   }
 
-  override fun refreshProperties() {
-    super.refreshProperties()
-    max = IntegerHSLColor.Component.A.maxValue
-  }
-
   override fun updateColorFrom(color: IntegerHSLColor, value: IntegerHSLColor) {
     color.setFrom(value)
   }
 
-  override fun refreshInternalPickedColorFromProgress() {
-    super.refreshInternalPickedColorFromProgress()
-    val currentProgress = progress
+  override fun onRefreshProperties() {
+    max = IntegerHSLColor.Component.A.maxValue
+  }
+
+  override fun calculateProgressFromColor(color: IntegerHSLColor): Int? {
+    return color.intA
+  }
+
+  override fun refreshColorFromProgress(color: IntegerHSLColor, progress: Int): Boolean {
     val currentA = internalPickedColor.intA
-    val changed = if (currentA != currentProgress) {
+    return if (currentA != progress) {
       internalPickedColor.intA = progress
       true
     } else {
       false
     }
-
-    if (changed) {
-      notifyListenersOnColorChanged()
-    }
-  }
-
-  override fun refreshProgressFromCurrentColor() {
-    super.refreshProgressFromCurrentColor()
-    progress = internalPickedColor.intA
   }
 
   interface OnColorPickListener :

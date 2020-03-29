@@ -106,12 +106,32 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     color.setFrom(value)
   }
 
-  override fun refreshProperties() {
-    super.refreshProperties()
+  override fun onRefreshProperties() {
     if (!modeInitialized) {
       return
     }
     max = mode.absoluteProgress
+  }
+
+  override fun calculateProgressFromColor(color: IntegerCMYKColor): Int? {
+    if (!modeInitialized) {
+      return null
+    }
+
+    return -mode.minProgress + when (mode) {
+      Mode.MODE_C -> {
+        internalPickedColor.intC
+      }
+      Mode.MODE_M -> {
+        internalPickedColor.intM
+      }
+      Mode.MODE_Y -> {
+        internalPickedColor.intY
+      }
+      Mode.MODE_K -> {
+        internalPickedColor.intK
+      }
+    }
   }
 
   override fun refreshProgressDrawable() {
@@ -164,78 +184,48 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshInternalPickedColorFromProgress() {
-    super.refreshInternalPickedColorFromProgress()
-
+  override fun refreshColorFromProgress(color: IntegerCMYKColor, progress: Int): Boolean {
     if (!modeInitialized) {
-      return
+      return false
     }
 
-    val currentProgress = progress
-    // TODO: Use Atomic and compare/set?
-    val changed = when (mode) {
+    val unmaskedProgress = mode.minProgress + progress
+    return when (mode) {
       Mode.MODE_C -> {
-        val currentH = internalPickedColor.intC
-        if (currentH != currentProgress) {
-          internalPickedColor.intC = currentProgress
+        val currentH = color.intC
+        if (currentH != unmaskedProgress) {
+          color.intC = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_M -> {
-        val currentS = internalPickedColor.intM
-        if (currentS != currentProgress) {
-          internalPickedColor.intM = currentProgress
+        val currentS = color.intM
+        if (currentS != unmaskedProgress) {
+          color.intM = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_Y -> {
-        val currentL = internalPickedColor.intY
-        if (currentL != currentProgress) {
-          internalPickedColor.intY = currentProgress
+        val currentL = color.intY
+        if (currentL != unmaskedProgress) {
+          color.intY = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_K -> {
-        val currentL = internalPickedColor.intK
-        if (currentL != currentProgress) {
-          internalPickedColor.intK = currentProgress
+        val currentL = color.intK
+        if (currentL != unmaskedProgress) {
+          color.intK = unmaskedProgress
           true
         } else {
           false
         }
-      }
-    }
-
-    if (changed) {
-      notifyListenersOnColorChanged()
-    }
-  }
-
-  override fun refreshProgressFromCurrentColor() {
-    super.refreshProgressFromCurrentColor()
-
-    if (!modeInitialized) {
-      return
-    }
-
-    progress = when (mode) {
-      Mode.MODE_C -> {
-        internalPickedColor.intC
-      }
-      Mode.MODE_M -> {
-        internalPickedColor.intM
-      }
-      Mode.MODE_Y -> {
-        internalPickedColor.intY
-      }
-      Mode.MODE_K -> {
-        internalPickedColor.intK
       }
     }
   }

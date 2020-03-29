@@ -143,12 +143,29 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     color.setFrom(value)
   }
 
-  override fun refreshProperties() {
-    super.refreshProperties()
+  override fun onRefreshProperties() {
     if (!modeInitialized) {
       return
     }
     max = mode.absoluteProgress
+  }
+
+  override fun calculateProgressFromColor(color: IntegerHSLColor): Int? {
+    if (!modeInitialized) {
+      return null
+    }
+
+    return -mode.minProgress + when (mode) {
+      Mode.MODE_HUE -> {
+        internalPickedColor.intH
+      }
+      Mode.MODE_SATURATION -> {
+        internalPickedColor.intS
+      }
+      Mode.MODE_LIGHTNESS -> {
+        internalPickedColor.intL
+      }
+    }
   }
 
   // TODO: Get rid of toIntArray allocations
@@ -233,66 +250,39 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshInternalPickedColorFromProgress() {
-    super.refreshInternalPickedColorFromProgress()
-
+  override fun refreshColorFromProgress(color: IntegerHSLColor, progress: Int): Boolean {
     if (!modeInitialized) {
-      return
+      return false
     }
 
-    val currentProgress = progress
-    // TODO: Use Atomic and compare/set?
-    val changed = when (mode) {
+    val unmaskedProgress = mode.minProgress + progress
+    return when (mode) {
       Mode.MODE_HUE -> {
-        val currentH = internalPickedColor.intH
-        if (currentH != currentProgress) {
-          internalPickedColor.intH = currentProgress
+        val currentH = color.intH
+        if (currentH != unmaskedProgress) {
+          color.intH = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_SATURATION -> {
-        val currentS = internalPickedColor.intS
-        if (currentS != currentProgress) {
-          internalPickedColor.intS = currentProgress
+        val currentS = color.intS
+        if (currentS != unmaskedProgress) {
+          color.intS = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_LIGHTNESS -> {
-        val currentL = internalPickedColor.intL
-        if (currentL != currentProgress) {
-          internalPickedColor.intL = currentProgress
+        val currentL = color.intL
+        if (currentL != unmaskedProgress) {
+          color.intL = unmaskedProgress
           true
         } else {
           false
         }
-      }
-    }
-
-    if (changed) {
-      notifyListenersOnColorChanged()
-    }
-  }
-
-  override fun refreshProgressFromCurrentColor() {
-    super.refreshProgressFromCurrentColor()
-
-    if (!modeInitialized) {
-      return
-    }
-
-    progress = when (mode) {
-      Mode.MODE_HUE -> {
-        internalPickedColor.intH
-      }
-      Mode.MODE_SATURATION -> {
-        internalPickedColor.intS
-      }
-      Mode.MODE_LIGHTNESS -> {
-        internalPickedColor.intL
       }
     }
   }
