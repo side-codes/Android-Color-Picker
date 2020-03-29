@@ -14,12 +14,22 @@ object ColorConverterHub {
       ColorKey.CMYK,
       IntegerCMYKColorConverter()
     )
+    registerConverter(
+      ColorKey.RGB,
+      IntegerRGBColorConverter()
+    )
+    registerConverter(
+      ColorKey.LAB,
+      IntegerLABColorConverter()
+    )
   }
 
+  @Suppress("MemberVisibilityCanBePrivate")
   fun getConverterByKey(key: ColorKey): ColorConverter {
     return requireNotNull(map[key])
   }
 
+  @Suppress("MemberVisibilityCanBePrivate")
   fun registerConverter(key: ColorKey, converter: ColorConverter) {
     map[key] = converter
   }

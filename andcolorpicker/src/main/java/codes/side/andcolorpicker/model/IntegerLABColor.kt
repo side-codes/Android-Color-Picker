@@ -1,22 +1,64 @@
 package codes.side.andcolorpicker.model
 
-class IntegerRGBColor : IntegerColor(
+// TODO: Provide precision options
+// TODO: Remove float properties? Move to converters?
+class IntegerLABColor : IntegerColor(
   COMPONENTS_COUNT,
-  DEFAULT_RGB_VALUES
+  DEFAULT_VALUES
 ) {
   companion object {
-    private const val TAG = "IntegerRGBColor"
+    private const val TAG = "IntegerLABColor"
     private val COMPONENTS_COUNT = Component.values().size
 
-    private val DEFAULT_RGB_VALUES = Component
+    private val DEFAULT_VALUES = Component
       .values().map { it.defaultValue }.toIntArray()
   }
 
-  override val colorKey = ColorKey.RGB
+  override val colorKey = ColorKey.LAB
 
   override val alpha: Float
     get() {
+      return intAlpha / Component.ALPHA.maxValue.toFloat()
+    }
+
+  var intAlpha: Int
+    get() {
+      return intValues[Component.ALPHA.index]
+    }
+    set(value) {
+      setValue(
+        Component.ALPHA.index,
+        value,
+        Component.ALPHA.minValue,
+        Component.ALPHA.maxValue
+      )
+    }
+
+  var floatL: Float
+    get() {
+      return intL.toFloat()
+    }
+    set(value) {
+      intL = value.toInt()
+    }
+  var intL: Int
+    get() {
+      return intValues[Component.L.index]
+    }
+    set(value) {
+      setValue(
+        Component.L.index,
+        value,
+        Component.L.minValue,
+        Component.L.maxValue
+      )
+    }
+  var floatA: Float
+    get() {
       return intA / Component.A.maxValue.toFloat()
+    }
+    set(value) {
+      intA = (value * Component.A.maxValue).toInt()
     }
   var intA: Int
     get() {
@@ -30,53 +72,12 @@ class IntegerRGBColor : IntegerColor(
         Component.A.maxValue
       )
     }
-
-  var floatR: Float
-    get() {
-      return intR.toFloat()
-    }
-    set(value) {
-      intR = value.toInt()
-    }
-  var intR: Int
-    get() {
-      return intValues[Component.R.index]
-    }
-    set(value) {
-      setValue(
-        Component.R.index,
-        value,
-        Component.R.minValue,
-        Component.R.maxValue
-      )
-    }
-
-  var floatG: Float
-    get() {
-      return intG.toFloat()
-    }
-    set(value) {
-      intG = value.toInt()
-    }
-  var intG: Int
-    get() {
-      return intValues[Component.G.index]
-    }
-    set(value) {
-      setValue(
-        Component.G.index,
-        value,
-        Component.G.minValue,
-        Component.G.maxValue
-      )
-    }
-
   var floatB: Float
     get() {
-      return intB.toFloat()
+      return intB / Component.B.maxValue.toFloat()
     }
     set(value) {
-      intB = value.toInt()
+      intB = (value * Component.B.maxValue).toInt()
     }
   var intB: Int
     get() {
@@ -91,8 +92,10 @@ class IntegerRGBColor : IntegerColor(
       )
     }
 
-  override fun clone(): IntegerRGBColor {
-    return super.clone() as IntegerRGBColor
+  override fun clone(): IntegerLABColor {
+    return IntegerLABColor().also {
+      it.setFrom(this)
+    }
   }
 
   override fun equals(other: Any?): Boolean {
@@ -100,7 +103,7 @@ class IntegerRGBColor : IntegerColor(
     if (javaClass != other?.javaClass) return false
     if (!super.equals(other)) return false
 
-    other as IntegerRGBColor
+    other as IntegerLABColor
 
     if (colorKey != other.colorKey) return false
 
@@ -121,22 +124,22 @@ class IntegerRGBColor : IntegerColor(
     val minValue: Int,
     val maxValue: Int
   ) {
-    R(
+    L(
+      50,
       0,
-      0,
-      255
+      100
     ),
-    G(
+    A(
       0,
-      0,
-      255
+      -128,
+      127
     ),
     B(
       0,
-      0,
-      255
+      -128,
+      127
     ),
-    A(
+    ALPHA(
       255,
       0,
       255

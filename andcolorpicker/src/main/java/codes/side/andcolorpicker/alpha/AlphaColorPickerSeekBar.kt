@@ -85,20 +85,16 @@ abstract class AlphaColorPickerSeekBar<C : Color> @JvmOverloads constructor(
     return layerList.toTypedArray()
   }
 
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
-
-    ((progressDrawable as LayerDrawable).getDrawable(1) as GradientDrawable).colors =
+  override fun onRefreshProgressDrawable(progressDrawable: LayerDrawable) {
+    (progressDrawable.getDrawable(1) as GradientDrawable).colors =
       intArrayOf(
         android.graphics.Color.TRANSPARENT,
         colorConverter.convertToOpaqueColorInt(internalPickedColor)
       )
   }
 
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
+  override fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>) {
+    thumbColoringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
           paintThumbStroke(it)

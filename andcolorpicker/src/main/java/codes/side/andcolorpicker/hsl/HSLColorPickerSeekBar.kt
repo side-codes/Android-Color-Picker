@@ -2,6 +2,7 @@ package codes.side.andcolorpicker.hsl
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -30,7 +31,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     defStyle
   ) {
   companion object {
-    private const val TAG = "AndColorPickerSeekBar"
+    private const val TAG = "HSLColorPickerSeekBar"
 
     private val DEFAULT_MODE = Mode.MODE_HUE
     private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
@@ -132,31 +133,40 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     typedArray.recycle()
   }
 
-  override fun setMin(min: Int) {
-    if (modeInitialized && min != mode.minProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.minProgress} min value only")
-    }
-    super.setMin(min)
-  }
-
   override fun setMax(max: Int) {
-    if (modeInitialized && max != mode.maxProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.maxProgress} max value only")
+    if (modeInitialized && max != mode.absoluteProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, was $max")
     }
     super.setMax(max)
   }
 
-  override fun updateInternalPickedColorFrom(value: IntegerHSLColor) {
-    super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFrom(value)
+  override fun onUpdateColorFrom(color: IntegerHSLColor, value: IntegerHSLColor) {
+    color.setFrom(value)
   }
 
-  override fun refreshProperties() {
-    super.refreshProperties()
+  override fun onRefreshProperties() {
     if (!modeInitialized) {
       return
     }
-    max = mode.maxProgress
+    max = mode.absoluteProgress
+  }
+
+  override fun onRefreshProgressFromColor(color: IntegerHSLColor): Int? {
+    if (!modeInitialized) {
+      return null
+    }
+
+    return -mode.minProgress + when (mode) {
+      Mode.MODE_HUE -> {
+        internalPickedColor.intH
+      }
+      Mode.MODE_SATURATION -> {
+        internalPickedColor.intS
+      }
+      Mode.MODE_LIGHTNESS -> {
+        internalPickedColor.intL
+      }
+    }
   }
 
   // TODO: Get rid of toIntArray allocations
@@ -179,14 +189,12 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     zeroSaturationOutputColorHSLCache[2] = internalPickedColor.floatL
   }
 
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
-
+  override fun onRefreshProgressDrawable(progressDrawable: LayerDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
 
-    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
+    (progressDrawable.getDrawable(0) as GradientDrawable).colors = when (mode) {
       Mode.MODE_HUE -> {
         when (coloringMode) {
           ColoringMode.PURE_COLOR -> HUE_COLOR_CHECKPOINTS
@@ -226,10 +234,8 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
+  override fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>) {
+    thumbColoringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
           paintThumbStroke(it)
@@ -241,66 +247,39 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshInternalPickedColorFromProgress() {
-    super.refreshInternalPickedColorFromProgress()
-
+  override fun onRefreshColorFromProgress(color: IntegerHSLColor, progress: Int): Boolean {
     if (!modeInitialized) {
-      return
+      return false
     }
 
-    val currentProgress = progress
-    // TODO: Use Atomic and compare/set?
-    val changed = when (mode) {
+    val unmaskedProgress = mode.minProgress + progress
+    return when (mode) {
       Mode.MODE_HUE -> {
-        val currentH = internalPickedColor.intH
-        if (currentH != currentProgress) {
-          internalPickedColor.intH = currentProgress
+        val currentH = color.intH
+        if (currentH != unmaskedProgress) {
+          color.intH = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_SATURATION -> {
-        val currentS = internalPickedColor.intS
-        if (currentS != currentProgress) {
-          internalPickedColor.intS = currentProgress
+        val currentS = color.intS
+        if (currentS != unmaskedProgress) {
+          color.intS = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_LIGHTNESS -> {
-        val currentL = internalPickedColor.intL
-        if (currentL != currentProgress) {
-          internalPickedColor.intL = currentProgress
+        val currentL = color.intL
+        if (currentL != unmaskedProgress) {
+          color.intL = unmaskedProgress
           true
         } else {
           false
         }
-      }
-    }
-
-    if (changed) {
-      notifyListenersOnColorChanged()
-    }
-  }
-
-  override fun refreshProgressFromCurrentColor() {
-    super.refreshProgressFromCurrentColor()
-
-    if (!modeInitialized) {
-      return
-    }
-
-    progress = when (mode) {
-      Mode.MODE_HUE -> {
-        internalPickedColor.intH
-      }
-      Mode.MODE_SATURATION -> {
-        internalPickedColor.intS
-      }
-      Mode.MODE_LIGHTNESS -> {
-        internalPickedColor.intL
       }
     }
   }
@@ -388,9 +367,9 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
   }
 
   enum class Mode(
-    val minProgress: Int,
-    val maxProgress: Int
-  ) {
+    override val minProgress: Int,
+    override val maxProgress: Int
+  ) : ColorSeekBar.Mode {
     // H from HSV/HSL/HSI/HSB
     MODE_HUE(
       IntegerHSLColor.Component.H.minValue,

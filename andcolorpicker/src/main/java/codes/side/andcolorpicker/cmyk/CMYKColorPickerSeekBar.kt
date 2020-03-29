@@ -2,6 +2,7 @@ package codes.side.andcolorpicker.cmyk
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -10,6 +11,7 @@ import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerCMYKColorConverter
 import codes.side.andcolorpicker.model.IntegerCMYKColor
 import codes.side.andcolorpicker.model.factory.CMYKColorFactory
+import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 
 class CMYKColorPickerSeekBar @JvmOverloads constructor(
@@ -94,41 +96,51 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     typedArray.recycle()
   }
 
-  override fun setMin(min: Int) {
-    if (min != 0) {
-      throw IllegalArgumentException("Current mode supports 0 min value only")
-    }
-    super.setMin(min)
-  }
-
   override fun setMax(max: Int) {
-    if (max != 100) {
-      throw IllegalArgumentException("Current mode supports 100 max value only")
+    if (modeInitialized && max != mode.absoluteProgress) {
+      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, was $max")
     }
     super.setMax(max)
   }
 
-  override fun updateInternalPickedColorFrom(value: IntegerCMYKColor) {
-    super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFrom(value)
+  override fun onUpdateColorFrom(color: IntegerCMYKColor, value: IntegerCMYKColor) {
+    color.setFrom(value)
   }
 
-  override fun refreshProperties() {
-    super.refreshProperties()
+  override fun onRefreshProperties() {
     if (!modeInitialized) {
       return
     }
-    max = mode.maxProgress
+    max = mode.absoluteProgress
   }
 
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
+  override fun onRefreshProgressFromColor(color: IntegerCMYKColor): Int? {
+    if (!modeInitialized) {
+      return null
+    }
 
+    return -mode.minProgress + when (mode) {
+      Mode.MODE_C -> {
+        internalPickedColor.intC
+      }
+      Mode.MODE_M -> {
+        internalPickedColor.intM
+      }
+      Mode.MODE_Y -> {
+        internalPickedColor.intY
+      }
+      Mode.MODE_K -> {
+        internalPickedColor.intK
+      }
+    }
+  }
+
+  override fun onRefreshProgressDrawable(progressDrawable: LayerDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
 
-    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
+    (progressDrawable.getDrawable(0) as GradientDrawable).colors = when (mode) {
       Mode.MODE_C -> {
         when (coloringMode) {
           ColoringMode.PURE_COLOR -> Mode.MODE_C.checkpoints
@@ -156,10 +168,8 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
+  override fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>) {
+    thumbColoringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
           paintThumbStroke(it)
@@ -171,78 +181,48 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshInternalPickedColorFromProgress() {
-    super.refreshInternalPickedColorFromProgress()
-
+  override fun onRefreshColorFromProgress(color: IntegerCMYKColor, progress: Int): Boolean {
     if (!modeInitialized) {
-      return
+      return false
     }
 
-    val currentProgress = progress
-    // TODO: Use Atomic and compare/set?
-    val changed = when (mode) {
+    val unmaskedProgress = mode.minProgress + progress
+    return when (mode) {
       Mode.MODE_C -> {
-        val currentH = internalPickedColor.intC
-        if (currentH != currentProgress) {
-          internalPickedColor.intC = currentProgress
+        val currentH = color.intC
+        if (currentH != unmaskedProgress) {
+          color.intC = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_M -> {
-        val currentS = internalPickedColor.intM
-        if (currentS != currentProgress) {
-          internalPickedColor.intM = currentProgress
+        val currentS = color.intM
+        if (currentS != unmaskedProgress) {
+          color.intM = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_Y -> {
-        val currentL = internalPickedColor.intY
-        if (currentL != currentProgress) {
-          internalPickedColor.intY = currentProgress
+        val currentL = color.intY
+        if (currentL != unmaskedProgress) {
+          color.intY = unmaskedProgress
           true
         } else {
           false
         }
       }
       Mode.MODE_K -> {
-        val currentL = internalPickedColor.intK
-        if (currentL != currentProgress) {
-          internalPickedColor.intK = currentProgress
+        val currentL = color.intK
+        if (currentL != unmaskedProgress) {
+          color.intK = unmaskedProgress
           true
         } else {
           false
         }
-      }
-    }
-
-    if (changed) {
-      notifyListenersOnColorChanged()
-    }
-  }
-
-  override fun refreshProgressFromCurrentColor() {
-    super.refreshProgressFromCurrentColor()
-
-    if (!modeInitialized) {
-      return
-    }
-
-    progress = when (mode) {
-      Mode.MODE_C -> {
-        internalPickedColor.intC
-      }
-      Mode.MODE_M -> {
-        internalPickedColor.intM
-      }
-      Mode.MODE_Y -> {
-        internalPickedColor.intY
-      }
-      Mode.MODE_K -> {
-        internalPickedColor.intK
       }
     }
   }
@@ -307,10 +287,10 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
   }
 
   enum class Mode(
-    val minProgress: Int,
-    val maxProgress: Int,
+    override val minProgress: Int,
+    override val maxProgress: Int,
     val checkpoints: IntArray
-  ) {
+  ) : ColorSeekBar.Mode {
     MODE_C(
       IntegerCMYKColor.Component.C.minValue,
       IntegerCMYKColor.Component.C.maxValue,

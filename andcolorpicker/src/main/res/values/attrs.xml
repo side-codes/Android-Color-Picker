@@ -23,4 +23,26 @@
       <enum name="output" value="1" />
     </attr>
   </declare-styleable>
+  <declare-styleable name="RGBColorPickerSeekBar">
+    <attr name="rgbMode" format="enum">
+      <enum name="red" value="0" />
+      <enum name="green" value="1" />
+      <enum name="blue" value="2" />
+    </attr>
+    <attr name="rgbColoringMode" format="enum">
+      <enum name="pure" value="0" />
+      <enum name="output" value="1" />
+      <enum name="plain" value="2" />
+    </attr>
+  </declare-styleable>
+  <declare-styleable name="LABColorPickerSeekBar">
+    <attr name="labMode" format="enum">
+      <enum name="l" value="0" />
+      <enum name="a" value="1" />
+      <enum name="b" value="2" />
+    </attr>
+    <attr name="labColoringMode" format="enum">
+      <enum name="output" value="0" />
+    </attr>
+  </declare-styleable>
 </resources>
