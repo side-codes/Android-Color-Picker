@@ -98,7 +98,7 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
 
   override fun setMax(max: Int) {
     if (modeInitialized && max != mode.absoluteProgress) {
-      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, but given $max")
+      throw IllegalArgumentException("Current mode supports ${mode.absoluteProgress} max value only, was $max")
     }
     super.setMax(max)
   }

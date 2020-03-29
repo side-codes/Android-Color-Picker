@@ -206,7 +206,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
 
   override fun setMin(min: Int) {
     if (min != 0) {
-      throw IllegalArgumentException("Current mode supports 0 min value only, but given $min")
+      throw IllegalArgumentException("Current mode supports 0 min value only, was $min")
     }
     ::minUpdating.marker {
       super.setMin(min)

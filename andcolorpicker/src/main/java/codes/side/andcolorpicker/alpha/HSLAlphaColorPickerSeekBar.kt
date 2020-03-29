@@ -32,7 +32,7 @@ class HSLAlphaColorPickerSeekBar @JvmOverloads constructor(
 
   override fun setMax(max: Int) {
     if (isInitialized && max != IntegerHSLColor.Component.A.maxValue) {
-      throw IllegalArgumentException("Current mode supports ${IntegerHSLColor.Component.A.maxValue} max value only, but given $max")
+      throw IllegalArgumentException("Current mode supports ${IntegerHSLColor.Component.A.maxValue} max value only, was $max")
     }
     super.setMax(max)
   }
