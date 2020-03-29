@@ -79,4 +79,42 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/blueRGBColorPickerSeekBar" />
+
+  <TextView
+    android:id="@+id/coloringModeTitleTextView"
+    style="@style/TextAppearance.MaterialComponents.Caption"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginTop="4dp"
+    android:text="@string/title_coloring_mode"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/swatchView" />
+
+  <RadioGroup
+    android:id="@+id/coloringModeRadioGroup"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginTop="4dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/coloringModeTitleTextView">
+
+    <com.google.android.material.radiobutton.MaterialRadioButton
+      android:id="@+id/pureRadioButton"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:checked="true"
+      android:minHeight="0dp"
+      android:text="@string/title_coloring_mode_pure" />
+
+    <com.google.android.material.radiobutton.MaterialRadioButton
+      android:id="@+id/plainRadioButton"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="0dp"
+      android:text="@string/title_coloring_mode_plain" />
+  </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

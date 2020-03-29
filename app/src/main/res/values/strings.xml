@@ -6,6 +6,7 @@
   <string name="title_coloring_mode">Coloring mode</string>
   <string name="title_coloring_mode_pure">Pure</string>
   <string name="title_coloring_mode_output">Output</string>
+  <string name="title_coloring_mode_plain">Plain</string>
   <string name="action_set_random_color">Randomize</string>
   <string name="title_work_in_progress">Work In Progress :D</string>
   <string name="action_show_dialog">Show dialog</string>

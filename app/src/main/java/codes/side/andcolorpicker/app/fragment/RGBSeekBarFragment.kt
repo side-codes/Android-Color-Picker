@@ -7,6 +7,7 @@ import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.model.IntegerRGBColor
+import codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import kotlinx.android.synthetic.main.fragment_rgb_seek_bar.*
 
@@ -16,19 +17,19 @@ class RGBSeekBarFragment : Fragment(R.layout.fragment_rgb_seek_bar) {
     private const val TAG = "RGBSeekBarFragment"
   }
 
+  private val pickerGroup = PickerGroup<IntegerRGBColor>()
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
       view,
       savedInstanceState
     )
 
-    val pickerGroup = PickerGroup<IntegerRGBColor>().also {
-      it.registerPickers(
-        redRGBColorPickerSeekBar,
-        greenRGBColorPickerSeekBar,
-        blueRGBColorPickerSeekBar
-      )
-    }
+    pickerGroup.registerPickers(
+      redRGBColorPickerSeekBar,
+      greenRGBColorPickerSeekBar,
+      blueRGBColorPickerSeekBar
+    )
 
     pickerGroup.addListener(
       object :
@@ -52,5 +53,16 @@ class RGBSeekBarFragment : Fragment(R.layout.fragment_rgb_seek_bar) {
         it.intB = 230
       }
     )
+
+    val radioColoringModesMap = hashMapOf(
+      R.id.pureRadioButton to RGBColorPickerSeekBar.ColoringMode.PURE_COLOR,
+      R.id.plainRadioButton to RGBColorPickerSeekBar.ColoringMode.PLAIN_COLOR
+    )
+    coloringModeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+      pickerGroup.forEach {
+        (it as? RGBColorPickerSeekBar)?.coloringMode =
+          requireNotNull(radioColoringModesMap[checkedId])
+      }
+    }
   }
 }
