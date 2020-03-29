@@ -2,6 +2,7 @@ package codes.side.andcolorpicker.hsl
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -139,7 +140,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     super.setMax(max)
   }
 
-  override fun updateColorFrom(color: IntegerHSLColor, value: IntegerHSLColor) {
+  override fun onUpdateColorFrom(color: IntegerHSLColor, value: IntegerHSLColor) {
     color.setFrom(value)
   }
 
@@ -150,7 +151,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     max = mode.absoluteProgress
   }
 
-  override fun calculateProgressFromColor(color: IntegerHSLColor): Int? {
+  override fun onRefreshProgressFromColor(color: IntegerHSLColor): Int? {
     if (!modeInitialized) {
       return null
     }
@@ -188,14 +189,12 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     zeroSaturationOutputColorHSLCache[2] = internalPickedColor.floatL
   }
 
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
-
+  override fun onRefreshProgressDrawable(progressDrawable: LayerDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
 
-    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
+    (progressDrawable.getDrawable(0) as GradientDrawable).colors = when (mode) {
       Mode.MODE_HUE -> {
         when (coloringMode) {
           ColoringMode.PURE_COLOR -> HUE_COLOR_CHECKPOINTS
@@ -235,10 +234,8 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
+  override fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>) {
+    thumbColoringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
           paintThumbStroke(it)
@@ -250,7 +247,7 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshColorFromProgress(color: IntegerHSLColor, progress: Int): Boolean {
+  override fun onRefreshColorFromProgress(color: IntegerHSLColor, progress: Int): Boolean {
     if (!modeInitialized) {
       return false
     }

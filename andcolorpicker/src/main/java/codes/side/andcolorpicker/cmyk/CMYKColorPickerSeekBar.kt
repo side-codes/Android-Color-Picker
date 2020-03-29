@@ -2,6 +2,7 @@ package codes.side.andcolorpicker.cmyk
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -102,7 +103,7 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     super.setMax(max)
   }
 
-  override fun updateColorFrom(color: IntegerCMYKColor, value: IntegerCMYKColor) {
+  override fun onUpdateColorFrom(color: IntegerCMYKColor, value: IntegerCMYKColor) {
     color.setFrom(value)
   }
 
@@ -113,7 +114,7 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     max = mode.absoluteProgress
   }
 
-  override fun calculateProgressFromColor(color: IntegerCMYKColor): Int? {
+  override fun onRefreshProgressFromColor(color: IntegerCMYKColor): Int? {
     if (!modeInitialized) {
       return null
     }
@@ -134,14 +135,12 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
-
+  override fun onRefreshProgressDrawable(progressDrawable: LayerDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
 
-    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
+    (progressDrawable.getDrawable(0) as GradientDrawable).colors = when (mode) {
       Mode.MODE_C -> {
         when (coloringMode) {
           ColoringMode.PURE_COLOR -> Mode.MODE_C.checkpoints
@@ -169,10 +168,8 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
+  override fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>) {
+    thumbColoringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
           paintThumbStroke(it)
@@ -184,7 +181,7 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshColorFromProgress(color: IntegerCMYKColor, progress: Int): Boolean {
+  override fun onRefreshColorFromProgress(color: IntegerCMYKColor, progress: Int): Boolean {
     if (!modeInitialized) {
       return false
     }

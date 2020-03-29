@@ -91,7 +91,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   private lateinit var thumbObjectAnimator: ObjectAnimator
 
   // TODO: Rename
-  protected val coloringDrawables = hashSetOf<Drawable>()
+  private val thumbColoringDrawables = hashSetOf<Drawable>()
 
   protected val thumbStrokeWidthPx by lazy {
     resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
@@ -176,7 +176,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       )
     }
 
-    coloringDrawables.add(thumbDrawable)
+    thumbColoringDrawables.add(thumbDrawable)
 
     thumb = ScaleDrawable(
       StateListDrawable().also {
@@ -229,13 +229,14 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
         "updateInternalCurrentColorFrom() called on $this"
       )
     }
-    updateColorFrom(
+
+    onUpdateColorFrom(
       internalPickedColor,
       value
     )
   }
 
-  abstract fun updateColorFrom(color: C, value: C)
+  protected abstract fun onUpdateColorFrom(color: C, value: C)
 
   /*
    * Refresh or set basic SeekBar properties like min/max.
@@ -247,10 +248,11 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
         "refreshProperties() called on $this"
       )
     }
+
     onRefreshProperties()
   }
 
-  abstract fun onRefreshProperties()
+  protected abstract fun onRefreshProperties()
 
   /*
    * Synchronizes progress from picked color.
@@ -263,13 +265,13 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       )
     }
 
-    val result = calculateProgressFromColor(internalPickedColor)
+    val result = onRefreshProgressFromColor(internalPickedColor)
     result?.let {
       progress = it
     }
   }
 
-  abstract fun calculateProgressFromColor(color: C): Int?
+  protected abstract fun onRefreshProgressFromColor(color: C): Int?
 
   /*
    * Synchronizes internal picked color from progress while bypassing public API
@@ -282,7 +284,8 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
         "refreshInternalCurrentColorFromProgress() called on $this"
       )
     }
-    val changed = refreshColorFromProgress(
+
+    val changed = onRefreshColorFromProgress(
       internalPickedColor,
       progress
     )
@@ -292,37 +295,41 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     }
   }
 
-  abstract fun refreshColorFromProgress(color: C, progress: Int): Boolean
+  protected abstract fun onRefreshColorFromProgress(color: C, progress: Int): Boolean
 
   /*
    * Refreshes SeekBar's progress drawable according to derived class details.
    * CONTRACT: Derived class is responsible for progressDrawable changes if needed.
    */
-  // TODO: Provide drawable as a parameter?
-  // TODO: Make abstract? Make template?
-  protected open fun refreshProgressDrawable() {
+  protected fun refreshProgressDrawable() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshProgressDrawable() called on $this"
       )
     }
+
+    onRefreshProgressDrawable(progressDrawable as LayerDrawable)
   }
+
+  protected abstract fun onRefreshProgressDrawable(progressDrawable: LayerDrawable)
 
   /**
    * Refreshes SeekBar's thumb drawable according to derived class details.
    * CONTRACT: Should paint GradientDrawable and first layer of LayerDrawable
    */
-  // TODO: Make abstract? Make template?
-  // TODO: Pass ready-to-paint drawables list?
-  protected open fun refreshThumb() {
+  protected fun refreshThumb() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshThumb() called on $this"
       )
     }
+
+    onRefreshThumb(thumbColoringDrawables)
   }
+
+  protected abstract fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>)
 
   fun addListener(listener: OnColorPickListener<ColorSeekBar<C>, C>) {
     colorPickListeners.add(listener)

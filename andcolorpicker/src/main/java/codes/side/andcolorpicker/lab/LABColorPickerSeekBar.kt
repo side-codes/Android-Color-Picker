@@ -1,6 +1,7 @@
 package codes.side.andcolorpicker.lab
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -106,7 +107,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     super.setMax(max)
   }
 
-  override fun updateColorFrom(color: IntegerLABColor, value: IntegerLABColor) {
+  override fun onUpdateColorFrom(color: IntegerLABColor, value: IntegerLABColor) {
     color.setFrom(value)
   }
 
@@ -117,7 +118,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     max = mode.absoluteProgress
   }
 
-  override fun calculateProgressFromColor(color: IntegerLABColor): Int? {
+  override fun onRefreshProgressFromColor(color: IntegerLABColor): Int? {
     if (!modeInitialized) {
       return null
     }
@@ -135,9 +136,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshProgressDrawable() {
-    super.refreshProgressDrawable()
-
+  override fun onRefreshProgressDrawable(progressDrawable: LayerDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
     }
@@ -145,7 +144,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     val sampledRangeIntArray = mode.sampledRangeIntArray
     val outputIntArray = IntArray(sampledRangeIntArray.size)
 
-    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
+    (progressDrawable.getDrawable(0) as GradientDrawable).colors = when (mode) {
       Mode.MODE_L -> {
         when (coloringMode) {
           ColoringMode.OUTPUT_COLOR -> {
@@ -188,10 +187,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshThumb() {
-    super.refreshThumb()
-
-    coloringDrawables.forEach {
+  override fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>) {
+    thumbColoringDrawables.forEach {
       when (it) {
         is GradientDrawable -> {
           paintThumbStroke(it)
@@ -203,7 +200,7 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  override fun refreshColorFromProgress(color: IntegerLABColor, progress: Int): Boolean {
+  override fun onRefreshColorFromProgress(color: IntegerLABColor, progress: Int): Boolean {
     if (!modeInitialized) {
       return false
     }
