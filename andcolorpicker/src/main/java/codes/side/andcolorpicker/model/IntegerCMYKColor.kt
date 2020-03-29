@@ -3,13 +3,13 @@ package codes.side.andcolorpicker.model
 // TODO: Remove float properties? Move to converters?
 class IntegerCMYKColor : IntegerColor(
   COMPONENTS_COUNT,
-  DEFAULT_CMYK_VALUES
+  DEFAULT_VALUES
 ) {
   companion object {
     private const val TAG = "IntegerCMYKColor"
     private val COMPONENTS_COUNT = Component.values().size
 
-    private val DEFAULT_CMYK_VALUES = Component
+    private val DEFAULT_VALUES = Component
       .values().map { it.defaultValue }.toIntArray()
   }
 
