@@ -28,40 +28,14 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
 
     private val DEFAULT_MODE = Mode.MODE_R
     private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
-
-    private val PURE_RED_COLOR_CHECKPOINTS = intArrayOf(
-      Color.BLACK,
-      Color.RED
-    )
-    private val PURE_GREEN_COLOR_CHECKPOINTS = intArrayOf(
-      Color.BLACK,
-      Color.GREEN
-    )
-    private val PURE_BLUE_COLOR_CHECKPOINTS = intArrayOf(
-      Color.BLACK,
-      Color.BLUE
-    )
-
-    private val PLAIN_RED_COLOR_CHECKPOINTS = intArrayOf(
-      Color.RED,
-      Color.RED
-    )
-    private val PLAIN_GREEN_COLOR_CHECKPOINTS = intArrayOf(
-      Color.GREEN,
-      Color.GREEN
-    )
-    private val PLAIN_BLUE_COLOR_CHECKPOINTS = intArrayOf(
-      Color.BLUE,
-      Color.BLUE
-    )
   }
 
   override val colorConverter: IntegerRGBColorConverter
     get() = super.colorConverter as IntegerRGBColorConverter
 
   private var modeInitialized = false
-  private var _mode: RGBColorPickerSeekBar.Mode? = null
-  var mode: RGBColorPickerSeekBar.Mode
+  private var _mode: Mode? = null
+  var mode: Mode
     get() {
       return requireNotNull(_mode) { "Mode is not initialized yet" }
     }
@@ -151,29 +125,15 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
       return
     }
 
-    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors = when (mode) {
-      Mode.MODE_R -> {
-        when (coloringMode) {
-          ColoringMode.PURE_COLOR -> PURE_RED_COLOR_CHECKPOINTS
-          ColoringMode.OUTPUT_COLOR -> TODO()
-          ColoringMode.PLAIN_COLOR -> PLAIN_RED_COLOR_CHECKPOINTS
+    ((progressDrawable as LayerDrawable).getDrawable(0) as GradientDrawable).colors =
+      when (coloringMode) {
+        ColoringMode.PURE_COLOR, ColoringMode.PLAIN_COLOR -> mode.coloringModeCheckpointsMap[coloringMode]
+        ColoringMode.OUTPUT_COLOR -> when (mode) {
+          Mode.MODE_R -> TODO()
+          Mode.MODE_G -> TODO()
+          Mode.MODE_B -> TODO()
         }
       }
-      Mode.MODE_G -> {
-        when (coloringMode) {
-          ColoringMode.PURE_COLOR -> PURE_GREEN_COLOR_CHECKPOINTS
-          ColoringMode.OUTPUT_COLOR -> TODO()
-          ColoringMode.PLAIN_COLOR -> PLAIN_GREEN_COLOR_CHECKPOINTS
-        }
-      }
-      Mode.MODE_B -> {
-        when (coloringMode) {
-          ColoringMode.PURE_COLOR -> PURE_BLUE_COLOR_CHECKPOINTS
-          ColoringMode.OUTPUT_COLOR -> TODO()
-          ColoringMode.PLAIN_COLOR -> PLAIN_BLUE_COLOR_CHECKPOINTS
-        }
-      }
-    }
   }
 
   override fun refreshThumb() {
@@ -255,7 +215,6 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
     }
   }
 
-  // TODO: Refactor
   private fun paintThumbStroke(drawable: GradientDrawable) {
     if (!coloringModeInitialized || !modeInitialized) {
       return
@@ -264,39 +223,19 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
     val currentProgress = progress
     drawable.setStroke(
       thumbStrokeWidthPx,
-      when (mode) {
-        Mode.MODE_R -> {
-          when (coloringMode) {
-            ColoringMode.PURE_COLOR -> ColorUtils.blendARGB(
-              Color.BLACK,
-              Color.RED,
-              currentProgress / mode.maxProgress.toFloat()
-            )
-            ColoringMode.OUTPUT_COLOR -> TODO()
-            ColoringMode.PLAIN_COLOR -> Color.RED
-          }
+      when (coloringMode) {
+        ColoringMode.PURE_COLOR, ColoringMode.PLAIN_COLOR -> {
+          val checkpoints = requireNotNull(mode.coloringModeCheckpointsMap[coloringMode])
+          ColorUtils.blendARGB(
+            checkpoints.first(),
+            checkpoints.last(),
+            currentProgress / mode.maxProgress.toFloat()
+          )
         }
-        Mode.MODE_G -> {
-          when (coloringMode) {
-            ColoringMode.PURE_COLOR -> ColorUtils.blendARGB(
-              Color.BLACK,
-              Color.GREEN,
-              currentProgress / mode.maxProgress.toFloat()
-            )
-            ColoringMode.OUTPUT_COLOR -> TODO()
-            ColoringMode.PLAIN_COLOR -> Color.GREEN
-          }
-        }
-        Mode.MODE_B -> {
-          when (coloringMode) {
-            ColoringMode.PURE_COLOR -> ColorUtils.blendARGB(
-              Color.BLACK,
-              Color.BLUE,
-              currentProgress / mode.maxProgress.toFloat()
-            )
-            ColoringMode.OUTPUT_COLOR -> TODO()
-            ColoringMode.PLAIN_COLOR -> Color.BLUE
-          }
+        ColoringMode.OUTPUT_COLOR -> when (mode) {
+          Mode.MODE_R -> TODO()
+          Mode.MODE_G -> TODO()
+          Mode.MODE_B -> TODO()
         }
       }
     )
@@ -310,19 +249,50 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
 
   enum class Mode(
     val minProgress: Int,
-    val maxProgress: Int
+    val maxProgress: Int,
+    val coloringModeCheckpointsMap: HashMap<ColoringMode, IntArray>
   ) {
     MODE_R(
       IntegerRGBColor.Component.R.minValue,
-      IntegerRGBColor.Component.R.maxValue
+      IntegerRGBColor.Component.R.maxValue,
+      hashMapOf(
+        ColoringMode.PURE_COLOR to intArrayOf(
+          Color.BLACK,
+          Color.RED
+        ),
+        ColoringMode.PLAIN_COLOR to intArrayOf(
+          Color.RED,
+          Color.RED
+        )
+      )
     ),
     MODE_G(
       IntegerRGBColor.Component.G.minValue,
-      IntegerRGBColor.Component.G.maxValue
+      IntegerRGBColor.Component.G.maxValue,
+      hashMapOf(
+        ColoringMode.PURE_COLOR to intArrayOf(
+          Color.BLACK,
+          Color.GREEN
+        ),
+        ColoringMode.PLAIN_COLOR to intArrayOf(
+          Color.GREEN,
+          Color.GREEN
+        )
+      )
     ),
     MODE_B(
       IntegerRGBColor.Component.B.minValue,
-      IntegerRGBColor.Component.B.maxValue
-    ),
+      IntegerRGBColor.Component.B.maxValue,
+      hashMapOf(
+        ColoringMode.PURE_COLOR to intArrayOf(
+          Color.BLACK,
+          Color.BLUE
+        ),
+        ColoringMode.PLAIN_COLOR to intArrayOf(
+          Color.BLUE,
+          Color.BLUE
+        )
+      )
+    );
   }
 }
