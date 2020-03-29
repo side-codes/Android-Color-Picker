@@ -129,6 +129,17 @@ hueColorPickerSeekBar.progress = 50
 
 ![](github/seek_bar_lab_output.png)
 
+#### Layout XML Snippet
+
+Basic LAB components:
+```xml
+<codes.side.andcolorpicker.lab.LABColorPickerSeekBar
+  android:id="@+id/lLABColorPickerSeekBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:labMode="l" />
+```
+
 ### CMYK (cyan, magenta, yellow, key)
 
 ![](github/seek_bar_cmyk_pure.png)
