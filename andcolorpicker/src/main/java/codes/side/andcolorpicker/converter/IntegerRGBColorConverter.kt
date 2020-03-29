@@ -12,10 +12,11 @@ class IntegerRGBColorConverter : ColorConverter {
   override fun convertToColorInt(color: Color): Int {
     require(color is IntegerRGBColor) { "Unsupported color type supplied" }
 
-    return android.graphics.Color.rgb(
-      color.floatR.toInt(),
-      color.floatG.toInt(),
-      color.floatB.toInt()
+    return android.graphics.Color.argb(
+      color.intA,
+      color.intR,
+      color.intG,
+      color.intB
     )
   }
 
@@ -28,6 +29,7 @@ class IntegerRGBColorConverter : ColorConverter {
 
     color.copyValuesFrom(
       intArrayOf(
+        android.graphics.Color.alpha(value),
         android.graphics.Color.red(value),
         android.graphics.Color.green(value),
         android.graphics.Color.blue(value)
