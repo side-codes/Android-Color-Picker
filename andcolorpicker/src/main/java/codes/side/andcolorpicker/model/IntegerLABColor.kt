@@ -4,13 +4,13 @@ package codes.side.andcolorpicker.model
 // TODO: Remove float properties? Move to converters?
 class IntegerLABColor : IntegerColor(
   COMPONENTS_COUNT,
-  DEFAULT_HSL_VALUES
+  DEFAULT_VALUES
 ) {
   companion object {
     private const val TAG = "IntegerLABColor"
     private val COMPONENTS_COUNT = Component.values().size
 
-    private val DEFAULT_HSL_VALUES = Component
+    private val DEFAULT_VALUES = Component
       .values().map { it.defaultValue }.toIntArray()
   }
 
