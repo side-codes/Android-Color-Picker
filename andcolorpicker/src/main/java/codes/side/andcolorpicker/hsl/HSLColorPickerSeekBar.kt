@@ -139,9 +139,8 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     super.setMax(max)
   }
 
-  override fun updateInternalPickedColorFrom(value: IntegerHSLColor) {
-    super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFrom(value)
+  override fun updateColorFrom(color: IntegerHSLColor, value: IntegerHSLColor) {
+    color.setFrom(value)
   }
 
   override fun refreshProperties() {

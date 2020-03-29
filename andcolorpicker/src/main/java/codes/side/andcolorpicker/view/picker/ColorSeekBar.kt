@@ -220,17 +220,23 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   /*
-   * Silently updates internal picked color from value provided.
+   * Silently updates internal picked color from provided value.
    */
   // TODO: Make abstract? Make template?
-  protected open fun updateInternalPickedColorFrom(value: C) {
+  private fun updateInternalPickedColorFrom(value: C) {
     if (DEBUG) {
       Log.d(
         TAG,
         "updateInternalCurrentColorFrom() called on $this"
       )
     }
+    updateColorFrom(
+      internalPickedColor,
+      value
+    )
   }
+
+  abstract fun updateColorFrom(color: C, value: C)
 
   /*
    * Refresh or set basic SeekBar properties like min/max.

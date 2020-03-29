@@ -102,9 +102,8 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     super.setMax(max)
   }
 
-  override fun updateInternalPickedColorFrom(value: IntegerCMYKColor) {
-    super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFrom(value)
+  override fun updateColorFrom(color: IntegerCMYKColor, value: IntegerCMYKColor) {
+    color.setFrom(value)
   }
 
   override fun refreshProperties() {

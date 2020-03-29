@@ -106,9 +106,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
     super.setMax(max)
   }
 
-  override fun updateInternalPickedColorFrom(value: IntegerLABColor) {
-    super.updateInternalPickedColorFrom(value)
-    internalPickedColor.setFrom(value)
+  override fun updateColorFrom(color: IntegerLABColor, value: IntegerLABColor) {
+    color.setFrom(value)
   }
 
   override fun refreshProperties() {
