@@ -30,7 +30,7 @@ implementation "codes.side:andcolorpicker:0.2.0"
 
 - *Add color model description*
 
-![](github/type_hsl.png)
+![](github/seek_bar_hsl_pure.png)
 
 #### Layout XML Snippet
 
@@ -121,9 +121,17 @@ pickerGroup.setColor(
 hueColorPickerSeekBar.progress = 50
 ```
 
+### RGB (red, green, blue)
+
+![](github/seek_bar_rgb_pure.png)
+
+### LAB
+
+![](github/seek_bar_lab_output.png)
+
 ### CMYK (cyan, magenta, yellow, key)
 
-![](github/type_cmyk.png)
+![](github/seek_bar_cmyk_pure.png)
 
 #### Layout XML Snippet
 
