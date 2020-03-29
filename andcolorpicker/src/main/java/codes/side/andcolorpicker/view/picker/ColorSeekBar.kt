@@ -91,7 +91,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   private lateinit var thumbObjectAnimator: ObjectAnimator
 
   // TODO: Rename
-  protected val coloringDrawables = hashSetOf<Drawable>()
+  private val thumbColoringDrawables = hashSetOf<Drawable>()
 
   protected val thumbStrokeWidthPx by lazy {
     resources.getDimensionPixelOffset(R.dimen.acp_thumb_stroke_width)
@@ -176,7 +176,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
       )
     }
 
-    coloringDrawables.add(thumbDrawable)
+    thumbColoringDrawables.add(thumbDrawable)
 
     thumb = ScaleDrawable(
       StateListDrawable().also {
@@ -205,6 +205,9 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   override fun setMin(min: Int) {
+    if (min != 0) {
+      throw IllegalArgumentException("Current mode supports 0 min value only, was $min")
+    }
     ::minUpdating.marker {
       super.setMin(min)
     }
@@ -217,91 +220,116 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   /*
-   * Silently updates internal picked color from value provided.
+   * Silently updates internal picked color from provided value.
    */
-  // TODO: Make abstract? Make template?
-  protected open fun updateInternalPickedColorFrom(value: C) {
+  private fun updateInternalPickedColorFrom(value: C) {
     if (DEBUG) {
       Log.d(
         TAG,
         "updateInternalCurrentColorFrom() called on $this"
       )
     }
+
+    onUpdateColorFrom(
+      internalPickedColor,
+      value
+    )
   }
+
+  protected abstract fun onUpdateColorFrom(color: C, value: C)
 
   /*
    * Refresh or set basic SeekBar properties like min/max.
    */
-  // TODO: Make abstract? Make template?
-  protected open fun refreshProperties() {
+  protected fun refreshProperties() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshProperties() called on $this"
       )
     }
+
+    onRefreshProperties()
   }
+
+  protected abstract fun onRefreshProperties()
 
   /*
    * Synchronizes progress from picked color.
    */
-  // TODO: Provide color as a parameter?
-  // TODO: Make abstract? Make template?
-  protected open fun refreshProgressFromCurrentColor() {
+  protected fun refreshProgressFromCurrentColor() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshProgressFromCurrentColor() called on $this"
       )
     }
+
+    val result = onRefreshProgressFromColor(internalPickedColor)
+    result?.let {
+      progress = it
+    }
   }
+
+  protected abstract fun onRefreshProgressFromColor(color: C): Int?
 
   /*
    * Synchronizes internal picked color from progress while bypassing public API
    * pickedColor setter and consequent calls.
-   * CONTRACT: Derived class is responsible for notifying listeners on color change
-   * if needed.
    */
-  // TODO: Provide color as a parameter?
-  // TODO: Make abstract? Make template?
-  protected open fun refreshInternalPickedColorFromProgress() {
+  private fun refreshInternalPickedColorFromProgress() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshInternalCurrentColorFromProgress() called on $this"
       )
     }
+
+    val changed = onRefreshColorFromProgress(
+      internalPickedColor,
+      progress
+    )
+
+    if (changed) {
+      notifyListenersOnColorChanged()
+    }
   }
+
+  protected abstract fun onRefreshColorFromProgress(color: C, progress: Int): Boolean
 
   /*
    * Refreshes SeekBar's progress drawable according to derived class details.
    * CONTRACT: Derived class is responsible for progressDrawable changes if needed.
    */
-  // TODO: Provide drawable as a parameter?
-  // TODO: Make abstract? Make template?
-  protected open fun refreshProgressDrawable() {
+  protected fun refreshProgressDrawable() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshProgressDrawable() called on $this"
       )
     }
+
+    onRefreshProgressDrawable(progressDrawable as LayerDrawable)
   }
+
+  protected abstract fun onRefreshProgressDrawable(progressDrawable: LayerDrawable)
 
   /**
    * Refreshes SeekBar's thumb drawable according to derived class details.
    * CONTRACT: Should paint GradientDrawable and first layer of LayerDrawable
    */
-  // TODO: Make abstract? Make template?
-  // TODO: Pass ready-to-paint drawables list?
-  protected open fun refreshThumb() {
+  protected fun refreshThumb() {
     if (DEBUG) {
       Log.d(
         TAG,
         "refreshThumb() called on $this"
       )
     }
+
+    onRefreshThumb(thumbColoringDrawables)
   }
+
+  protected abstract fun onRefreshThumb(thumbColoringDrawables: Set<Drawable>)
 
   fun addListener(listener: OnColorPickListener<ColorSeekBar<C>, C>) {
     colorPickListeners.add(listener)
@@ -323,7 +351,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     super.setOnSeekBarChangeListener(l)
   }
 
-  protected fun notifyListenersOnColorChanged() {
+  private fun notifyListenersOnColorChanged() {
     if (!notifyListeners) {
       if (DEBUG) {
         Log.d(
@@ -421,6 +449,16 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     thumbObjectAnimator.start()
     notifyListenersOnColorPicked(true)
   }
+
+  interface Mode {
+    val minProgress: Int
+    val maxProgress: Int
+  }
+
+  val Mode.absoluteProgress: Int
+    get() {
+      return maxProgress - minProgress
+    }
 
   // TODO: Rename
   interface OnColorPickListener<S : ColorSeekBar<C>, C : Color> {
