@@ -151,7 +151,7 @@ class IntegerLABColor : IntegerColor(
         return ordinal
       }
 
-    // TODO: Adapt for non-zero min valies
+    // TODO: Adapt for non-zero min values
     val normalizedDefaultValue: Float
       get() {
         return defaultValue / maxValue.toFloat()
