@@ -15,6 +15,10 @@ object ColorConverterHub {
       IntegerCMYKColorConverter()
     )
     registerConverter(
+      ColorKey.RGB,
+      IntegerRGBColorConverter()
+    )
+    registerConverter(
       ColorKey.LAB,
       IntegerLABColorConverter()
     )

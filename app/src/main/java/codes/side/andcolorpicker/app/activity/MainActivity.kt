@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity(),
     RGB_SEEK_BAR(
       "RGB SeekBar",
       MaterialDesignDx.Icon.gmf_space_bar,
-      { WipFragment() }
+      { RGBSeekBarFragment() }
     ),
     RGB_PLANE(
       "RGB Plane",
