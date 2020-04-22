@@ -1,6 +1,8 @@
-![](github/logo.png)
+# andColorPicker — Android color picker
 
-*:avocado: Handy, :snake: flexible and :zap: lightning-fast material color picker view components for Android*
+*:avocado: Handy, :snake: flexible and :zap: lightning-fast material Android color picker view components*
+
+![andColorPicker logo](github/logo.png)
 
 :speech_balloon: Work-In-Progress
 
