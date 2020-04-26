@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
-import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.model.Color
 
@@ -32,14 +31,14 @@ abstract class ColorPickerSeekBarSet<C : Color> @JvmOverloads constructor(
   }
 
   private fun init(attrs: AttributeSet? = null) {
-    val typedArray = context.theme.obtainStyledAttributes(
-      attrs,
-      R.styleable.ColorPickerSeekBarSet,
-      0,
-      0
-    )
+    //val typedArray = context.theme.obtainStyledAttributes(
+    //  attrs,
+    //  R.styleable.ColorPickerSeekBarSet,
+    //  0,
+    //  0
+    //)
 
-    typedArray.recycle()
+    //typedArray.recycle()
   }
 
   protected fun addLabel(@StringRes titleResId: Int) {
