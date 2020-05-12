@@ -32,7 +32,7 @@ implementation "codes.side:andcolorpicker:0.3.0"
 
 - *Add color model description*
 
-![](github/seek_bar_hsl_pure.png)
+![](../github/seek_bar_hsl_pure.png)
 
 #### Layout XML Snippet
 
@@ -125,7 +125,7 @@ hueColorPickerSeekBar.progress = 50
 
 ### RGB (red, green, blue)
 
-![](github/seek_bar_rgb_pure.png)
+![](../github/seek_bar_rgb_pure.png)
 
 #### Layout XML Snippet
 
@@ -140,7 +140,7 @@ Basic RGB components:
 
 ### LAB
 
-![](github/seek_bar_lab_output.png)
+![](../github/seek_bar_lab_output.png)
 
 #### Layout XML Snippet
 
@@ -155,7 +155,7 @@ Basic LAB components:
 
 ### CMYK (cyan, magenta, yellow, key)
 
-![](github/seek_bar_cmyk_pure.png)
+![](../github/seek_bar_cmyk_pure.png)
 
 #### Layout XML Snippet
 
