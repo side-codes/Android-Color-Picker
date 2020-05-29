@@ -127,46 +127,29 @@ hueColorPickerSeekBar.progress = 50
 
 ![](https://github.com/side-codes/andColorPicker/raw/master/github/seek_bar_rgb_pure.png)
 
-#### Layout XML Snippet
+#### Properties
 
-Basic RGB components:
-```xml
-<codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
-  android:id="@+id/redRGBColorPickerSeekBar"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  app:rgbMode="red" />
-```
+- View name: ```RGBColorPickerSeekBar```
+- ```app:rgbMode``` for RGB component selection
 
 ### LAB
 
 ![](https://github.com/side-codes/andColorPicker/raw/master/github/seek_bar_lab_output.png)
 
-#### Layout XML Snippet
+#### Properties
 
-Basic LAB components:
-```xml
-<codes.side.andcolorpicker.lab.LABColorPickerSeekBar
-  android:id="@+id/lLABColorPickerSeekBar"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  app:labMode="l" />
-```
+- View name: ```LABColorPickerSeekBar```
+- ```app:labMode``` for LAB component selection
 
 ### CMYK (cyan, magenta, yellow, key)
 
 ![](https://github.com/side-codes/andColorPicker/raw/master/github/seek_bar_cmyk_pure.png)
 
-#### Layout XML Snippet
+#### Properties
 
-Basic CMYK components:
-```xml
-<codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
-  android:id="@+id/cyanCMYKColorPickerSeekBar"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  app:cmykMode="cyan" />
-```
+- View name: ```CMYKColorPickerSeekBar```
+- ```app:cmykMode``` for CMYK component selection
+- ```app:cmykColoringMode``` for coloring mode selection
 
 Supported `cmykMode` values:
 - `cyan` (default)
@@ -205,49 +188,6 @@ swatchView.setSwatchColor(
   }
 )
 ```
-
-## :rocket: Roadmap
-
-- [ ] Add more picker types
-    - [x] HLS SeekBars
-    - [ ] RGB SeekBars
-    - [ ] RGB circle
-    - [ ] RGB plane
-    - [ ] HSV/HSB seekbars
-    - [x] CMYK SeekBars
-    - [x] Alpha SeekBars
-    - [ ] HSL (S+L) plane
-    - [ ] LAB
-    - [ ] XYZ
-    - [ ] YPbPr
-    - [x] Swatches
-- [ ] Extend picker types
-    - [ ] CMYK SeekBars coloring modes
-    - [ ] More awesome swatches
-    - [ ] More supported alpha color models
-- [x] Sample buttons -> radios
-- [x] Remove sample app child press delays
-- [x] Enhance API
-- [x] Add XML attributes
-- [x] Provide *git-flow*
-- [ ] Automate release/publish flow
-- [x] Add thumb animation
-- [x] Add *MaterialDrawer* & sample fragments
-- [x] Add more *HSLColorPickerSeekBar* checks and reduce calls count
-- [x] Add more encapsulation to limit picker modification capabilities
-- [x] Package repository publish *(Bintray)*
-- [ ] Add *Rx* support
-- [x] Add/Revisit *RecyclerView* support
-- [x] Add sample app icon
-- [ ] Add logger solution
-- [ ] Add sample app analytics
-- [ ] Add GIFs media
-- [ ] Add call flow diagram
-- [ ] Add tests
-- [ ] Add docs
-- [ ] Add contribution guidelines
-- [x] Add OSS licenses
-- [x] Add license
 
 ## :memo: License
 
