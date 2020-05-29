@@ -39,7 +39,7 @@ implementation "codes.side:andcolorpicker:0.3.0"
 Basic HSL components:
 ```xml
 <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
-  android:id="@+id/hueColorPickerSeekBar"
+  android:id="@+id/hueSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:hslColoringMode="pure"
@@ -58,37 +58,37 @@ Supported `hslColoringMode` values:
 Alpha component:
 ```xml
 <codes.side.andcolorpicker.alpha.HSLAlphaColorPickerSeekBar
-  android:id="@+id/alphaColorPickerSeekBar"
+  android:id="@+id/alphaSeekBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content" />
 ```
 
 #### Kotlin Snippet
 ```kotlin
-// Configure picker color model programmatically
-hueColorPickerSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LIGHTNESS
+// Configure color model programmatically
+hueSeekBar.mode = Mode.MODE_HUE // Mode.MODE_SATURATION, Mode.MODE_LIGHTNESS
 
 // Configure coloring mode programmatically
-hueColorPickerSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
+hueSeekBar.coloringMode = ColoringMode.PURE_COLOR // ColoringMode.OUTPUT_COLOR
 
 // Group pickers with PickerGroup to automatically synchronize color across them
-val pickerGroup = PickerGroup<IntegerHSLColor>().also {
+val group = PickerGroup<IntegerHSLColor>().also {
   it.registerPickers(
-    hueColorPickerSeekBar,
-    saturationColorPickerSeekBar,
-    lightnessColorPickerSeekBar,
-    alphaColorPickerSeekBar
+    hueSeekBar,
+    saturationSeekBar,
+    lightnessSeekBar,
+    alphaSeekBar
   )
 }
 
 // Get current color immediately
 Log.d(
   TAG,
-  "Current color is ${hueColorPickerSeekBar.pickedColor}"
+  "Current color is ${hueSeekBar.pickedColor}"
 )
 
 // Listen individual pickers or groups for changes
-pickerGroup.addListener(
+group.addListener(
   object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
     override fun onColorChanged(
       picker: ColorSeekBar<IntegerHSLColor>,
@@ -107,7 +107,7 @@ pickerGroup.addListener(
 )
 
 // Set desired color programmatically
-pickerGroup.setColor(
+group.setColor(
   IntegerHSLColor().also {
     it.setFromColorInt(
       Color.rgb(
@@ -120,7 +120,7 @@ pickerGroup.setColor(
 )
 
 // Set color components programmatically
-hueColorPickerSeekBar.progress = 50
+hueSeekBar.progress = 50
 ```
 
 ### RGB (red, green, blue)
