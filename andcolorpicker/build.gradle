@@ -47,7 +47,7 @@ dependencies {
 publish {
   def groupProjectID = "codes.side"
   def artifactProjectID = "andcolorpicker"
-  def publishVersionID = "0.3.0"
+  def publishVersionID = "0.4.0"
   userOrg = "side-codes"
   repoName = "andColorPicker"
   groupId = groupProjectID
