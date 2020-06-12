@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
+import androidx.annotation.StringRes
 import androidx.core.graphics.ColorUtils
 import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.IntegerRGBColorConverter
@@ -229,7 +230,8 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
   enum class Mode(
     override val minProgress: Int,
     override val maxProgress: Int,
-    val coloringModeCheckpointsMap: HashMap<ColoringMode, IntArray>
+    val coloringModeCheckpointsMap: HashMap<ColoringMode, IntArray>,
+    @StringRes val nameStringResId: Int
   ) : ColorSeekBar.Mode {
     MODE_R(
       IntegerRGBColor.Component.R.minValue,
@@ -243,7 +245,8 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
           Color.RED,
           Color.RED
         )
-      )
+      ),
+      R.string.title_red
     ),
     MODE_G(
       IntegerRGBColor.Component.G.minValue,
@@ -257,7 +260,8 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
           Color.GREEN,
           Color.GREEN
         )
-      )
+      ),
+      R.string.title_green
     ),
     MODE_B(
       IntegerRGBColor.Component.B.minValue,
@@ -271,7 +275,8 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
           Color.BLUE,
           Color.BLUE
         )
-      )
+      ),
+      R.string.title_blue
     )
   }
 }

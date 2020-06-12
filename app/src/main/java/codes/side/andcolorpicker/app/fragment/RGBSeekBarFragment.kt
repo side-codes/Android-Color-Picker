@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.app.R
-import codes.side.andcolorpicker.group.PickerGroup
-import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.model.IntegerRGBColor
 import codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
@@ -17,19 +15,13 @@ class RGBSeekBarFragment : Fragment(R.layout.fragment_rgb_seek_bar) {
     private const val TAG = "RGBSeekBarFragment"
   }
 
-  private val pickerGroup = PickerGroup<IntegerRGBColor>()
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
       view,
       savedInstanceState
     )
 
-    pickerGroup.registerPickers(
-      redRGBColorPickerSeekBar,
-      greenRGBColorPickerSeekBar,
-      blueRGBColorPickerSeekBar
-    )
+    val pickerGroup = colorPickerSeekBarSet.pickerGroup
 
     pickerGroup.addListener(
       object :

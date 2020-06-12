@@ -5,88 +5,32 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <TextView
-    android:id="@+id/redTitleTextView"
-    style="@style/TextAppearance.MaterialComponents.Caption"
+  <codes.side.andcolorpicker.view.set.RGBColorPickerSeekBarSet
+    android:id="@+id/colorPickerSeekBarSet"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginTop="8dp"
-    android:text="@string/title_red"
+    android:layout_marginHorizontal="@dimen/spacing_8"
+    android:layout_marginTop="@dimen/spacing_8"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
-
-  <codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
-    android:id="@+id/redRGBColorPickerSeekBar"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/redTitleTextView"
-    app:rgbMode="red" />
-
-  <TextView
-    android:id="@+id/greenTitleTextView"
-    style="@style/TextAppearance.MaterialComponents.Caption"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginTop="8dp"
-    android:text="@string/title_green"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/redRGBColorPickerSeekBar" />
-
-  <codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
-    android:id="@+id/greenRGBColorPickerSeekBar"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/greenTitleTextView"
-    app:rgbMode="green" />
-
-  <TextView
-    android:id="@+id/blueTitleTextView"
-    style="@style/TextAppearance.MaterialComponents.Caption"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginTop="8dp"
-    android:text="@string/title_blue"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/greenRGBColorPickerSeekBar" />
-
-  <codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
-    android:id="@+id/blueRGBColorPickerSeekBar"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/blueTitleTextView"
-    app:rgbMode="blue" />
 
   <codes.side.andcolorpicker.view.swatch.SwatchView
     android:id="@+id/swatchView"
     android:layout_width="96dp"
     android:layout_height="96dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="@dimen/spacing_8"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/blueRGBColorPickerSeekBar" />
+    app:layout_constraintTop_toBottomOf="@+id/colorPickerSeekBarSet" />
 
   <TextView
     android:id="@+id/coloringModeTitleTextView"
     style="@style/TextAppearance.MaterialComponents.Caption"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginTop="4dp"
+    android:layout_marginHorizontal="@dimen/spacing_8"
+    android:layout_marginTop="@dimen/spacing_4"
     android:text="@string/title_coloring_mode"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -96,8 +40,8 @@
     android:id="@+id/coloringModeRadioGroup"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginTop="4dp"
+    android:layout_marginHorizontal="@dimen/spacing_8"
+    android:layout_marginTop="@dimen/spacing_4"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/coloringModeTitleTextView">

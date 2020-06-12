@@ -7,14 +7,77 @@
   android:orientation="vertical"
   android:padding="8dp">
 
+  <androidx.appcompat.widget.AppCompatSeekBar
+    android:id="@+id/defaultSeekBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
   <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:hslMode="hue" />
 
-  <androidx.appcompat.widget.AppCompatSeekBar
-    android:id="@+id/defaultSeekBar"
+  <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp" />
+    app:hslMode="saturation" />
+
+  <codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:hslMode="lightness" />
+
+  <codes.side.andcolorpicker.lab.LABColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:labMode="l" />
+
+  <codes.side.andcolorpicker.lab.LABColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:labMode="a" />
+
+  <codes.side.andcolorpicker.lab.LABColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:labMode="b" />
+
+  <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cmykMode="cyan" />
+
+  <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cmykMode="magenta" />
+
+  <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cmykMode="yellow" />
+
+  <codes.side.andcolorpicker.cmyk.CMYKColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cmykMode="black" />
+
+  <codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:rgbMode="red" />
+
+  <codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:rgbMode="green" />
+
+  <codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:rgbMode="blue" />
+
+  <codes.side.andcolorpicker.alpha.HSLAlphaColorPickerSeekBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 </LinearLayout>
