@@ -2,7 +2,6 @@ package codes.side.andcolorpicker.view.picker
 
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.drawable.*
 import android.os.Build
 import android.util.AttributeSet
@@ -98,7 +97,9 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   }
 
   init {
-    splitTrack = false
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      splitTrack = false
+    }
 
     setOnSeekBarChangeListener(this)
 
@@ -116,17 +117,19 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
    * Setups views's background drawable. Adjusts initial thumb ripple size.
    */
   private fun setupBackground() {
-    background = background.mutate()
-      .also {
-        if (it is RippleDrawable) {
-          // TODO: Set ripple size for pre-M too
-          // TODO: Make ripple size configurable?
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val rippleSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_ripple_radius)
-            it.radius = rippleSizePx
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      background = background.mutate()
+        .also {
+          if (it is RippleDrawable) {
+            // TODO: Set ripple size for pre-M too
+            // TODO: Make ripple size configurable?
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+              val rippleSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_ripple_radius)
+              it.radius = rippleSizePx
+            }
           }
         }
-      }
+    }
   }
 
   private fun setupProgressDrawable() {
@@ -168,7 +171,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     val thumbFullSizePx = resources.getDimensionPixelOffset(R.dimen.acp_thumb_size_full)
 
     thumbDrawable = GradientDrawable().also {
-      it.color = ColorStateList.valueOf(android.graphics.Color.WHITE)
+      it.setColor(android.graphics.Color.WHITE)
       it.shape = GradientDrawable.OVAL
       it.setSize(
         thumbFullSizePx,

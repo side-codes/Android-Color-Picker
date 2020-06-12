@@ -26,9 +26,7 @@
       <FrameLayout
         android:id="@+id/colorContainerFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_transparency_pattern"
-        android:backgroundTint="@color/colorTransparencyTileTint">
+        android:layout_height="wrap_content">
 
         <TextView
           android:id="@+id/colorTextView"

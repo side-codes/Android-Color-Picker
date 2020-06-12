@@ -3,10 +3,15 @@ package codes.side.andcolorpicker.app.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.CompoundButtonCompat
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
@@ -47,6 +52,28 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
     )
 
     setupIcons()
+
+    // API 19 backward-compatible way
+    // Set it directly for newer versions:
+    // android:background="@drawable/bg_transparency_pattern"
+    // android:backgroundTint="@color/colorTransparencyTileTint"
+    colorContainerFrameLayout.background =
+      requireNotNull(
+        ContextCompat.getDrawable(
+          requireContext(),
+          R.drawable.bg_transparency_pattern
+        )
+      )
+        .mutate()
+        .also {
+          it.colorFilter = PorterDuffColorFilter(
+            ContextCompat.getColor(
+              requireContext(),
+              R.color.colorTransparencyTileTint
+            ),
+            PorterDuff.Mode.SRC_ATOP
+          )
+        }
 
     colorfulViews.add(hueRadioButton)
     colorfulViews.add(saturationRadioButton)
@@ -160,13 +187,19 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
           it.iconTint = ColorStateList.valueOf(contrastColor)
         }
         is RadioButton -> {
-          it.buttonTintList = ColorStateList.valueOf(opaqueColorInt)
+          CompoundButtonCompat.setButtonTintList(
+            it,
+            ColorStateList.valueOf(opaqueColorInt)
+          )
         }
         // Any other TextView is considered as raw color holder
         is TextView -> {
           it.setTextColor(alphaContrastColor)
           it.setBackgroundColor(color.toColorInt())
-          it.compoundDrawables.first().setTintList(ColorStateList.valueOf(alphaContrastColor))
+          TextViewCompat.setCompoundDrawableTintList(
+            it,
+            ColorStateList.valueOf(alphaContrastColor)
+          )
         }
       }
     }

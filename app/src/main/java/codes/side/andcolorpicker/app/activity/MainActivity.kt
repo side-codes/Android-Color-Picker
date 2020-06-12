@@ -4,10 +4,12 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import codes.side.andcolorpicker.app.ColorizationConsumer
 import codes.side.andcolorpicker.app.R
@@ -164,13 +166,24 @@ class MainActivity : AppCompatActivity(),
     colorizeHSLColorCache.setFrom(color)
     colorizeHSLColorCache.floatL = colorizeHSLColorCache.floatL.coerceAtMost(0.8f)
 
-    appBarLayout.backgroundTintList =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      appBarLayout.backgroundTintList =
+        ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
+    } else {
+      appBarLayout.setBackgroundColor(colorizeHSLColorCache.toOpaqueColorInt())
+    }
+
+    ViewCompat.setBackgroundTintList(
+      appBarLayout,
       ColorStateList.valueOf(colorizeHSLColorCache.toOpaqueColorInt())
+    )
 
     // Overwrite cache for StatusBar
     colorizeHSLColorCache.floatL -= 0.1f
 
-    window.statusBarColor = colorizeHSLColorCache.toOpaqueColorInt()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      window.statusBarColor = colorizeHSLColorCache.toOpaqueColorInt()
+    }
 
     toolbar.setTitleTextColor(contrastColor)
     toolbar.setSubtitleTextColor(contrastColor)

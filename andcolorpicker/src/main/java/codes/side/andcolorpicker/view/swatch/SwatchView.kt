@@ -6,6 +6,8 @@ import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import codes.side.andcolorpicker.R
 import codes.side.andcolorpicker.converter.ColorConverterHub
 import codes.side.andcolorpicker.model.Color
@@ -20,7 +22,12 @@ class SwatchView @JvmOverloads constructor(
   defStyleAttr
 ) {
   private val patternDrawable =
-    requireNotNull(context.getDrawable(R.drawable.bg_transparency_pattern))
+    requireNotNull(
+      ContextCompat.getDrawable(
+        context,
+        R.drawable.bg_transparency_pattern
+      )
+    )
 
   init {
     background = LayerDrawable(
@@ -37,6 +44,9 @@ class SwatchView @JvmOverloads constructor(
   }
 
   fun setSwatchPatternTint(@ColorInt tintColor: Int) {
-    patternDrawable.setTint(tintColor)
+    DrawableCompat.setTint(
+      patternDrawable,
+      tintColor
+    )
   }
 }
