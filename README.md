@@ -4,8 +4,6 @@
 
 ![andColorPicker logo](https://github.com/side-codes/andColorPicker/raw/master/github/logo.png)
 
-:speech_balloon: Work-In-Progress
-
 ## :pill: Features
 
 - Clean, easy-to-use components and API
