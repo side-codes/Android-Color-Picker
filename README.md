@@ -1,6 +1,6 @@
-# andColorPicker
+# andColorPicker — Color Picker library for Android
 
-*:avocado: Handy, :snake: flexible, and :zap: lightning-fast material Android color picker view components*
+:avocado: Handy, :snake: flexible, and :zap: lightning-fast Android color picker views and utilities.
 
 ![andColorPicker logo](https://github.com/side-codes/andColorPicker/raw/master/github/logo.png)
 
