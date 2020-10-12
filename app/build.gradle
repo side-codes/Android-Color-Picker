@@ -62,7 +62,7 @@ dependencies {
 
   implementation "com.mikepenz:iconics-core:5.0.3"
   implementation "com.mikepenz:material-design-icons-dx-typeface:5.0.1.0-kotlin@aar"
-  implementation "com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar"
+  implementation "com.mikepenz:fontawesome-typeface:5.9.0.1-kotlin@aar"
 
   implementation "com.mikepenz:fastadapter:5.2.3"
   implementation "com.mikepenz:fastadapter-extensions-diff:5.2.3"
