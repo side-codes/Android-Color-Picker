@@ -61,7 +61,7 @@ dependencies {
   implementation "com.mikepenz:materialdrawer:8.1.6"
 
   implementation "com.mikepenz:iconics-core:5.1.0"
-  implementation "com.mikepenz:material-design-icons-dx-typeface:5.0.1.0-kotlin@aar"
+  implementation "com.mikepenz:material-design-icons-dx-typeface:5.0.1.1-kotlin@aar"
   implementation "com.mikepenz:fontawesome-typeface:5.9.0.1-kotlin@aar"
 
   implementation "com.mikepenz:fastadapter:5.2.4"
