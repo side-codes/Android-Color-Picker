@@ -3,13 +3,13 @@ apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
 
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
   buildToolsVersion "29.0.3"
 
   defaultConfig {
     applicationId "codes.side.andcolorpicker.integrationapp"
-    minSdkVersion 21
-    targetSdkVersion 29
+    minSdkVersion 19
+    targetSdkVersion 30
     versionCode 1
     versionName "1.0"
 

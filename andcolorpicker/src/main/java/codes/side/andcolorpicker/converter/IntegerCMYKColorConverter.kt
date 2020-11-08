@@ -38,7 +38,7 @@ class IntegerCMYKColorConverter : ColorConverter {
         r,
         g,
         b
-      ).max()
+      ).maxOrNull()
     )
     val c = (1f - r - k) / (1f - k)
     val m = (1f - g - k) / (1f - k)

@@ -1,5 +1,5 @@
 plugins {
-  id "com.github.ben-manes.versions" version "0.34.0"
+  id "com.github.ben-manes.versions" version "0.35.0"
 }
 
 apply plugin: "com.android.library"
@@ -8,12 +8,12 @@ apply plugin: "kotlin-android-extensions"
 apply plugin: "com.novoda.bintray-release"
 
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
   buildToolsVersion "29.0.3"
 
   defaultConfig {
     minSdkVersion 19
-    targetSdkVersion 29
+    targetSdkVersion 30
     versionCode 1
     versionName "1.0"
 
