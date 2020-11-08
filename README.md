@@ -23,7 +23,7 @@
 Gradle dependency:
 
 ```gradle
-implementation "codes.side:andcolorpicker:0.4.0"
+implementation "codes.side:andcolorpicker:0.5.0"
 ```
 
 ## :art: Picker types
