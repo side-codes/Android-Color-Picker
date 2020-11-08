@@ -1,11 +1,11 @@
 package codes.side.andcolorpicker.view.set
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.core.widget.TextViewCompat
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.model.Color
 
@@ -20,7 +20,7 @@ abstract class ColorPickerSeekBarSet<C : Color> @JvmOverloads constructor(
 ) {
   companion object {
     private const val TAG = "ColorPickerSeekBarSet"
-    internal const val defaultTextAppearance = android.R.style.TextAppearance_Material_Caption
+    private const val defaultTextAppearance = android.R.style.TextAppearance_Material_Caption
   }
 
   val pickerGroup = PickerGroup<C>()
@@ -46,15 +46,10 @@ abstract class ColorPickerSeekBarSet<C : Color> @JvmOverloads constructor(
       TextView(
         context
       ).also {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-          @Suppress("DEPRECATION")
-          it.setTextAppearance(
-            context,
-            defaultTextAppearance
-          )
-        } else {
-          it.setTextAppearance(defaultTextAppearance)
-        }
+        TextViewCompat.setTextAppearance(
+          it,
+          defaultTextAppearance
+        )
         it.setText(titleResId)
       }
     )

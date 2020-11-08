@@ -1,5 +1,5 @@
 plugins {
-  id "com.github.ben-manes.versions" version "0.28.0"
+  id "com.github.ben-manes.versions" version "0.35.0"
 }
 
 apply plugin: "com.android.application"
@@ -8,13 +8,13 @@ apply plugin: "kotlin-android-extensions"
 apply plugin: "com.google.android.gms.oss-licenses-plugin"
 
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
   buildToolsVersion "29.0.3"
 
   defaultConfig {
     applicationId "codes.side.andcolorpicker.app"
     minSdkVersion 19
-    targetSdkVersion 29
+    targetSdkVersion 30
     versionCode 1
     versionName "1.0"
 
@@ -49,27 +49,27 @@ dependencies {
   implementation project(":andcolorpicker")
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  implementation "androidx.appcompat:appcompat:1.3.0-alpha01"
+  implementation "androidx.appcompat:appcompat:1.3.0-alpha02"
 
-  implementation "androidx.core:core-ktx:1.4.0-alpha01"
+  implementation "androidx.core:core-ktx:1.5.0-alpha04"
 
-  implementation "androidx.recyclerview:recyclerview:1.2.0-alpha03"
+  implementation "androidx.recyclerview:recyclerview:1.2.0-alpha06"
   implementation "androidx.annotation:annotation:1.1.0"
-  implementation "androidx.fragment:fragment-ktx:1.3.0-alpha06"
-  implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
-  implementation "com.google.android.material:material:1.3.0-alpha01"
-  implementation "com.mikepenz:materialdrawer:8.1.1"
+  implementation "androidx.fragment:fragment-ktx:1.3.0-beta01"
+  implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+  implementation "com.google.android.material:material:1.3.0-alpha03"
+  implementation "com.mikepenz:materialdrawer:8.1.8"
 
-  implementation "com.mikepenz:iconics-core:5.0.3"
-  implementation "com.mikepenz:material-design-icons-dx-typeface:5.0.1.0-kotlin@aar"
-  implementation "com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar"
+  implementation "com.mikepenz:iconics-core:5.1.0"
+  implementation "com.mikepenz:material-design-icons-dx-typeface:5.0.1.1-kotlin@aar"
+  implementation "com.mikepenz:fontawesome-typeface:5.9.0.1-kotlin@aar"
 
-  implementation "com.mikepenz:fastadapter:5.1.0"
-  implementation "com.mikepenz:fastadapter-extensions-diff:5.1.0"
+  implementation "com.mikepenz:fastadapter:5.2.4"
+  implementation "com.mikepenz:fastadapter-extensions-diff:5.2.4"
 
   implementation "com.google.android.gms:play-services-oss-licenses:17.0.0"
 
-  testImplementation "junit:junit:4.13"
-  androidTestImplementation "androidx.test.ext:junit:1.1.2-rc01"
-  androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0-rc01"
+  testImplementation "junit:junit:4.13.1"
+  androidTestImplementation "androidx.test.ext:junit:1.1.2"
+  androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
 }
