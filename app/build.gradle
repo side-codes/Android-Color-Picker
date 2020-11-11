@@ -65,7 +65,7 @@ dependencies {
   implementation "com.mikepenz:fontawesome-typeface:5.9.0.1-kotlin@aar"
 
   implementation "com.mikepenz:fastadapter:5.3.0"
-  implementation "com.mikepenz:fastadapter-extensions-diff:5.2.4"
+  implementation "com.mikepenz:fastadapter-extensions-diff:5.3.0"
 
   implementation "com.google.android.gms:play-services-oss-licenses:17.0.0"
 
