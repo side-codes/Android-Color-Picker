@@ -3,6 +3,7 @@ package codes.side.andcolorpicker.converter
 import codes.side.andcolorpicker.model.ColorKey
 
 object ColorConverterHub {
+
   private val map = hashMapOf<ColorKey, ColorConverter>()
 
   init {

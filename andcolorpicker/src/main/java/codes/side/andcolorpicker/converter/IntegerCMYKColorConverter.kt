@@ -4,6 +4,7 @@ import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.IntegerCMYKColor
 
 class IntegerCMYKColorConverter : ColorConverter {
+
   override fun convertToOpaqueColorInt(color: Color): Int {
     TODO("Not yet implemented")
   }

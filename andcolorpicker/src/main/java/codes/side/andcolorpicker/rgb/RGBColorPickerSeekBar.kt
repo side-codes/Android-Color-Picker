@@ -18,7 +18,7 @@ import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 class RGBColorPickerSeekBar @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
-  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+  defStyle: Int = R.attr.seekBarStyle
 ) :
   GradientColorSeekBar<IntegerRGBColor>(
     RGBColorFactory(),
@@ -26,12 +26,6 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
     attrs,
     defStyle
   ) {
-  companion object {
-    private const val TAG = "RGBColorPickerSeekBar"
-
-    private val DEFAULT_MODE = Mode.MODE_R
-    private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
-  }
 
   override val colorConverter: IntegerRGBColorConverter
     get() = super.colorConverter as IntegerRGBColorConverter
@@ -278,5 +272,10 @@ class RGBColorPickerSeekBar @JvmOverloads constructor(
       ),
       R.string.title_blue
     )
+  }
+
+  companion object {
+    private val DEFAULT_MODE = Mode.MODE_R
+    private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
   }
 }

@@ -28,7 +28,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
   private val colorFactory: ColorFactory<C>,
   context: Context,
   attrs: AttributeSet? = null,
-  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+  defStyle: Int = R.attr.seekBarStyle
 ) :
   AppCompatSeekBar(
     context,
@@ -36,15 +36,6 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     defStyle
   ),
   SeekBar.OnSeekBarChangeListener {
-
-  companion object {
-    private const val TAG = "ColorSeekBar"
-    private const val DEBUG = false
-
-    private const val THUMB_DRAWABLE_LEVEL_DEFAULT = 8000
-    private const val THUMB_DRAWABLE_LEVEL_PRESSED = 10000
-    private const val THUMB_ANIM_DURATION = 150L
-  }
 
   // TODO: Revisit factory-based approach
   private val _pickedColor: C = colorFactory.create()
@@ -513,5 +504,14 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
     ) {
 
     }
+  }
+
+  companion object {
+    private const val TAG = "ColorSeekBar"
+    private const val DEBUG = false
+
+    private const val THUMB_DRAWABLE_LEVEL_DEFAULT = 8000
+    private const val THUMB_DRAWABLE_LEVEL_PRESSED = 10000
+    private const val THUMB_ANIM_DURATION = 150L
   }
 }

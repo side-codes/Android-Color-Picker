@@ -6,6 +6,7 @@ import codes.side.andcolorpicker.view.picker.ColorSeekBar
 open class PickerGroup<C : Color> :
   ColorSeekBar.OnColorPickListener<ColorSeekBar<C>, C>,
   Iterable<ColorSeekBar<C>> {
+
   // Kinda prioritized collection
   private val pickers = linkedSetOf<ColorSeekBar<C>>()
   private val colorPickListeners = hashSetOf<ColorSeekBar.OnColorPickListener<ColorSeekBar<C>, C>>()

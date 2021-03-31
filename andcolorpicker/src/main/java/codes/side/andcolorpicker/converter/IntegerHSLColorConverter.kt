@@ -7,7 +7,9 @@ import codes.side.andcolorpicker.model.IntegerHSLColor
 
 // Should it be generic?
 class IntegerHSLColorConverter : ColorConverter {
+
   private val convertToColorIntHSLCache = FloatArray(3)
+
   override fun convertToOpaqueColorInt(color: Color): Int {
     require(color is IntegerHSLColor) { "Unsupported color type supplied" }
 

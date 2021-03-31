@@ -6,13 +6,6 @@ class IntegerLABColor : IntegerColor(
   COMPONENTS_COUNT,
   DEFAULT_VALUES
 ) {
-  companion object {
-    private const val TAG = "IntegerLABColor"
-    private val COMPONENTS_COUNT = Component.values().size
-
-    private val DEFAULT_VALUES = Component
-      .values().map { it.defaultValue }.toIntArray()
-  }
 
   override val colorKey = ColorKey.LAB
 
@@ -34,13 +27,6 @@ class IntegerLABColor : IntegerColor(
       )
     }
 
-  var floatL: Float
-    get() {
-      return intL.toFloat()
-    }
-    set(value) {
-      intL = value.toInt()
-    }
   var intL: Int
     get() {
       return intValues[Component.L.index]
@@ -53,13 +39,7 @@ class IntegerLABColor : IntegerColor(
         Component.L.maxValue
       )
     }
-  var floatA: Float
-    get() {
-      return intA / Component.A.maxValue.toFloat()
-    }
-    set(value) {
-      intA = (value * Component.A.maxValue).toInt()
-    }
+
   var intA: Int
     get() {
       return intValues[Component.A.index]
@@ -72,13 +52,7 @@ class IntegerLABColor : IntegerColor(
         Component.A.maxValue
       )
     }
-  var floatB: Float
-    get() {
-      return intB / Component.B.maxValue.toFloat()
-    }
-    set(value) {
-      intB = (value * Component.B.maxValue).toInt()
-    }
+
   var intB: Int
     get() {
       return intValues[Component.B.index]
@@ -157,4 +131,35 @@ class IntegerLABColor : IntegerColor(
         return defaultValue / maxValue.toFloat()
       }
   }
+
+  companion object {
+    private val COMPONENTS_COUNT = Component.values().size
+
+    private val DEFAULT_VALUES = Component
+      .values().map { it.defaultValue }.toIntArray()
+  }
 }
+
+var IntegerLABColor.floatL: Float
+  get() {
+    return intL.toFloat()
+  }
+  set(value) {
+    intL = value.toInt()
+  }
+
+var IntegerLABColor.floatA: Float
+  get() {
+    return intA / IntegerLABColor.Component.A.maxValue.toFloat()
+  }
+  set(value) {
+    intA = (value * IntegerLABColor.Component.A.maxValue).toInt()
+  }
+
+var IntegerLABColor.floatB: Float
+  get() {
+    return intB / IntegerLABColor.Component.B.maxValue.toFloat()
+  }
+  set(value) {
+    intB = (value * IntegerLABColor.Component.B.maxValue).toInt()
+  }

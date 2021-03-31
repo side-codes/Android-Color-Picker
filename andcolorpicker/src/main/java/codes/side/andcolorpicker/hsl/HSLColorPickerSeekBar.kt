@@ -22,7 +22,7 @@ import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 class HSLColorPickerSeekBar @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
-  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+  defStyle: Int = R.attr.seekBarStyle
 ) :
   GradientColorSeekBar<IntegerHSLColor>(
     HSLColorFactory(),
@@ -30,35 +30,6 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     attrs,
     defStyle
   ) {
-  companion object {
-    private const val TAG = "HSLColorPickerSeekBar"
-
-    private val DEFAULT_MODE = Mode.MODE_HUE
-    private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
-
-    // TODO: Make configurable
-    private const val COERCE_AT_MOST_LIGHTNING = 90
-    private val HUE_COLOR_CHECKPOINTS = intArrayOf(
-      Color.RED,
-      Color.YELLOW,
-      Color.GREEN,
-      Color.CYAN,
-      Color.BLUE,
-      Color.MAGENTA,
-      Color.RED
-    )
-    private val ZERO_SATURATION_COLOR_INT = Color.rgb(
-      128,
-      128,
-      128
-    )
-    private val ZERO_SATURATION_COLOR_HSL = FloatArray(3).also {
-      ColorUtils.colorToHSL(
-        ZERO_SATURATION_COLOR_INT,
-        it
-      )
-    }
-  }
 
   override val colorConverter: IntegerHSLColorConverter
     get() = super.colorConverter as IntegerHSLColorConverter
@@ -389,34 +360,31 @@ class HSLColorPickerSeekBar @JvmOverloads constructor(
     )
   }
 
-  interface OnColorPickListener :
-    ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor>
+  companion object {
+    private val DEFAULT_MODE = Mode.MODE_HUE
+    private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
 
-  open class DefaultOnColorPickListener : OnColorPickListener {
-    override fun onColorPicking(
-      picker: ColorSeekBar<IntegerHSLColor>,
-      color: IntegerHSLColor,
-      value: Int,
-      fromUser: Boolean
-    ) {
-
-    }
-
-    override fun onColorPicked(
-      picker: ColorSeekBar<IntegerHSLColor>,
-      color: IntegerHSLColor,
-      value: Int,
-      fromUser: Boolean
-    ) {
-
-    }
-
-    override fun onColorChanged(
-      picker: ColorSeekBar<IntegerHSLColor>,
-      color: IntegerHSLColor,
-      value: Int
-    ) {
-
+    // TODO: Make configurable
+    private const val COERCE_AT_MOST_LIGHTNING = 90
+    private val HUE_COLOR_CHECKPOINTS = intArrayOf(
+      Color.RED,
+      Color.YELLOW,
+      Color.GREEN,
+      Color.CYAN,
+      Color.BLUE,
+      Color.MAGENTA,
+      Color.RED
+    )
+    private val ZERO_SATURATION_COLOR_INT = Color.rgb(
+      128,
+      128,
+      128
+    )
+    private val ZERO_SATURATION_COLOR_HSL = FloatArray(3).also {
+      ColorUtils.colorToHSL(
+        ZERO_SATURATION_COLOR_INT,
+        it
+      )
     }
   }
 }

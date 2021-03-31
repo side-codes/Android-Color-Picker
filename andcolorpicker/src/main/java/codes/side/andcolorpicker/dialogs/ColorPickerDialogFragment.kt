@@ -11,6 +11,7 @@ import codes.side.andcolorpicker.R
 // TODO: Propagate picked value
 // TODO: Support out-of-box color model selection
 class ColorPickerDialogFragment : DialogFragment() {
+
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     return AlertDialog.Builder(requireActivity())
       .setTitle(R.string.title_dialog_pick)

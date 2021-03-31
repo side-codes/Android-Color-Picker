@@ -14,6 +14,7 @@ class RGBColorPickerSeekBarSet @JvmOverloads constructor(
   attrs,
   defStyle
 ) {
+
   init {
     RGBColorPickerSeekBar.Mode.values().forEach { rgbMode ->
       addLabel(rgbMode.nameStringResId)

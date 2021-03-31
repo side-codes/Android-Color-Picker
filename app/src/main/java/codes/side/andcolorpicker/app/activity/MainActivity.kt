@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity(),
       this,
       root,
       toolbar,
-      com.mikepenz.materialdrawer.R.string.material_drawer_open,
-      com.mikepenz.materialdrawer.R.string.material_drawer_close
+      R.string.material_drawer_open,
+      R.string.material_drawer_close
     )
 
     slider.apply {

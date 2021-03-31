@@ -8,34 +8,6 @@ class IntegerHSLColor : IntegerColor(
   COMPONENTS_COUNT,
   DEFAULT_VALUES
 ) {
-  companion object {
-    private const val TAG = "IntegerHSLColor"
-    private val COMPONENTS_COUNT = Component.values().size
-
-    private val DEFAULT_VALUES = Component
-      .values().map { it.defaultValue }.toIntArray()
-
-    fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
-      return IntegerHSLColor().also {
-        it.copyValuesFrom(
-          intArrayOf(
-            Random.Default.nextInt(
-              Component.H.minValue,
-              Component.H.maxValue
-            ),
-            if (pure) Component.S.defaultValue else Random.Default.nextInt(
-              Component.S.minValue,
-              Component.S.maxValue
-            ),
-            if (pure) Component.L.defaultValue else Random.Default.nextInt(
-              Component.L.minValue,
-              Component.L.maxValue
-            )
-          )
-        )
-      }
-    }
-  }
 
   override val colorKey = ColorKey.HSL
 
@@ -179,5 +151,34 @@ class IntegerHSLColor : IntegerColor(
       get() {
         return defaultValue / maxValue.toFloat()
       }
+  }
+
+  companion object {
+    private const val TAG = "IntegerHSLColor"
+    private val COMPONENTS_COUNT = Component.values().size
+
+    private val DEFAULT_VALUES = Component
+      .values().map { it.defaultValue }.toIntArray()
+
+    fun createRandomColor(pure: Boolean = false): IntegerHSLColor {
+      return IntegerHSLColor().also {
+        it.copyValuesFrom(
+          intArrayOf(
+            Random.Default.nextInt(
+              Component.H.minValue,
+              Component.H.maxValue
+            ),
+            if (pure) Component.S.defaultValue else Random.Default.nextInt(
+              Component.S.minValue,
+              Component.S.maxValue
+            ),
+            if (pure) Component.L.defaultValue else Random.Default.nextInt(
+              Component.L.minValue,
+              Component.L.maxValue
+            )
+          )
+        )
+      }
+    }
   }
 }

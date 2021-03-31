@@ -4,13 +4,6 @@ class IntegerRGBColor : IntegerColor(
   COMPONENTS_COUNT,
   DEFAULT_RGB_VALUES
 ) {
-  companion object {
-    private const val TAG = "IntegerRGBColor"
-    private val COMPONENTS_COUNT = Component.values().size
-
-    private val DEFAULT_RGB_VALUES = Component
-      .values().map { it.defaultValue }.toIntArray()
-  }
 
   override val colorKey = ColorKey.RGB
 
@@ -153,5 +146,13 @@ class IntegerRGBColor : IntegerColor(
       get() {
         return defaultValue / maxValue.toFloat()
       }
+  }
+
+  companion object {
+    private const val TAG = "IntegerRGBColor"
+    private val COMPONENTS_COUNT = Component.values().size
+
+    private val DEFAULT_RGB_VALUES = Component
+      .values().map { it.defaultValue }.toIntArray()
   }
 }

@@ -17,7 +17,7 @@ import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 class CMYKColorPickerSeekBar @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
-  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+  defStyle: Int = R.attr.seekBarStyle
 ) :
   GradientColorSeekBar<IntegerCMYKColor>(
     CMYKColorFactory(),
@@ -25,15 +25,6 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
     attrs,
     defStyle
   ) {
-  companion object {
-    private const val TAG = "CMYKColorPickerSeekBar"
-
-    private val DEFAULT_MODE = Mode.MODE_C
-    private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
-
-    // TODO: Make configurable
-    private const val COERCE_AT_LEAST_COMPONENT = 15
-  }
 
   override val colorConverter: IntegerCMYKColorConverter
     get() = super.colorConverter as IntegerCMYKColorConverter
@@ -323,5 +314,13 @@ class CMYKColorPickerSeekBar @JvmOverloads constructor(
         Color.BLACK
       )
     ),
+  }
+
+  companion object {
+    private val DEFAULT_MODE = Mode.MODE_C
+    private val DEFAULT_COLORING_MODE = ColoringMode.PURE_COLOR
+
+    // TODO: Make configurable
+    private const val COERCE_AT_LEAST_COMPONENT = 15
   }
 }

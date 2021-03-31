@@ -6,9 +6,6 @@ abstract class IntegerColor(
   componentsCount: Int,
   defaultValues: IntArray? = null
 ) : Color {
-  companion object {
-    private const val TAG = "IntegerColor"
-  }
 
   protected val intValues = IntArray(componentsCount)
 
@@ -58,5 +55,9 @@ abstract class IntegerColor(
 
   override fun hashCode(): Int {
     return intValues.contentHashCode()
+  }
+
+  companion object {
+    private const val TAG = "IntegerColor"
   }
 }

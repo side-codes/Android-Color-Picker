@@ -3,13 +3,16 @@ package codes.side.andcolorpicker.app.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils.HSLToColor
 import androidx.core.widget.CompoundButtonCompat
 import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
@@ -23,6 +26,7 @@ import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.OnIntegerHSLColorPickListener
 import com.google.android.material.button.MaterialButton
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.IconicsSize
@@ -44,6 +48,15 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
     PickerGroup<IntegerHSLColor>()
   private var colorizationConsumer: ColorizationConsumer? = null
   private val colorizeHSLColorCache = IntegerHSLColor()
+
+  fun IntegerHSLColor.toHex(): String {
+    val color = floatArrayOf(floatH, floatS, floatL)
+    val intColor = HSLToColor(color)
+    val red: Int = Color.red(intColor)
+    val green: Int = Color.green(intColor)
+    val blue: Int = Color.blue(intColor)
+    return String.format("#%02x%02x%02x", red, green, blue)
+  }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
@@ -86,7 +99,23 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
     colorfulViews.add(showDialogButton)
 
     pickerGroup.addListener(
-      object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+      object : OnIntegerHSLColorPickListener() {
+        override fun onColorPicked(
+          picker: ColorSeekBar<IntegerHSLColor>,
+          color: IntegerHSLColor,
+          value: Int,
+          fromUser: Boolean
+        ) {
+          super.onColorPicked(
+            picker,
+            color,
+            value,
+            fromUser
+          )
+
+          val colorHex = color.toHex()
+          Log.d("HSK", colorHex)
+        }
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerHSLColor>,
           color: IntegerHSLColor,
@@ -206,15 +235,19 @@ class HSLSeekBarFragment : Fragment(R.layout.fragment_hsl_seek_bar) {
 
     colorTextView.text =
       "RGB: [${color.getRInt()} ${color.getGInt()} ${color.getBInt()}]\n" +
-          "HEX: ${String.format(
-            "#%06X",
-            0xFFFFFF and color.toColorInt()
-          )}\n" +
+          "HEX: ${
+            String.format(
+              "#%06X",
+              0xFFFFFF and color.toColorInt()
+            )
+          }\n" +
           "HSL: [${color.intH} ${color.intS} ${color.intL}]\n" +
-          "Alpha: ${String.format(
-            "%.2f",
-            color.alpha
-          )}"
+          "Alpha: ${
+            String.format(
+              "%.2f",
+              color.alpha
+            )
+          }"
 
     colorizationConsumer?.colorize(color)
   }
