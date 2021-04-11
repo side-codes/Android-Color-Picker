@@ -109,8 +109,8 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
    */
   private fun setupBackground() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      background = background.mutate()
-        .also {
+      background?.let { originalBackground ->
+        background = originalBackground.mutate().also {
           if (it is RippleDrawable) {
             // TODO: Set ripple size for pre-M too
             // TODO: Make ripple size configurable?
@@ -120,6 +120,7 @@ abstract class ColorSeekBar<C : Color> @JvmOverloads constructor(
             }
           }
         }
+      }
     }
   }
 
