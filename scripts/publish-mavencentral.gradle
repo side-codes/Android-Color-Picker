@@ -71,7 +71,7 @@ afterEvaluate {
             developer {
               id = "dummyco"
               name = "Illia Achour"
-              email = "thierry@getstream.io"
+              email = "ilyaachour@gmail.com"
             }
             developer {
               id = "N7k"
