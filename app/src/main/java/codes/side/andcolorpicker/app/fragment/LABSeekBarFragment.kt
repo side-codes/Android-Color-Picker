@@ -8,6 +8,7 @@ import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.model.IntegerLABColor
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.OnIntegerLABColorPickListener
 import kotlinx.android.synthetic.main.fragment_cmyk_seek_bar.swatchView
 import kotlinx.android.synthetic.main.fragment_lab_seek_bar.*
 
@@ -31,8 +32,7 @@ class LABSeekBarFragment : Fragment(R.layout.fragment_lab_seek_bar) {
     }
 
     pickerGroup.addListener(
-      object :
-        ColorSeekBar.DefaultOnColorPickListener<ColorSeekBar<IntegerLABColor>, IntegerLABColor>() {
+      object : OnIntegerLABColorPickListener() {
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerLABColor>,
           color: IntegerLABColor,

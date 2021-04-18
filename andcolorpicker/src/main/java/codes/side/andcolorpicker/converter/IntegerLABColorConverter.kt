@@ -5,6 +5,7 @@ import codes.side.andcolorpicker.model.Color
 import codes.side.andcolorpicker.model.IntegerLABColor
 
 class IntegerLABColorConverter : ColorConverter {
+
   override fun convertToOpaqueColorInt(color: Color): Int {
     TODO("Not yet implemented")
   }

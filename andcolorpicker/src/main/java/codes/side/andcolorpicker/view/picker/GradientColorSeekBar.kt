@@ -12,13 +12,14 @@ abstract class GradientColorSeekBar<C : Color> @JvmOverloads constructor(
   colorFactory: ColorFactory<C>,
   context: Context,
   attrs: AttributeSet? = null,
-  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+  defStyle: Int = R.attr.seekBarStyle
 ) : ColorSeekBar<C>(
   colorFactory,
   context,
   attrs,
   defStyle
 ) {
+
   override fun onSetupProgressDrawableLayers(layers: Array<Drawable>): Array<Drawable> {
     return layers.toMutableList().also { list ->
       list.add(

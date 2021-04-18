@@ -7,6 +7,7 @@ import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.model.IntegerRGBColor
 import codes.side.andcolorpicker.rgb.RGBColorPickerSeekBar
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.OnIntegerRGBColorPickListener
 import kotlinx.android.synthetic.main.fragment_rgb_seek_bar.*
 
 class RGBSeekBarFragment : Fragment(R.layout.fragment_rgb_seek_bar) {
@@ -25,7 +26,7 @@ class RGBSeekBarFragment : Fragment(R.layout.fragment_rgb_seek_bar) {
 
     pickerGroup.addListener(
       object :
-        ColorSeekBar.DefaultOnColorPickListener<ColorSeekBar<IntegerRGBColor>, IntegerRGBColor>() {
+        OnIntegerRGBColorPickListener() {
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerRGBColor>,
           color: IntegerRGBColor,

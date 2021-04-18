@@ -3,6 +3,7 @@ package codes.side.andcolorpicker.model
 // TODO: Make serializable / parcelable?
 // TODO: Leave as a marker?
 interface Color : Cloneable {
+
   val colorKey: ColorKey
 
   // [0, 1]

@@ -5,13 +5,6 @@ class IntegerCMYKColor : IntegerColor(
   COMPONENTS_COUNT,
   DEFAULT_VALUES
 ) {
-  companion object {
-    private const val TAG = "IntegerCMYKColor"
-    private val COMPONENTS_COUNT = Component.values().size
-
-    private val DEFAULT_VALUES = Component
-      .values().map { it.defaultValue }.toIntArray()
-  }
 
   override val colorKey = ColorKey.CMYK
 
@@ -180,5 +173,12 @@ class IntegerCMYKColor : IntegerColor(
       get() {
         return defaultValue / maxValue.toFloat()
       }
+  }
+
+  companion object {
+    private val COMPONENTS_COUNT = Component.values().size
+
+    private val DEFAULT_VALUES = Component
+      .values().map { it.defaultValue }.toIntArray()
   }
 }

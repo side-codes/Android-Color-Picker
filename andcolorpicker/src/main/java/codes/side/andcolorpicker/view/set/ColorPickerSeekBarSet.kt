@@ -18,10 +18,6 @@ abstract class ColorPickerSeekBarSet<C : Color> @JvmOverloads constructor(
   attrs,
   defStyle
 ) {
-  companion object {
-    private const val TAG = "ColorPickerSeekBarSet"
-    private const val defaultTextAppearance = android.R.style.TextAppearance_Material_Caption
-  }
 
   val pickerGroup = PickerGroup<C>()
 
@@ -53,5 +49,10 @@ abstract class ColorPickerSeekBarSet<C : Color> @JvmOverloads constructor(
         it.setText(titleResId)
       }
     )
+  }
+
+  companion object {
+    private const val TAG = "ColorPickerSeekBarSet"
+    private const val defaultTextAppearance = android.R.style.TextAppearance_Material_Caption
   }
 }

@@ -8,6 +8,7 @@ import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
 import codes.side.andcolorpicker.model.IntegerCMYKColor
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.OnIntegerCMYKColorPickListener
 import kotlinx.android.synthetic.main.fragment_cmyk_seek_bar.*
 
 class CMYKSeekBarFragment : Fragment(R.layout.fragment_cmyk_seek_bar) {
@@ -31,8 +32,7 @@ class CMYKSeekBarFragment : Fragment(R.layout.fragment_cmyk_seek_bar) {
     }
 
     pickerGroup.addListener(
-      object :
-        ColorSeekBar.DefaultOnColorPickListener<ColorSeekBar<IntegerCMYKColor>, IntegerCMYKColor>() {
+      object : OnIntegerCMYKColorPickListener() {
         override fun onColorChanged(
           picker: ColorSeekBar<IntegerCMYKColor>,
           color: IntegerCMYKColor,

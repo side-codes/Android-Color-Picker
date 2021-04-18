@@ -22,7 +22,7 @@ import codes.side.andcolorpicker.view.picker.GradientColorSeekBar
 class LABColorPickerSeekBar @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
-  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+  defStyle: Int = R.attr.seekBarStyle
 ) :
   GradientColorSeekBar<IntegerLABColor>(
     LABColorFactory(),
@@ -278,39 +278,8 @@ class LABColorPickerSeekBar @JvmOverloads constructor(
       IntegerLABColor.Component.B.maxValue
     );
 
-    val range by lazy { minProgress..maxProgress }
-    val sampledRange by lazy { range.step(PROGRESS_SAMPLING_PERIOD) }
+    private val range by lazy { minProgress..maxProgress }
+    private val sampledRange by lazy { range.step(PROGRESS_SAMPLING_PERIOD) }
     val sampledRangeIntArray by lazy { sampledRange.map { it }.toIntArray() }
-  }
-
-  interface OnColorPickListener :
-    ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerLABColor>, IntegerLABColor>
-
-  open class DefaultOnColorPickListener : OnColorPickListener {
-    override fun onColorPicking(
-      picker: ColorSeekBar<IntegerLABColor>,
-      color: IntegerLABColor,
-      value: Int,
-      fromUser: Boolean
-    ) {
-
-    }
-
-    override fun onColorPicked(
-      picker: ColorSeekBar<IntegerLABColor>,
-      color: IntegerLABColor,
-      value: Int,
-      fromUser: Boolean
-    ) {
-
-    }
-
-    override fun onColorChanged(
-      picker: ColorSeekBar<IntegerLABColor>,
-      color: IntegerLABColor,
-      value: Int
-    ) {
-
-    }
   }
 }

@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import codes.side.andcolorpicker.app.R
 import codes.side.andcolorpicker.converter.setFromColorInt
 import codes.side.andcolorpicker.converter.toColorInt
-import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar
 import codes.side.andcolorpicker.model.IntegerHSLColor
 import codes.side.andcolorpicker.view.picker.ColorSeekBar
+import codes.side.andcolorpicker.view.picker.OnIntegerHSLColorPickListener
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_hsl_seek_bar_recyclerview.*
 import kotlinx.android.synthetic.main.layout_item_hsl_seek_bar.view.*
 
 class HSLSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seek_bar_recyclerview) {
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(
       view,
@@ -52,7 +53,7 @@ class HSLSeekBarRecyclerViewFragment : Fragment(R.layout.fragment_hsl_seek_bar_r
 
       init {
         itemView.hslSeekBar.addListener(
-          object : HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+          object : OnIntegerHSLColorPickListener() {
             override fun onColorChanged(
               picker: ColorSeekBar<IntegerHSLColor>,
               color: IntegerHSLColor,

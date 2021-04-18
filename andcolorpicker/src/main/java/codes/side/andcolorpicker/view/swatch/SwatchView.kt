@@ -21,6 +21,7 @@ class SwatchView @JvmOverloads constructor(
   attrs,
   defStyleAttr
 ) {
+
   private val patternDrawable =
     requireNotNull(
       ContextCompat.getDrawable(

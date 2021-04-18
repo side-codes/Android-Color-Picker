@@ -4,6 +4,7 @@ import androidx.annotation.ColorInt
 import codes.side.andcolorpicker.model.Color
 
 interface ColorConverter {
+
   @ColorInt
   fun convertToOpaqueColorInt(color: Color): Int
 

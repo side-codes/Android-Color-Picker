@@ -21,7 +21,7 @@ abstract class AlphaColorPickerSeekBar<C : Color> @JvmOverloads constructor(
   colorFactory: ColorFactory<C>,
   context: Context,
   attrs: AttributeSet? = null,
-  defStyle: Int = androidx.appcompat.R.attr.seekBarStyle
+  defStyle: Int = R.attr.seekBarStyle
 ) :
   ColorSeekBar<C>(
     colorFactory,
@@ -29,6 +29,7 @@ abstract class AlphaColorPickerSeekBar<C : Color> @JvmOverloads constructor(
     attrs,
     defStyle
   ) {
+
   // TODO: Handle rounded corners
   override fun onSetupProgressDrawableLayers(layers: Array<Drawable>): Array<Drawable> {
     val layerList = layers.toMutableList()
