@@ -42,7 +42,7 @@ dependencies {
   implementation "codes.side:andcolorpicker:0.6.2"
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  implementation "androidx.appcompat:appcompat:1.4.0-alpha01"
+  implementation "androidx.appcompat:appcompat:1.4.0-alpha02"
   implementation "androidx.core:core-ktx:1.6.0-beta02"
   implementation "androidx.constraintlayout:constraintlayout:2.0.4"
 
